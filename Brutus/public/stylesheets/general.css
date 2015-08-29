@@ -21,21 +21,40 @@
     font-size: 3.5em;
 }
 
-/* search bar shit */
+/* search bar */
  
-#search-box button {
+.icon-search {
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+    pointer-events: none; 
     border: 0;
     background: none;
-    /** belows styles are working good */
-    padding: 2px 5px;
-    margin-top: 2px;
-    position: relative;
-    right: 30px;
-    top: 7px;
-    /* IE7-8 doesn&#039;t have border-radius, so don&#039;t indent the padding */
-    margin-bottom: 0;
+    margin-right: 10px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    color:#6f5499;
+    color:#6f5499;  
+    z-index: 5; 
+}
+
+/* make select barss and search bars 100% width of col */ 
+.select2 {
+    width: 100% !important;
+}
+
+.typeahead tt-hint form-control tt-input {
+    width: 100%;
+}
+
+.typeahead tt-hint form-control {
+    width: 100%;
+}
+
+.twitter-typeahead {
+    width: 100%;
+}
+
+.glyphicon:hover {
+    cursor: pointer;
 }
