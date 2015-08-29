@@ -4,9 +4,9 @@
         <title><%= title %></title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
-		<link rel="stylesheet" href="/stylesheets/general.css"/>
         <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
         <link rel="stylesheet" href="/stylesheets/select2.css"/>
+		<link rel="stylesheet" href="/stylesheets/general.css"/>
 		<script type="text/javascript" src="/javascripts/jquery.js"></script>
 		<script type="text/javascript" src="/javascripts/underscore.js"></script>
 		<script type="text/javascript" src="/javascripts/bootstrap.js"></script>
@@ -47,11 +47,10 @@
                 <div class="col-lg-3"></div>
                 <div class="col-lg-2" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
                     <div style="padding-right: 15px">
-                        <i class="icon-search glyphicon glyphicon-search" style="font-size: 1.3em"></i>
                         <input class="typeahead tt-hint form-control" type="search" type="text" placeholder="Course">
-                        <!--<button class="btn btn-danger" type="button">
+                        <button class="btn search-btn" type="button">
                             <span style="font-size: 1.3em" class="glyphicon glyphicon-search"></span>
-                        </button>-->
+                        </button>
                     </div>
                 </div>
                 <div class="col-lg-2" style="margin-top: 4px;">
@@ -107,6 +106,10 @@
 		$(document).ready(function() {
             $(".subject-select").select2();
             $(".term-select").select2(); 
+            
+            $(".btn").click(function() {
+                alert("button clicked");
+            });
         });
         
         var substringMatcher = function(strs) {

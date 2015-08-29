@@ -30,6 +30,7 @@
     pointer-events: none; 
     border: 0;
     background: none;
+    bottom: 50px;
     margin-right: 10px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -55,6 +56,26 @@
     width: 100%;
 }
 
-.glyphicon:hover {
-    cursor: pointer;
+.btn:hover {
+    color: #6f5499;
+}
+
+.search-btn:focus {
+    outline: none !important;
+    color:#6f5499;
+    box-shadow: none;
+}
+
+.search-btn {
+    background: none;
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+    top: 0px;
+    margin-right: 10px;
+    color:#6f5499;  
+}
+
+.search-btn .glyphicon .glyphicon-search {
+    color: #6f5499;
 }
