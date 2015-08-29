@@ -26,7 +26,7 @@
     background-color: #fff;
     border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    width: 95%;
+    width: 100%;
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
     color: #000;
     margin-left: 14px;
@@ -46,10 +46,8 @@
     cursor: pointer;
 }
 
-/* remove the hover and box shadow effects */
 
-
-.btn-danger:focus {
+icon-search:focus {
     box-shadow: none !important;
     z-index: 3;   
     outline: none !important;
