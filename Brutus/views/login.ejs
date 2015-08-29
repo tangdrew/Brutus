@@ -29,9 +29,15 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4"></div>
-          <div class="col-md-4">                                     
+          <div class="col-md-4">                 
+                <% if (typeof registered != 'undefined') { %>
+                    <div class="alert alert-success" role="alert">Registration complete! Please login.</div>
+                <% } %>          
+                <% if (typeof error != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Login failed!</div>
+                <% } %>              
                 <h1>Login to Brutus</h1><br><br>
-                <form action = "login.html" autofocus="autofocus" autocomplete = "on" method = "post" enctype = "multipart/form-data">
+                <form action = "login" autofocus="autofocus" autocomplete = "on" method = "post">
                   <p><input type="text" class="form-control" name="login" value="" placeholder="Username"></p>
                   <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
                   <p class="remember_me">

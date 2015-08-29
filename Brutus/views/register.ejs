@@ -29,9 +29,12 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4"></div>
-          <div class="col-md-4">                         
+          <div class="col-md-4">          
+                <% if (typeof error != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Email already taken!</div>
+                <% } %>  
                 <h1>Sign Up</h1><br>
-                <form action = "registration.html" autocomplete = "on" method = "post" enctype = "multipart/form-data">
+                <form action="#" method="post" autocomplete = "on">
                   <p>First Name</p>
                   <p><input type="text" class="form-control" name="firstName" value=""></p>
                   <p>Last Name</p>
