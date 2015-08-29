@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
+		<link rel="stylesheet" href="/stylesheets/general.css"/>
+        <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
+        <link rel="stylesheet" href="/stylesheets/select2.css"/>
+		<script type="text/javascript" src="/javascripts/jquery.js"></script>
+		<script type="text/javascript" src="/javascripts/underscore.js"></script>
+		<script type="text/javascript" src="/javascripts/bootstrap.js"></script>
+		<script type="text/javascript" src="/javascripts/data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+        <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>
+        <script>
+			$(document).ready(function(){
+				$('.listing').click(function(){
+					var link = "/course?course=" + this.id;
+					console.log(link);
+					window.location = link;
+				});
+			});
+		</script>
+  </head>
+  <body style="background-color: #42325b">
+
+        <!--Navbar-->
+        <nav class="navbar navbar-default navbar-fixed-top" style="background-color: #6f5499; border: #6f5499">
+            <div class="container">
+                <!--Navbar header and hamburger menu-->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brutus</a>
+                </div>
+            </div>
+        </nav>
+        
+        <!--Body-->
+        <div class="container-fluid" style="padding-top: 100px">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-2" style="margin-top: 4px;" id="search-box">
+                    <div>
+                        <input class="typeahead tt-hint" style="width: 250px" type="text" placeholder="Course">
+                        <button class="btn btn-danger" type="button">
+                            <span style="font-size: 1.3em" class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-top: 4px; margin-left: 15px">
+                    <select class="subject-select" style="width: 250px">
+                        <option value="ALL">All Subjects</option>
+                        <option value="ACCOUNTING">ACCOUNT - Accounting</option>
+                        <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
+                        <option value="ECON">ECON - Economics</option>
+                        <option value="EECS">EECS - Electrical Engineering and Computer Science</option>
+                        <option value="PHYSICS">PHYSICS - Physics</option>
+                    </select>  
+                </div>
+                <div class="col-md-2" style="margin-top: 4px; margin-left: 15px">
+                    <select class="term-select" style="width: 250px">
+                        <option value="FALL2015">Fall 2015</option>
+                        <option value="WINTER2016">Winter 2016</option>
+                        <option value="SPRING2016">Spring 2016</option>
+                        <option value="FALL2016">Fall 2016</option>
+                    </select>  
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <br>
+        
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <script>
+                        for(var i = 0; i < obj.courses.length; i++){
+                            document.write("<div id='" + obj.courses[i].course_id + "' class='panel panel-default listing' style='margin: 0; color: #fff'> \
+                                                <div class='panel-body' style='border: 2px solid #7d65a3; background-color: #634b89; color: #fff'> \
+                                                    <div style='display: inline-block; width: 100%'> \
+                                                        <a href='#' style='color: #FFD700'>" + obj.courses[i].title + "</a> \
+                                                        <label style='float: right; color: #fff'> " + obj.courses[i].term + " \
+                                                    </div> \
+                                                    <label style='color: #fff'>Instructor: </label style='color: #fff'><a href='#' style='color: #FFD700'> " + obj.courses[i].instructor + "</a><br> \
+                                                    <label style='color: #fff'>Class Times: </label style='color: #fff'> " + obj.courses[i].meeting_days + " " + obj.courses[i].start_time + " to " + obj.courses[i].end_time + "<br> \
+                                                    <label style='color: #fff'>Room: </label> " + obj.courses[i].room + "<br> \
+                                                    <label style='color: #fff'>Seats Available: </label> " + obj.courses[i].seats + "<br> \
+                                                    <label style='color: #fff'>Rating: </label> 3.5/5.0 <br> \
+                                                </div> \
+                                            </div> \
+                                            ");
+                        }
+                    </script>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>		
+	</body>
+    
+    <script type="text/javascript">
+		$(document).ready(function() {
+            $(".subject-select").select2();
+            $(".term-select").select2(); 
+        });
+        
+        var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+                var matches, substringRegex;
+
+                var selectedText = $( "#subject-select option:selected" ).text();
+                if (selectedText.indexOf('econ') > -1)
+                {
+                    strs = ['ECON 201', 'ECON 202'];
+                }
+
+                // an array that will be populated with substring matches
+                matches = [];
+            
+                // regex used to determine if a string contains the substring `q`
+                substrRegex = new RegExp(q, 'i');
+            
+                // iterate through the pool of strings and for any string that
+                // contains the substring `q`, add it to the `matches` array
+                $.each(strs, function(i, str) {
+                    if (substrRegex.test(str)) {
+                        matches.push(str);
+                    }
+                });
+            
+                cb(matches);
+            };
+        };
+
+        var courses = ['ECON 201', 'EECS 203', 'EECS 349', 'EECS 361', 'PHYSICS 135-2',
+            'CHEM 101-1', 'ECON 202'
+        ];
+
+        $('#search-box .typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'Courses',
+            source: substringMatcher(courses)
+        });
+        
+	</script>
+</html>

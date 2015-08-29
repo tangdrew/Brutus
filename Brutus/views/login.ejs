@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
+		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
+		<link rel="stylesheet" href="/stylesheets/general.css"/>
+
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!--Navbar-->
+      <nav class="navbar navbar-default">
+        <!--Navbar header and hamburger menu-->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+						  <span class="icon-bar"></span>
+						  <span class="icon-bar"></span>
+						  <span class="icon-bar"></span>
+					  </button> 
+            <a class="navbar-brand" href="#">Brutus</a>
+          </div>
+      </nav><br>
+      
+      <!--Body-->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">                                     
+                <h1>Login to Brutus</h1><br><br>
+                <form action = "login.html" autofocus="autofocus" autocomplete = "on" method = "post" enctype = "multipart/form-data">
+                  <p><input type="text" class="form-control" name="login" value="" placeholder="Username"></p>
+                  <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
+                  <p class="remember_me">
+                    <div style="vertical-align: top">
+                      <input type="checkbox" name="remember_me" id="remember_me">
+                      Remember me on this computer
+                    </div>
+                  </p>
+                  <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Login"></p>
+                </form><br><br><br>
+                <div class="login-help" style="margin-bottom: 0px"><br>
+                  <p>Forgot your password? &nbsp<a href="index.html">Click here to reset it</a></p>
+                </div>
+                <div class="login-help" style="margin: 0px">
+                  <p>New to Brutus? &nbsp<a href="/new_memeber_register">Create an account now</a></p>               
+            </div>
+          </div>
+          <div class="col-md-4"></div>
+        </div>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+.listing-top-row{
+	display: inline-block; 
+	width: 100%;
+}
+.course-link{
+	font-size: 20px;
+}
+.term-label{
+	float: right;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/* make nav bar bigger */
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 80px;
+    height: 80px;
+    padding-top: 0;
+    font-size: 3.5em;
+}
+
+/* search bar shit */
+ 
+#search-box button {
+    border: 0;
+    background: none;
+    /** belows styles are working good */
+    padding: 2px 5px;
+    margin-top: 2px;
+    position: relative;
+    right: 30px;
+    top: 7px;
+    /* IE7-8 doesn&#039;t have border-radius, so don&#039;t indent the padding */
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    color:#6f5499;
+}

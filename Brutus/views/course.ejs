@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
+		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
+		<link rel="stylesheet" href="/stylesheets/general.css"/>
+		<script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script src="/javascripts/Chart.js"></script>
+		<script type="text/javascript" src="/javascripts/bootstrap.js"></script>
+        <script type="text/javascript" src="/javascripts/data.js"></script>
+		
+		<script>
+			function getQuerystringNameValue(name){
+				var winURL = window.location.href;
+				var queryStringArray = winURL.split("?");
+				var queryStringParamArray = queryStringArray[1].split("&");
+				var nameValue = null;
+			
+				for ( var i=0; i<queryStringParamArray.length; i++ )
+				{           
+					queryStringNameValueArray = queryStringParamArray[i].split("=");
+			
+					if ( name == queryStringNameValueArray[0] )
+					{
+						nameValue = queryStringNameValueArray[1];
+					}                       
+				}
+			
+				return nameValue;
+			}	
+			function getObjects(obj, key, val) {
+				var objects = [];
+				for (var i in obj) {
+					if (!obj.hasOwnProperty(i)) continue;
+					if (typeof obj[i] == 'object') {
+						objects = objects.concat(getObjects(obj[i], key, val));
+					} else if (i == key && obj[key] == val) {
+						objects.push(obj);
+					}
+				}
+				return objects;
+			}
+			
+            var courseID = getQuerystringNameValue("course");
+            var course = getObjects(obj.courses, "course_id", courseID);
+            var reviews = getObjects(obj.users, "course_id", courseID);
+            //Calculate average rating
+            var ratingSum = 0;
+            for(var i = 0; i < reviews.length; i++){
+                ratingSum += reviews[i].rating;
+            }
+            if(reviews.length > 0){
+                var ratingAvg = (ratingSum / reviews.length).toFixed(2);
+            }
+            else{
+                var ratingAvg = "NA";
+            }
+            //Calculate average difficulty
+            var difficultySum = 0;
+            for(var i = 0; i < reviews.length; i++){
+                difficultySum += reviews[i].difficulty;
+            }
+            if(reviews.length > 0){
+                var difficultyAvg = (difficultySum / reviews.length).toFixed(2);
+            }
+            else{
+                var difficultyAvg = "NA";
+            }
+            //Calculate average grade
+            gradeArray = {"A":4.0, "A-":3.7, "B+":3.3, "B":3.0, "B-":2.7, "C+":2.3, "C":2.0, "C-":1.7, "D+":1.3, "D":1.0, "D-":0.7, "F+":0.3, "F":0.0};
+            var pointArray = [4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.7, 0.3, 0.0];
+            var letterArray = ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F+", "F"];
+            var gradeSum = 0;
+            for(var i = 0; i < reviews.length; i++){
+                gradeSum += gradeArray[reviews[i].grade];
+            }
+            if(reviews.length > 0){
+                var gradeAvg = (gradeSum / reviews.length).toFixed(2);
+                var diffArray = pointArray;
+                for(var i = 0; i < pointArray.length; i++){
+                    diffArray[i] = Math.abs(pointArray[i] - gradeAvg);
+                }
+                leastDiff = Math.min.apply(Math, diffArray);
+                var avgLetterGrade = letterArray[diffArray.indexOf(leastDiff)];
+            }
+            else{
+                var avgLetterGrade = "NA";
+            }
+            
+            
+		</script>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<!--Navbar-->
+			<nav class="navbar navbar-default">
+				<!--Navbar header and hamburger menu-->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Brutus</a>
+				</div>
+			</nav>
+			
+			<div class="containter">
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<script> document.write(course[0].title) </script>
+							</div>
+							<div class="panel-body">
+                                <div class="row">
+                                    <!--Basic Course Information-->
+                                    <div class="col-md-4">
+                                        <label>Instructor: </label><a href="#"><script> document.write(course[0].instructor) </script></a><br>
+                                        <label>Term: </label><script> document.write(course[0].term) </script><br>
+                                        <label>Class Times: </label><script> document.write(course[0].meeting_days + " " + course[0].start_time + " to " + course[0].end_time) </script><br>
+                                        <label>Room: </label><script> document.write(course[0].room) </script><br>
+                                        <label>Seats Available: </label><script> document.write(course[0].seats) </script><br>
+                                        <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
+                                    </div>
+                                    <!--Ratings Graphs-->
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        Average Grade: <script> document.write(avgLetterGrade) </script>  
+                                                    </div>
+                                                     <div class="panel-body">
+                                                        <div>
+                                                            <canvas id="canvas" height="450" width="600"></canvas>
+                                                        </div>
+                                                     </div>
+                                                </div>
+                                            </div>  
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        Difficulty: <script> document.write(difficultyAvg) </script>
+                                                    </div>
+                                                     <div class="panel-body">
+                                                        <div>
+                                                            <canvas id="canvas2" height="450" width="600"></canvas>
+                                                        </div>
+                                                     </div>
+                                                </div>
+                                            </div>   
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                                <!--Reviews Section-->
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="panel panel-default col-md-10">
+                                        <div class="panel-heading">
+                                            Reviews
+                                        </div>
+                                        <div class="panel-body">
+                                            <script>
+                                                for(var i = 0; i < reviews.length; i++){
+                                                    document.write("<div class='row'> \
+                                                                        <div class='col-md-1'></div> \
+                                                                        <div class='panel panel-default col-md-10'> \
+                                                                            <div class='panel-body'> \
+                                                                                <span id='rating-" + reviews[i].review_id + "'></span> <span style='color:#aaa;font-family:verdana;font-size:11px'>on August 28, 2015</span> <br> \
+                                                                                <i>'" + reviews[i].comment + "'</i> \
+                                                                            </div> \
+                                                                        </div> \
+                                                                        <div class='col-md-1'></div> \
+                                                                    </div>");
+                                                    for(var j = 0; j < reviews[i].rating; j++){
+                                                        document.getElementById("rating-"+reviews[i].review_id).innerHTML = document.getElementById("rating-"+reviews[i].review_id).innerHTML + "☆";
+                                                    }
+                                                }
+                                                
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>			
+						</div>	
+					</div>
+					<div class="col-md-2"></div>	
+				</div>
+			</div>
+			
+		</div>
+        <script>
+            var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+            var lineChartData = {
+                labels : ["January","February","March","April","May","June","July"],
+                datasets : [
+                    {
+                        label: "My First dataset",
+                        fillColor : "rgba(220,220,220,0.2)",
+                        strokeColor : "rgba(220,220,220,1)",
+                        pointColor : "rgba(220,220,220,1)",
+                        pointStrokeColor : "#fff",
+                        pointHighlightFill : "#fff",
+                        pointHighlightStroke : "rgba(220,220,220,1)",
+                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                    },
+                    {
+                        label: "My Second dataset",
+                        fillColor : "rgba(151,187,205,0.2)",
+                        strokeColor : "rgba(151,187,205,1)",
+                        pointColor : "rgba(151,187,205,1)",
+                        pointStrokeColor : "#fff",
+                        pointHighlightFill : "#fff",
+                        pointHighlightStroke : "rgba(151,187,205,1)",
+                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                    }
+                ]
+    
+            }
+    
+            window.onload = function(){
+                var ctx = document.getElementById("canvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx2 = document.getElementById("canvas2").getContext("2d");
+                window.myLine = new Chart(ctx2).Line(lineChartData, {
+                    responsive: true
+                });
+            }
+        </script>
+	</body>
+</html>

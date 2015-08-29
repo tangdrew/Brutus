@@ -1,0 +1,62 @@
+.tt-query, /* UPDATE: newer versions use tt-input instead of tt-query */
+.tt-hint {
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    margin-left: 15px;
+}
+
+.tt-hint:focus {
+    outline-color: #8b76ad;
+    outline-width: 4px;
+    outline-offset: 1px;
+}
+
+.tt-query { /* UPDATE: newer versions use tt-input instead of tt-query */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+    color: #000;
+}
+
+.tt-menu { /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 95%;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    color: #000;
+    margin-left: 14px;
+    
+}
+
+.tt-suggestion {
+    width: 100%;
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+    color: #000;
+}
+
+.tt-suggestion:hover {
+    background-color: #42325b;
+    cursor: pointer;
+}
+
+/* remove the hover and box shadow effects */
+
+
+.btn-danger:focus {
+    box-shadow: none !important;
+    z-index: 3;   
+    outline: none !important;
+    outline-width: 0px;
+    outline-color: #fff;
+}
+
+.glyphicon:focus {
+    outline: none !important;
+}
