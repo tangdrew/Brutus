@@ -54,15 +54,7 @@
   position: absolute;
   left: -100000px;
   width: 100%;
-  z-index: 1051; 
-  opacity:0.4;
-  filter:alpha(opacity=40); /* For IE8 and earlier */ }
-
-@media screen and (max-width: 720px) {
-    .select2-dropdown {
-        opacity:1;
-        filter:alpha(opacity=100); /* For IE8 and earlier */ }
-}
+  z-index: 1051; }
 
 .select2-results {
   display: block;

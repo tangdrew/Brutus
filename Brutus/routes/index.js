@@ -26,7 +26,7 @@ router.get('/course', function(req, res, next)
 {
     if(req.session.user == undefined)
     {
-        res.render('login', { title: 'Login to Brutus', user: null });   
+        res.redirect('/login');
     }
     else
     {
@@ -44,11 +44,13 @@ router.get('/course', function(req, res, next)
 });
 
 /* GET course profile page. */
+// make so only admin users can use this post request
 router.get('/addCourse', function(req, res, next) {
   res.render('addCourse', { title: 'Add courses to the database', user: req.session.user });
 });
 
 /* POST course data to the database courses collection */
+// make so only admin users can use this post request
 router.post('/addCourse', function(req, res, next) {
      courses.addCourse({
 			title 	: req.body['title'],
@@ -78,15 +80,19 @@ router.post('/addCourse', function(req, res, next) {
 /* GET login page. */
 router.get('/login', function(req, res, next) 
 {
-  // Check if user is already logged in. If they are, redirect them to their account page
-  if (req.session.user == undefined)
-  {
-      res.render('login', { user: req.session.user, title: 'Login to Brutus' }); 
-  }
-  else
-  {
-      res.redirect('accountSummary');
-  }  
+    if (req.query.registered)
+    {
+        res.render('login', {registered: true, user: null});
+    }
+    // Check if user is already logged in. If they are, redirect them to their account page
+    if (req.session.user == undefined)
+    {
+        res.render('login', { user: req.session.user, title: 'Login to Brutus' }); 
+    }
+    else
+    {   
+        res.redirect('accountSummary');
+    }  
 });
 
 router.post('/login', function(req, res, next) 
@@ -145,11 +151,13 @@ router.post('/register', function(req, res)
       else if (e == 'passwordNotMatch')
       {				
                 res.render('register', { passwordNotMatch : e , user: null });
-			}	
+        }	
       else
       {
-				res.render('login', { registered: true , user: null });
-			}
+          
+        res.redirect('/login?registered=true');
+        //res.render('login', { registered: true , user: null });
+        }
 	});
 });
 
