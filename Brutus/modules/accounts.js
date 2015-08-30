@@ -25,6 +25,7 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 
 var accounts = db.collection('accounts');
 
+
 // Creating new account for new users
 
 exports.createAccount = function(data, callback)

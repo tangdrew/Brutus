@@ -42,17 +42,18 @@ exports.getCourseByCourseId = function(value, callback){
     });
 }
 
-exports.addReview = function(data, callback){
-    accounts.findOne({email:data.user_email}, function(e,o) {
+exports.addReview = function(data, userEmail, callback){
+    accounts.findOne({email:userEmail}, function(e,o) {
         if (o){
-            var id = o._id;
-            console.log(o);
-            console.log(data);
-            accounts.courses_taken.save( { _id: id, courses_taken: data } );
-            callback(o);
+            var newReviewJSON = "{ '" + data.course_id + "' : " +
+                                    "{ 'grade': '" + data.grade + "' , 'rating': '" + data.rating + "'," +
+                                    "'difficulty':'" + data.difficulty + "' , 'comments': '" + data.comments + "' } }";
+            var newCoursesTakenJSON = '{' + o.courses_taken.slice(1,o.courses_taken.length-1) + ',' + newReviewJSON + '}'
+            accounts.update ({email: userEmail}, {$set: {"courses_taken" : newCoursesTakenJSON} });
+            callback(e, o);
         }
         else{
-            callback(e);
+            callback(e, o);
         }
     });
 }
