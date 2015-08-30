@@ -57,6 +57,15 @@ exports.createAccount = function(data, callback)
                 data.pass = hash;
                 // append date stamp when record was created 
                 data.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+                
+                data = {
+                    "firstName": data.firstName,
+                    "lastName": data.lastName,
+                    "email": data.email,
+                    "pass": data.pass,
+                    "date": data.date
+                };
+                
                 accounts.insert(data, {safe: true}, callback);
             });
         }
