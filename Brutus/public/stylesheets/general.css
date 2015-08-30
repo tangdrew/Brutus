@@ -85,3 +85,17 @@
     font-size: 2em !important;
     line-height: 90px !important;
 }
+
+.dropdown-heading {
+    font-size: 1em !important;
+    height: 40px !important;
+    line-height: 40px !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #6f5499;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #6f5499;
+}
