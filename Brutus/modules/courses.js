@@ -2,6 +2,7 @@ var crypto 		= require('crypto');
 var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
+var util        = require('util');
 
 var dbPort 		= 27017;
 var dbHost 		= 'localhost';
@@ -21,4 +22,21 @@ var courses = db.collection('courses');
 
 exports.addCourse = function(data, callback){
     courses.insert(data, {safe: true}, callback);
+}
+
+exports.getAllCourses = function(data, callback){
+    courses.find().toArray(function (err, items) {
+        callback(items);
+    });
+}
+
+exports.getCourseByCourseId = function(value, callback){
+    courses.findOne({course_id:value}, function(e,o) {
+        if (o){
+            callback(o);
+        }
+        else{
+            callback(e);
+        }
+    });
 }

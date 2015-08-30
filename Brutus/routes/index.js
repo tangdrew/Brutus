@@ -15,7 +15,17 @@ router.get('/search', function(req, res, next) {
 
 /* GET course profile page. */
 router.get('/course', function(req, res, next) {
-  res.render('course', { title: 'Course' });
+  var courseId = req.query.course;
+  courses.getCourseByCourseId(courseId, function(obj,e){
+      if(obj){
+          console.log(obj);
+          res.render('course', {title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+      }
+      if(e){
+          res.status(400).send(e);
+      }
+  })
+  
 });
 
 /* GET course profile page. */
@@ -76,7 +86,7 @@ router.get('/register', function(req, res, next) {
 
 router.post('/register', function(req, res){
     accounts.createAccount({
-			fistName 	: req.body['firstName'],
+			firstName 	: req.body['firstName'],
             lastName 	: req.body['lastName'],
             email 	: req.body['email'],
             password	: req.body['password'],
@@ -101,6 +111,13 @@ router.get('/', function(req, res){
          }
       );
    }
+});
+
+/*GET course data and return as JSON */
+router.post('/search', function(req, res){
+   courses.getAllCourses(req.body, function(o){
+       res.send(o);
+   });
 });
 
 module.exports = router;

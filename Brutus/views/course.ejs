@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 	<head>
+        <title><%= title %></title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -115,17 +116,17 @@
 					<div class="col-md-8">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<script> document.write(course[0].title) </script>
+								<%= title %>
 							</div>
 							<div class="panel-body">
                                 <div class="row">
                                     <!--Basic Course Information-->
                                     <div class="col-md-4">
-                                        <label>Instructor: </label><a href="#"><script> document.write(course[0].instructor) </script></a><br>
-                                        <label>Term: </label><script> document.write(course[0].term) </script><br>
-                                        <label>Class Times: </label><script> document.write(course[0].meeting_days + " " + course[0].start_time + " to " + course[0].end_time) </script><br>
-                                        <label>Room: </label><script> document.write(course[0].room) </script><br>
-                                        <label>Seats Available: </label><script> document.write(course[0].seats) </script><br>
+                                        <label>Instructor: </label><a href="#"><%= instructor %></a><br>
+                                        <label>Term: </label><%= term %><br>
+                                        <label>Class Times: </label><%= meeting_days %> <%= start_time %> to <%= end_time %><br>
+                                        <label>Room: </label><%= room %><br>
+                                        <label>Seats Available: </label><%= seats %><br>
                                         <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
                                     </div>
                                     <!--Ratings Graphs-->
