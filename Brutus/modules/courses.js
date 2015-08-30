@@ -19,6 +19,7 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 	}
 });
 var courses = db.collection('courses');
+var accounts = db.collection('accounts');
 
 exports.addCourse = function(data, callback){
     courses.insert(data, {safe: true}, callback);
@@ -33,6 +34,21 @@ exports.getAllCourses = function(data, callback){
 exports.getCourseByCourseId = function(value, callback){
     courses.findOne({course_id:value}, function(e,o) {
         if (o){
+            callback(o);
+        }
+        else{
+            callback(e);
+        }
+    });
+}
+
+exports.addReview = function(data, callback){
+    accounts.findOne({email:data.user_email}, function(e,o) {
+        if (o){
+            var id = o._id;
+            console.log(o);
+            console.log(data);
+            accounts.courses_taken.save( { _id: id, courses_taken: data } );
             callback(o);
         }
         else{

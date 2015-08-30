@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
+		<link rel="stylesheet" href="/stylesheets/general.css"/>
+
+  </head>
+  <body>
+    <!--Navbar-->
+    <% include ../shared/_navbar %>
+      
+      <!--Body-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">                 
+                    <form action="review" method="post" name="addReviewForm" style="margin-top: 150px">
+                        <h2>Review a Course</h2>
+                        <label>Course ID</label> (ex. 4)
+                        <input type="text" class="form-control" name="course_id">
+                        <label>Grade</label> (ex. B+)
+                        <input type="text" class="form-control" name="grade">
+                        <label>Overall Rating</label> (1 to 5)
+                        <input type="text" class="form-control" name="rating">
+                        <label>Difficulty Level</label> (1 to 5)
+                        <input type="text" class="form-control" name="difficulty">
+                        <label>Comments</label> (optional)
+                        <input type="text" class="form-control" name="comments">
+                        <input type="submit" class="form-control" style="margin-top: 25px">
+                    </form>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+  </body>
+</html>

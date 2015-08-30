@@ -169,5 +169,28 @@ router.post('/search', function(req, res){
    });
 });
 
+/* GET course review page. */ 
+router.get('/review', function(req, res, next) {
+  res.render('review', { title: 'Review Classes', user: req.session.user});
+});
+
+/* POST course review data to the user collection in the db */
+router.post('/review', function(req, res, next) {
+     courses.addReview({
+            user_email : req.session.user.email,
+			course_id : req.body['couse_id'],
+            grade : req.body['grade'],
+            rating : req.body['rating'],
+            difficulty : req.body['difficulty'],
+            comments : req.body['comments']
+		}, function(e){
+			if (e){
+				res.status(400).send(e);
+			}	else{
+				res.render('review', { title: 'Review Classes', user: req.session.user });
+			}
+		});
+});
+
 module.exports = router;
 
