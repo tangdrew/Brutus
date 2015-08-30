@@ -94,108 +94,96 @@
 		</script>
 	</head>
 	<body>
-		<div class="container-fluid">
-			<!--Navbar-->
-			<nav class="navbar navbar-default">
-				<!--Navbar header and hamburger menu-->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">Brutus</a>
-				</div>
-			</nav>
-			
-			<div class="containter">
-				<div class="row">
-					<div class="col-md-2"></div>
-					<div class="col-md-8">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<script> document.write(course[0].title) </script>
-							</div>
-							<div class="panel-body">
-                                <div class="row">
-                                    <!--Basic Course Information-->
-                                    <div class="col-md-4">
-                                        <label>Instructor: </label><a href="#"><script> document.write(course[0].instructor) </script></a><br>
-                                        <label>Term: </label><script> document.write(course[0].term) </script><br>
-                                        <label>Class Times: </label><script> document.write(course[0].meeting_days + " " + course[0].start_time + " to " + course[0].end_time) </script><br>
-                                        <label>Room: </label><script> document.write(course[0].room) </script><br>
-                                        <label>Seats Available: </label><script> document.write(course[0].seats) </script><br>
-                                        <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
-                                    </div>
-                                    <!--Ratings Graphs-->
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        Average Grade: <script> document.write(avgLetterGrade) </script>  
-                                                    </div>
-                                                     <div class="panel-body">
-                                                        <div>
-                                                            <canvas id="canvas" height="450" width="600"></canvas>
-                                                        </div>
-                                                     </div>
+        
+        <% include ../shared/_navbar %>
+        
+        <div class="container" style="padding-top: 100px;">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <script> document.write(course[0].title) </script>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <!--Basic Course Information-->
+                                <div class="col-md-4">
+                                    <label>Instructor: </label><a href="#"><script> document.write(course[0].instructor) </script></a><br>
+                                    <label>Term: </label><script> document.write(course[0].term) </script><br>
+                                    <label>Class Times: </label><script> document.write(course[0].meeting_days + " " + course[0].start_time + " to " + course[0].end_time) </script><br>
+                                    <label>Room: </label><script> document.write(course[0].room) </script><br>
+                                    <label>Seats Available: </label><script> document.write(course[0].seats) </script><br>
+                                    <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
+                                </div>
+                                <!--Ratings Graphs-->
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Average Grade: <script> document.write(avgLetterGrade) </script>  
                                                 </div>
-                                            </div>  
-                                            <div class="col-md-6">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        Difficulty: <script> document.write(difficultyAvg) </script>
+                                                    <div class="panel-body">
+                                                    <div>
+                                                        <canvas id="canvas" height="450" width="600"></canvas>
                                                     </div>
-                                                     <div class="panel-body">
-                                                        <div>
-                                                            <canvas id="canvas2" height="450" width="600"></canvas>
-                                                        </div>
-                                                     </div>
+                                                    </div>
+                                            </div>
+                                        </div>  
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Difficulty: <script> document.write(difficultyAvg) </script>
                                                 </div>
-                                            </div>   
-                                        </div>
+                                                    <div class="panel-body">
+                                                    <div>
+                                                        <canvas id="canvas2" height="450" width="600"></canvas>
+                                                    </div>
+                                                    </div>
+                                            </div>
+                                        </div>   
                                     </div>
                                 </div>
-                                <!--Reviews Section-->
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="panel panel-default col-md-10">
-                                        <div class="panel-heading">
-                                            Reviews
-                                        </div>
-                                        <div class="panel-body">
-                                            <script>
-                                                for(var i = 0; i < reviews.length; i++){
-                                                    document.write("<div class='row'> \
-                                                                        <div class='col-md-1'></div> \
-                                                                        <div class='panel panel-default col-md-10'> \
-                                                                            <div class='panel-body'> \
-                                                                                <span id='rating-" + reviews[i].review_id + "'></span> <span style='color:#aaa;font-family:verdana;font-size:11px'>on August 28, 2015</span> <br> \
-                                                                                <i>'" + reviews[i].comment + "'</i> \
-                                                                            </div> \
+                            </div>
+                            <!--Reviews Section-->
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="panel panel-default col-md-10">
+                                    <div class="panel-heading">
+                                        Reviews
+                                    </div>
+                                    <div class="panel-body">
+                                        <script>
+                                            for(var i = 0; i < reviews.length; i++){
+                                                document.write("<div class='row'> \
+                                                                    <div class='col-md-1'></div> \
+                                                                    <div class='panel panel-default col-md-10'> \
+                                                                        <div class='panel-body'> \
+                                                                            <span id='rating-" + reviews[i].review_id + "'></span> <span style='color:#aaa;font-family:verdana;font-size:11px'>on August 28, 2015</span> <br> \
+                                                                            <i>'" + reviews[i].comment + "'</i> \
                                                                         </div> \
-                                                                        <div class='col-md-1'></div> \
-                                                                    </div>");
-                                                    for(var j = 0; j < reviews[i].rating; j++){
-                                                        document.getElementById("rating-"+reviews[i].review_id).innerHTML = document.getElementById("rating-"+reviews[i].review_id).innerHTML + "☆";
-                                                    }
+                                                                    </div> \
+                                                                    <div class='col-md-1'></div> \
+                                                                </div>");
+                                                for(var j = 0; j < reviews[i].rating; j++){
+                                                    document.getElementById("rating-"+reviews[i].review_id).innerHTML = document.getElementById("rating-"+reviews[i].review_id).innerHTML + "☆";
                                                 }
-                                                
-                                            </script>
-                                        </div>
+                                            }
+                                            
+                                        </script>
                                     </div>
-                                    <div class="col-md-1"></div>
                                 </div>
-                            </div>			
-						</div>	
-					</div>
-					<div class="col-md-2"></div>	
-				</div>
-			</div>
+                                <div class="col-md-1"></div>
+                            </div>
+                        </div>			
+                    </div>	
+                </div>
+                <div class="col-md-2"></div>	
+            </div>
+        </div>
 			
-		</div>
+		
         <script>
             var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
             var lineChartData = {

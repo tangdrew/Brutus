@@ -1,11 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
+        <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
+        <link rel="stylesheet" href="/stylesheets/select2.css"/>
+        <link rel="stylesheet" href="/stylesheets/general.css"/>
+        <link rel="stylesheet" href="/stylesheets/index.css"/>
+        <script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script type="text/javascript" src="/javascripts/underscore.js"></script>
+        <script type="text/javascript" src="/javascripts/bootstrap.js"></script>
+        <script type="text/javascript" src="/javascripts/data.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+        <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>    
+    </head>
+    <body style="width: 100%; background: #fff">
+        <!-- navbar -->
+        <% include ../shared/_navbar %>
+        
+        
+        
+        <div style="container-fluid">
+            <div class="row">
+                <div class="top">
+                    <div style="margin-top: 150px">
+                        <h1 class="text-center gold-text">Et Tu Brute?</h1>
+                        <h2 class="text-center gold-text lato animate slideInDown">NU Course Scheduling Made Easy.</h2>
+                        <p class="text-center">
+                        <br>
+                        <a href="#" class="btn btn-gold btn-lg btn-huge lato" data-toggle="modal" data-target="#myModal">Sign Up Now</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container" style="padding-top: 600px">
+            <div class="row">
+                <div class="middle">
+                    <div class="col-md-4">
+                        <h2><b>Smart Search</b></h2>
+                    </div>
+                    <div class="col-md-4">
+                        <h2><b>Detailed Planning</b></h2>
+                    </div>
+                    <div class="col-md-4">
+                        <h2><b>In-Depth Reviews</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="container-fluid" style="padding-top: 600px">
+            <div class="row">
+                <div class="bottom">
+                    <div class="col-md-4">
+                        <h2><b>Smart Search</b></h2>
+                    </div>
+                    <div class="col-md-4">
+                        <h2><b>Detailed Planning</b></h2>
+                    </div>
+                    <div class="col-md-4">
+                        <h2><b>In-Depth Reviews</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--
+        <header style="padding-top: 100px">
+            <div class="header-content">
+                <div class="header-content-inner">
+                    <h1>Your Favorite Source of Free Bootstrap Themes</h1>
+                    <hr>
+                    <p>Start Bootstrap can help you build better websites using the Bootstrap CSS framework! Just download your template and start going, no strings attached!</p>
+                    <a href="#about" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
+                </div>
+            </div>
+        </header>
+        -->
+    </body>
 </html>

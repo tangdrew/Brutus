@@ -56,6 +56,7 @@
     width: 100%;
 }
 
+/* search button glyph on main page */
 .search-btn:hover {
     color: #6f5499;
 }
@@ -78,4 +79,9 @@
 
 .search-btn .glyphicon .glyphicon-search {
     color: #6f5499;
+}
+
+.navbar-heading {
+    font-size: 2em !important;
+    line-height: 90px !important;
 }

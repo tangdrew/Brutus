@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var accounts = require('../modules/accounts');
 
-/* GET home page. 
+/* GET home page. */ 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});*/
+  res.render('index', { title: 'Brutus', user: null});
+});
 
 /* GET search page. */
 router.get('/search', function(req, res, next) {
@@ -58,7 +58,8 @@ router.post('/register', function(req, res){
 		});
 });
 
-/*GET index page, if cookie saved proceed to home, else go to login */
+/*
+// GET index page, if cookie saved proceed to home, else go to login
 router.get('/', function(req, res){
 // check if the user's credentials are saved in a cookie //
    if (req.cookies.user == undefined || req.cookies.pass == undefined){
@@ -69,5 +70,5 @@ router.get('/', function(req, res){
       );
    }
 });
-
+*/
 module.exports = router;
