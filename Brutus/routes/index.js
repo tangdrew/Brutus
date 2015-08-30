@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var accounts = require('../modules/accounts');
+var courses = require('../modules/courses');
 
 /* GET home page. 
 router.get('/', function(req, res, next) {
@@ -15,6 +16,38 @@ router.get('/search', function(req, res, next) {
 /* GET course profile page. */
 router.get('/course', function(req, res, next) {
   res.render('course', { title: 'Course' });
+});
+
+/* GET course profile page. */
+router.get('/addCourse', function(req, res, next) {
+  res.render('addCourse', { title: 'Add courses to the database' });
+});
+
+/* POST course data to the database courses collection */
+router.post('/addCourse', function(req, res, next) {
+     courses.addCourse({
+			title 	: req.body['title'],
+            term 	: req.body['term'],
+            instructor 	: req.body['instructor'],
+            subject	: req.body['subject'],
+            catalog_num : req.body['catalog_num'],
+            section : req.body['section'],
+            room : req.body['room'],
+            meeting_days : req.body['meeting_days'],
+            start_time : req.body['start_time'],
+            end_time : req.body['end_time'],
+            seats : req.body['seats'],
+            topic : req.body['topic'],
+            component : req.body['component'],
+            class_num : req.body['class_num'],
+            course_id : req.body['course_id']
+		}, function(e){
+			if (e){
+				res.status(400).send(e);
+			}	else{
+				res.render('addCourse');
+			}
+		});
 });
 
 /* GET login page. */
