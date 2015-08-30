@@ -136,8 +136,8 @@ header .header-content .header-content-inner p {
 
 /* bottom section of landing page */
 .bottom {
-    position: relative;
-    top: 0;
+    position: absolute;
+    top: 1000px;
     width: 100%;
     margin: 0;
     /*
@@ -147,9 +147,10 @@ header .header-content .header-content-inner p {
     background-size: cover;
     -o-background-size: cover;
     */
-    background-color: #42325b;
+    background-color: #d7d7d7;
     left: 0px;
     margin-left: 0;
+    margin-top: 80px;
     text-align: center;
     height: 500px;
 }

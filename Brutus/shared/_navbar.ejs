@@ -17,9 +17,11 @@
                 <li>
                 <a href="/search" class="navbar-heading">Search</a>
                 </li>
+            <% if (user) { %>
                 <li>
-                <a href="/reviews" class="navbar-heading">Reviews</a>
+                <a href="/reviews" class="navbar-heading">Submit Reviews</a>
                 </li>
+            <% } %>
             </ul>
             <% if (user) { %>
                 <ul style="margin-left: 20px" class="nav navbar-nav navbar-right">
