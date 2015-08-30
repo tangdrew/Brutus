@@ -10,10 +10,10 @@ router.use(cookieParser());
 router.use(session({secret: '1234567890QWERTY',resave: false,saveUninitialized: true}));
 
 
-/* GET home page. 
+/* GET home page. */ 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});*/
+  res.render('index', { title: 'Brutus', user: req.session.user});
+});
 
 /* GET search page. */
 router.get('/search', function(req, res, next) 
@@ -157,10 +157,18 @@ router.post('/logout', function(req, res)
 		req.session.destroy();
 });
 
-/*GET index page, if cookie saved proceed to home, else go to login*/ 
-router.get('/', function(req, res)
-{
-      res.redirect('index');
-});
 
+/*
+// GET index page, if cookie saved proceed to home, else go to login
+router.get('/', function(req, res){
+// check if the user's credentials are saved in a cookie //
+   if (req.cookies.user == undefined || req.cookies.pass == undefined){
+      res.render('login', 
+         { locals: 
+            { title: 'Hello - Please Login To Your Account' }
+         }
+      );
+   }
+});
+*/
 module.exports = router;
