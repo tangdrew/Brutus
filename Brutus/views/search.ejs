@@ -97,8 +97,8 @@
                 <div class="col-lg-3"></div>
             </div>
             <br>
-        
-            <div class="row">
+            
+            <div class="row" style="padding-top:100px">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <script>
@@ -106,7 +106,7 @@
                             var html = "";
                             for(var i = 0; i < matches.length; i++){
                                 html = html + "<div id='" + matches[i].course_id + "' class='panel panel-default listing' " + "onclick=goToCourse('" + matches[i].course_id + "')" + " style='margin: 0; color: #fff'> \
-                                                    <div class='panel-body' style='border: 2px solid #7d65a3; background-color: #634b89; color: #fff'> \
+                                                    <div class='panel-body'> \
                                                         <div style='display: inline-block; width: 100%'> \
                                                             <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
                                                             <label style='float: right; color: #fff'> " + matches[i].term + " \
@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-md-3"></div>
             </div>
-        </div>		
+        </div>	
 	</body>
     
     <script type="text/javascript">

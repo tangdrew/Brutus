@@ -47,14 +47,16 @@
 
 .select2-dropdown {
   background-color: white;
-  border: 1px solid #aaa;
+  border: 3px solid #42325b;
   border-radius: 4px;
   box-sizing: border-box;
   display: block;
   position: absolute;
   left: -100000px;
   width: 100%;
-  z-index: 1051; }
+  z-index: 1051; 
+  opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */ }
 
 .select2-results {
   display: block;
