@@ -168,13 +168,13 @@ router.post('/search', function(req, res){
        res.send(o);
    });
 });
-
-/* GET course review page. */ 
+/*
+/* GET course review page. 
 router.get('/review', function(req, res, next) {
   res.render('review', { title: 'Review Classes', user: req.session.user});
 });
 
-/* POST course review data to the user collection in the db */
+/* POST course review data to the user collection in the db 
 router.post('/review', function(req, res, next) {
      courses.addReview({
             user_email : req.session.user.email,
@@ -191,6 +191,6 @@ router.post('/review', function(req, res, next) {
 			}
 		});
 });
-
+*/
 module.exports = router;
 
