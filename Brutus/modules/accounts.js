@@ -31,15 +31,16 @@ exports.createAccount = function(data, callback)
 {
     var index = data.email.indexOf("@");
     var validEmail = data.email.substring(index + 1 , data.email.length);
+    console.log(validEmail);
     
     if(data.firstName == "" || data.lastName == "" || data.email == "" || data.password ==  "" || data.passwordConfirm == "")
     {
        callback('missingData');
     }
-    else if(validEmail != "u.northwestern.edu" || validEmail != "northwestern.edu")
-    {
-        callback('invalidEmail');
-    }     
+    else if(validEmail != "u.northwestern.edu" && validEmail != "northwestern.edu")
+    {        
+            callback('invalidEmail');             
+    }           
     else if(data.password != data.passwordConfirm)
     {
        callback('passwordNotMatch');

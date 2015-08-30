@@ -26,7 +26,7 @@ router.get('/course', function(req, res, next)
 {
   if(req.session.user == undefined)
   {
-      res.render('login', { title: 'Login to Brutus' });   
+      res.render('login', { title: 'Login to Brutus', user: null });   
   }
   else
   {
@@ -36,7 +36,7 @@ router.get('/course', function(req, res, next)
 
 /* GET course profile page. */
 router.get('/addCourse', function(req, res, next) {
-  res.render('addCourse', { title: 'Add courses to the database' });
+  res.render('addCourse', { title: 'Add courses to the database', user: req.session.user });
 });
 
 /* POST course data to the database courses collection */
@@ -61,7 +61,7 @@ router.post('/addCourse', function(req, res, next) {
 			if (e){
 				res.status(400).send(e);
 			}	else{
-				res.render('addCourse');
+				res.render('addCourse', { title: 'Add courses to the database', user: req.session.user });
 			}
 		});
 });
@@ -72,7 +72,7 @@ router.get('/login', function(req, res, next)
   // Check if user is already logged in. If they are, redirect them to their account page
   if (req.session.user == undefined)
   {
-      res.render('login', { title: 'Login to Brutus' }); 
+      res.render('login', { user: req.session.user, title: 'Login to Brutus' }); 
   }
   else
   {
@@ -89,7 +89,7 @@ router.post('/login', function(req, res, next)
    function(e, o){       
        if(e == 'fail')
        {
-           res.render('login', { error : e });
+           res.render('login', { error : e, user: null });
        }       
        else
        {
@@ -107,7 +107,7 @@ router.post('/login', function(req, res, next)
 /* GET registration page. */
 router.get('/register', function(req, res, next) 
 {
-  res.render('register', { title: 'Register for Brutus' });
+  res.render('register', { title: 'Register for Brutus', user: null });
 });
 
 router.post('/register', function(req, res)
@@ -123,23 +123,23 @@ router.post('/register', function(req, res)
   {
 			if (e == 'email-taken')
       {				
-                res.render('register', { emailTaken : e });
+                res.render('register', { emailTaken : e , user: null  });
 			}
       else if (e == 'missingData')
       {				
-                res.render('register', { missingData : e });
+                res.render('register', { missingData : e , user: null });
 			}
       else if (e == 'invalidEmail')
       {
-                res.render('register', { invalidEmail : e });
+                res.render('register', { invalidEmail : e , user: null });
       }
       else if (e == 'passwordNotMatch')
       {				
-                res.render('register', { passwordNotMatch : e });
+                res.render('register', { passwordNotMatch : e , user: null });
 			}	
       else
       {
-				res.render('login', { registered: true });
+				res.render('login', { registered: true , user: null });
 			}
 	});
 });
@@ -147,16 +147,11 @@ router.post('/register', function(req, res)
 // GET logout page
 router.get('/logout', function(req, res, next)
 {
-    res.render('index');
-});
-
-router.post('/logout', function(req, res)
-{
     res.clearCookie('user');
 		res.clearCookie('pass');
 		req.session.destroy();
+    res.redirect('/');
 });
-
 
 /*
 // GET index page, if cookie saved proceed to home, else go to login
