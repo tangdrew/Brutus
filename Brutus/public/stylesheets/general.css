@@ -1,3 +1,7 @@
+body {
+    height: 1400px;
+}
+
 .listing-top-row{
 	display: inline-block; 
 	width: 100%;
@@ -27,7 +31,6 @@
     position: absolute;
     right: 0px;
     padding: 10px;
-    pointer-events: none; 
     border: 0;
     background: none;
     bottom: 50px;
@@ -98,4 +101,15 @@
 
 .navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
     background-color: #6f5499;
+}
+
+.panel-body {
+    border: 2px solid #7d65a3;
+    background-color: #634b89;
+    color: #fff;
+}
+
+.panel-body:hover{
+    cursor: pointer;
+    background-color: #8b76ad;
 }

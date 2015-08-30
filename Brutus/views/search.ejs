@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><%= title %></title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
@@ -68,7 +69,7 @@
         <div class="container-fluid" style="padding-top: 100px">
             <div class="row">
                 <div class="col-lg-3"></div>
-                <div class="col-lg-2" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
+                <div class="col-lg-2 col-xs-12" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
                     <div style="padding-right: 15px">
                         <input class="typeahead tt-hint form-control" id="search" type="search" type="text" placeholder="Course">
                         <button class="btn search-btn" type="button">
@@ -76,7 +77,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-lg-2" style="margin-top: 4px;">
+                <div class="col-lg-2 col-xs-12" style="margin-top: 4px;">
                     <select class="subject-select">
                         <option value="ALL">All Subjects</option>
                         <option value="ACCOUNTING">ACCOUNT - Accounting</option>
@@ -86,7 +87,7 @@
                         <option value="PHYSICS">PHYSICS - Physics</option>
                     </select>  
                 </div>
-                <div class="col-lg-2" style="margin-top: 4px;">
+                <div class="col-lg-2 col-xs-12" style="margin-top: 4px;">
                     <select class="term-select">
                         <option value="FALL2015">Fall 2015</option>
                         <option value="WINTER2016">Winter 2016</option>
@@ -97,16 +98,16 @@
                 <div class="col-lg-3"></div>
             </div>
             <br>
-        
-            <div class="row">
+            
+            <div class="row" style="padding-top:100px">
                 <div class="col-md-3"></div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-xs-12">
                     <script>
                         function createListings(matches){
                             var html = "";
                             for(var i = 0; i < matches.length; i++){
                                 html = html + "<div id='" + matches[i].course_id + "' class='panel panel-default listing' " + "onclick=goToCourse('" + matches[i].course_id + "')" + " style='margin: 0; color: #fff'> \
-                                                    <div class='panel-body' style='border: 2px solid #7d65a3; background-color: #634b89; color: #fff'> \
+                                                    <div class='panel-body'> \
                                                         <div style='display: inline-block; width: 100%'> \
                                                             <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
                                                             <label style='float: right; color: #fff'> " + matches[i].term + " \
@@ -127,7 +128,7 @@
                 </div>
                 <div class="col-md-3"></div>
             </div>
-        </div>		
+        </div>	
 	</body>
     
     <script type="text/javascript">
