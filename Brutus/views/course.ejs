@@ -14,7 +14,7 @@
         <script type="text/javascript" src="/javascripts/data.js"></script>
 		
 		<script>
-			function getQuerystringNameValue(name){
+	/*		function getQuerystringNameValue(name){
 				var winURL = window.location.href;
 				var queryStringArray = winURL.split("?");
 				var queryStringParamArray = queryStringArray[1].split("&");
@@ -31,7 +31,7 @@
 				}
 			
 				return nameValue;
-			}	
+			}	*/
 			function getObjects(obj, key, val) {
 				var objects = [];
 				for (var i in obj) {
@@ -45,9 +45,9 @@
 				return objects;
 			}
 			
-            var courseID = getQuerystringNameValue("course");
-            var course = getObjects(obj.courses, "course_id", courseID);
-            var reviews = getObjects(obj.users, "course_id", courseID);
+     //       var courseID = getQuerystringNameValue("course");
+     //       var course = getObjects(obj.courses, "course_id", courseID);
+    //        var reviews = getObjects(obj.users, "course_id", courseID);
             //Calculate average rating
             var ratingSum = 0;
             for(var i = 0; i < reviews.length; i++){

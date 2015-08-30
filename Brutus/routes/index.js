@@ -34,7 +34,7 @@ router.get('/course', function(req, res, next)
         courses.getCourseByCourseId(courseId, function(obj,e){
             if(obj){
                 console.log(obj);
-                res.render('course', {title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+                res.render('course', {user: req.session.user, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
             }
             if(e){
                 res.status(400).send(e);
