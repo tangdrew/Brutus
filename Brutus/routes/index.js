@@ -24,14 +24,23 @@ router.get('/search', function(req, res, next)
 /* GET course profile page. */
 router.get('/course', function(req, res, next) 
 {
-  if(req.session.user == undefined)
-  {
-      res.render('login', { title: 'Login to Brutus', user: null });   
-  }
-  else
-  {
-      res.render('course', { user: req.session.user, title: 'Course' });  
-  }  
+    if(req.session.user == undefined)
+    {
+        res.render('login', { title: 'Login to Brutus', user: null });   
+    }
+    else
+    {
+        var courseId = req.query.course;
+        courses.getCourseByCourseId(courseId, function(obj,e){
+            if(obj){
+                console.log(obj);
+                res.render('course', {user: req.session.user, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+            }
+            if(e){
+                res.status(400).send(e);
+            } 
+        });  
+    }
 });
 
 /* GET course profile page. */
@@ -113,7 +122,7 @@ router.get('/register', function(req, res, next)
 router.post('/register', function(req, res)
 {
     accounts.createAccount({
-			      firstName 	: req.body['firstName'],
+			firstName 	: req.body['firstName'],
             lastName 	: req.body['lastName'],
             email 	: req.body['email'],
             password	: req.body['password'],
@@ -153,17 +162,12 @@ router.get('/logout', function(req, res, next)
     res.redirect('/');
 });
 
-/*
-// GET index page, if cookie saved proceed to home, else go to login
-router.get('/', function(req, res){
-// check if the user's credentials are saved in a cookie //
-   if (req.cookies.user == undefined || req.cookies.pass == undefined){
-      res.render('login', 
-         { locals: 
-            { title: 'Hello - Please Login To Your Account' }
-         }
-      );
-   }
+/*GET course data and return as JSON */
+router.post('/search', function(req, res){
+   courses.getAllCourses(req.body, function(o){
+       res.send(o);
+   });
 });
-*/
+
 module.exports = router;
+

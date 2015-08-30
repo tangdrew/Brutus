@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<% var page = 'search' %>
 <html>
     <head>
         <title><%= title %></title>
@@ -15,13 +14,49 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
         <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>
         <script>
+            //Creates a delay of n milliseconds
+            var delay = (function(){
+                    var timer = 0;
+                    return function(callback, ms){
+                        clearTimeout (timer);
+                        timer = setTimeout(callback, ms);
+                    };
+                })();
+            
+            var courseArray;
+            var matches;
+            //AJAX post request to database, returns list of all courses
+            function getCourses(){
+                $.ajax( {
+                    url: '/search',
+                    type: 'POST',
+                 //   data: {"search" : document.getElementById('search').value},
+                    success: function(items) {
+                        courseArray = items;
+                        createListings(courseArray);
+                    }
+                });
+            }
+            
+            //Links course listings to their profile pages
+            function goToCourse(id){
+                var link = "/course?course=" + id;
+                console.log(link);
+                window.location = link;
+            }
+
 			$(document).ready(function(){
-				$('.listing').click(function(){
-					var link = "/course?course=" + this.id;
-					console.log(link);
-					window.location = link;
-				});
+                getCourses();
+                //Calls function while user types in the search input              
+                $('#search').keyup(function() {
+                    delay(function(){
+                        matches = search(courseArray, document.getElementById('search').value);
+                        createListings(matches);
+                    }, 500 );
+                });
 			});
+            
+            
 		</script>
   </head>
   <body style="background-color: #42325b">
@@ -35,7 +70,7 @@
                 <div class="col-lg-3"></div>
                 <div class="col-lg-2" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
                     <div style="padding-right: 15px">
-                        <input class="typeahead tt-hint form-control" type="search" type="text" placeholder="Course">
+                        <input class="typeahead tt-hint form-control" id="search" type="search" type="text" placeholder="Course">
                         <button class="btn search-btn" type="button">
                             <span style="font-size: 1.3em" class="glyphicon glyphicon-search"></span>
                         </button>
@@ -67,23 +102,28 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
                     <script>
-                        for(var i = 0; i < obj.courses.length; i++){
-                            document.write("<div id='" + obj.courses[i].course_id + "' class='panel panel-default listing' style='margin: 0; color: #fff'> \
-                                                <div class='panel-body' style='border: 2px solid #7d65a3; background-color: #634b89; color: #fff'> \
-                                                    <div style='display: inline-block; width: 100%'> \
-                                                        <a href='#' style='color: #FFD700'>" + obj.courses[i].title + "</a> \
-                                                        <label style='float: right; color: #fff'> " + obj.courses[i].term + " \
+                        function createListings(matches){
+                            var html = "";
+                            for(var i = 0; i < matches.length; i++){
+                                html = html + "<div id='" + matches[i].course_id + "' class='panel panel-default listing' " + "onclick=goToCourse('" + matches[i].course_id + "')" + " style='margin: 0; color: #fff'> \
+                                                    <div class='panel-body' style='border: 2px solid #7d65a3; background-color: #634b89; color: #fff'> \
+                                                        <div style='display: inline-block; width: 100%'> \
+                                                            <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
+                                                            <label style='float: right; color: #fff'> " + matches[i].term + " \
+                                                        </div> \
+                                                        <label style='color: #fff'>Instructor: </label style='color: #fff'><a href='#' style='color: #FFD700'> " + matches[i].instructor + "</a><br> \
+                                                        <label style='color: #fff'>Class Times: </label style='color: #fff'> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
+                                                        <label style='color: #fff'>Room: </label> " + matches[i].room + "<br> \
+                                                        <label style='color: #fff'>Seats Available: </label> " + matches[i].seats + "<br> \
+                                                        <label style='color: #fff'>Rating: </label> 3.5/5.0 <br> \
                                                     </div> \
-                                                    <label style='color: #fff'>Instructor: </label style='color: #fff'><a href='#' style='color: #FFD700'> " + obj.courses[i].instructor + "</a><br> \
-                                                    <label style='color: #fff'>Class Times: </label style='color: #fff'> " + obj.courses[i].meeting_days + " " + obj.courses[i].start_time + " to " + obj.courses[i].end_time + "<br> \
-                                                    <label style='color: #fff'>Room: </label> " + obj.courses[i].room + "<br> \
-                                                    <label style='color: #fff'>Seats Available: </label> " + obj.courses[i].seats + "<br> \
-                                                    <label style='color: #fff'>Rating: </label> 3.5/5.0 <br> \
                                                 </div> \
-                                            </div> \
-                                            ");
+                                                ";
+                            }
+                            document.getElementById('listings').innerHTML = html;
                         }
                     </script>
+                    <div id="listings" style="width: 100%"></div>
                 </div>
                 <div class="col-md-3"></div>
             </div>
@@ -99,6 +139,24 @@
                 alert("button clicked");
             });
         });
+        
+        function search(courses, substr){
+            var matches = [];
+            substr = substr.toLowerCase();
+            substr = substr.replace(/\s+/g, '');
+            console.log(substr);
+            for(var i = 0; i < courses.length; i++){
+                if(typeof courses[i].title != 'undefined' && typeof courses[i].subject != 'undefined' && typeof courses[i].catalog_num != 'undefined'){
+                    var fullString = courses[i].title.toLowerCase() + " " + courses[i].subject.toLowerCase() + " " + courses[i].catalog_num.toLowerCase()
+                    fullString = fullString.replace(/\s+/g, '');
+                    if(fullString.indexOf(substr) >= 0){
+                        matches.push(courses[i]);
+                    }
+                }
+            }
+            return matches;
+        }
+        
         
         var substringMatcher = function(strs) {
             return function findMatches(q, cb) {
