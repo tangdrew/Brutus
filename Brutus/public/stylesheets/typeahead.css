@@ -33,6 +33,12 @@
     opacity: .4;
 }
 
+@media screen and (max-width: 720px) {
+    .tt-menu {
+        opacity:1;
+        filter:alpha(opacity=100); /* For IE8 and earlier */ }
+}
+
 .tt-suggestion {
     width: 100%;
     padding: 3px 20px;

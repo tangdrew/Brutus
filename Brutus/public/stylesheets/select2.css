@@ -58,6 +58,12 @@
   opacity:0.4;
   filter:alpha(opacity=40); /* For IE8 and earlier */ }
 
+@media screen and (max-width: 720px) {
+    .select2-dropdown {
+        opacity:1;
+        filter:alpha(opacity=100); /* For IE8 and earlier */ }
+}
+
 .select2-results {
   display: block;
   color: #000 }
