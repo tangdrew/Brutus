@@ -62,7 +62,16 @@ exports.createAccount = function(data, callback)
                     "lastName": data.lastName,
                     "email": data.email,
                     "pass": data.pass,
-                    "date": data.date
+                    "date": data.date,
+                    "gpa": 0,
+                    "reviewed": false,
+                    "year": null,
+                    "major": {},
+                    "minor": {},
+                    "school": null,
+                    "credits": 0,
+                    "courses_taken": {},
+                    "current_courses": {}
                 };
                 
                 accounts.insert(data, {safe: true}, callback);
