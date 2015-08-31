@@ -107,6 +107,11 @@ body {
     border: 2px solid #7d65a3;
     background-color: #634b89;
     color: #fff;
+    font-size: 20px;
+}
+
+.search-panel-body label {
+    font-size: 20px;
 }
 
 .search-panel-body:hover{

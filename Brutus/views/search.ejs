@@ -60,7 +60,7 @@
             
 		</script>
   </head>
-  <body style="background-color: #42325b">
+  <body style="background-color: #42325b; padding: 30px 0px 0px 0px;">
         
         <!-- navbar -->
         <% include ../shared/_navbar %>
@@ -99,7 +99,7 @@
             </div>
             <br>
             
-            <div class="row" style="padding-top:100px">
+            <div class="row" style="padding-top:60px">
                 <div class="col-md-2"></div>
                 <div class="col-md-8 col-xs-12">
                     <script>
@@ -110,10 +110,10 @@
                                                     <div class='panel-body search-panel-body'> \
                                                         <div style='display: inline-block; width: 100%'> \
                                                             <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
-                                                            <label style='float: right; color: #fff'> " + matches[i].term + " \
+                                                            <label style='float: right; color: #fff'> " + matches[i].term + "</label> \
                                                         </div> \
-                                                        <label style='color: #fff'>Instructor: </label style='color: #fff'><a href='#' style='color: #FFD700'> " + matches[i].instructor + "</a><br> \
-                                                        <label style='color: #fff'>Class Times: </label style='color: #fff'> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
+                                                        <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor + "</a><br> \
+                                                        <label style='color: #fff'>Class Times: </label> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
                                                         <label style='color: #fff'>Room: </label> " + matches[i].room + "<br> \
                                                         <label style='color: #fff'>Seats Available: </label> " + matches[i].seats + "<br> \
                                                         <label style='color: #fff'>Rating: </label> 3.5/5.0 <br> \
