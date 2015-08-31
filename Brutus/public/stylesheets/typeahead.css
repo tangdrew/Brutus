@@ -33,7 +33,7 @@
     opacity: .4;
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 1200px) {
     .tt-menu {
         opacity:1;
         filter:alpha(opacity=100); /* For IE8 and earlier */ }
