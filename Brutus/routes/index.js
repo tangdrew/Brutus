@@ -194,9 +194,10 @@ router.get('/logout', function(req, res, next)
 
 /*GET course data and return as JSON */
 router.post('/search', function(req, res){
-   courses.getAllCourses(req.body, function(o){
-       res.send(o);
-   });
+   //courses.getAllCourses(req.body, function(o){
+   //    res.send(o);
+   //});
+   res.send({});
 });
 
 module.exports = router;
