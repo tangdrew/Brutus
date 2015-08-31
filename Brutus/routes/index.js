@@ -33,14 +33,23 @@ router.get('/course', function(req, res, next)
         var courseId = req.query.course;
         courses.getCourseByCourseId(courseId, function(obj,e){
             if(obj){
-                console.log(obj);
-                res.render('course', {user: req.session.user, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+                //Send Course data and whether user is already enrolled
+                accounts.checkEnrollment(req.session.user.email, courseId, function(enrolled){
+                    res.render('course', {enrolled: enrolled, user: req.session.user, course_id: courseId, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+                });
             }
             if(e){
                 res.status(400).send(e);
             } 
         });  
     }
+});
+
+//POST to course profile page when hit add class button, saves class to db
+router.post('/course', function(req, res, next) { 
+    courses.addClass(req.session.user.email, req.body.course_id, function(o){
+       res.send(o);
+   });
 });
 
 /* GET course profile page. */

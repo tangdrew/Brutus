@@ -45,11 +45,9 @@ exports.getCourseByCourseId = function(value, callback){
 exports.addReview = function(data, userEmail, callback){
     accounts.findOne({email:userEmail}, function(e,o) {
         if (o){
-            var newReviewJSON = "{ '" + data.course_id + "' : " +
-                                    "{ 'grade': '" + data.grade + "' , 'rating': '" + data.rating + "'," +
-                                    "'difficulty':'" + data.difficulty + "' , 'comments': '" + data.comments + "' } }";
-            var newCoursesTakenJSON = '{' + o.courses_taken.slice(1,o.courses_taken.length-1) + ',' + newReviewJSON + '}'
-            accounts.update ({email: userEmail}, {$set: {"courses_taken" : newCoursesTakenJSON} });
+            var courses_taken = o.courses_taken;
+            courses_taken.push(data);
+            accounts.update ({email: userEmail}, {$set: {"courses_taken" : courses_taken} });
             callback(e, o);
         }
         else{
@@ -57,3 +55,17 @@ exports.addReview = function(data, userEmail, callback){
         }
     });
 }
+
+exports.addClass = function(userEmail, course_id, callback){
+    accounts.findOne({email:userEmail}, function(e,o) {
+        if (o){
+            var current_courses = o.current_courses;
+            current_courses.push(course_id);
+            accounts.update ({email: userEmail}, {$set: {"current_courses" : current_courses} });
+            callback('success');
+        }
+        else{
+            callback(e);
+        }
+    });
+};

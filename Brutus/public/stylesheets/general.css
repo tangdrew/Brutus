@@ -113,3 +113,18 @@ body {
     cursor: pointer;
     background-color: #8b76ad;
 }
+
+/*Gold button*/
+.gold-text {
+    color: #ffdf32;
+}
+
+.btn-gold {
+    color: #fff;
+    font-weight: 500;
+    background-color: #ffdf32;
+}
+
+.btn-gold:hover {
+    background-color: #ffe766;
+}

@@ -71,8 +71,8 @@ exports.createAccount = function(data, callback)
                     "minor": {},
                     "school": null,
                     "credits": 0,
-                    "courses_taken": {},
-                    "current_courses": {}
+                    "courses_taken": [],
+                    "current_courses": []
                 };
                 
                 accounts.insert(data, {safe: true}, callback);
@@ -140,5 +140,22 @@ var validatePassword = function(plainPass, combined, callback)
         }
 
         callback(null, salt + new Buffer(verify).toString('hex') === combined);
+    });
+}
+
+exports.checkEnrollment = function(userEmail, courseId, callback){
+    accounts.findOne({email:userEmail}, function(e, o) 
+    {       
+        if (o)
+        {
+            if(o.current_courses.indexOf(courseId) >= 0){
+                callback(true);
+            }
+            callback(false);
+        }	
+        else
+        {
+            callback(false);
+        }
     });
 }

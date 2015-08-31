@@ -91,6 +91,25 @@
                 var avgLetterGrade = "NA";
             }
             
+            //AJAX post request to database, returns list of all courses
+            function addCourse(){
+                var course_id = <%= course_id %>;
+                $.ajax( {
+                    url: '/course',
+                    type: 'POST',
+                    data: {"course_id" : course_id},
+                    success: function(response) {
+                        if(response == 'success'){
+                            //On success of adding class to db, change class button
+                            console.log('POST success');
+                            document.getElementById("addButton").disabled = true;
+                            document.getElementById('addButton').classList.remove('btn-gold');
+                            document.getElementById('addButton').classList.add('btn-success');
+                            document.getElementById("addButton").innerHTML = "Added"
+                        }
+                    }
+                });
+            }
             
 		</script>
 	</head>
@@ -117,6 +136,13 @@
                                     <label>Room: </label><%= room %><br>
                                     <label>Seats Available: </label><%= seats %><br>
                                     <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
+                                    <div style="width: 100%; text-align: center">
+                                        <% if(enrolled == true){ %>
+                                            <button id="addButton" class="btn btn-success btn-lg">Added</button>
+                                        <% }else{%>
+                                            <button id="addButton" class="btn btn-gold btn-lg" onclick="addCourse()">Add Class</button>
+                                        <% } %>
+                                    </div>
                                 </div>
                                 <!--Ratings Graphs-->
                                 <div class="col-md-8">
@@ -126,63 +152,58 @@
                                                 <div class="panel-heading">
                                                     Average Grade: <script> document.write(avgLetterGrade) </script>  
                                                 </div>
-                                                    <div class="panel-body">
+                                                <div class="panel-body">
                                                     <div>
                                                         <canvas id="canvas" height="450" width="600"></canvas>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Difficulty: <script> document.write(difficultyAvg) </script>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div>
+                                                        <canvas id="canvas2" height="450" width="600"></canvas>
                                                     </div>
+                                                </div>
                                             </div>
-                                                <div class="panel-body">
-                                                <div>
-                                                    <canvas id="canvas" height="450" width="600"></canvas>
-                                                </div>
-                                                </div>
-                                        </div>
+                                        </div>  
                                     </div>  
-                                    <div class="col-md-6">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                Difficulty: <script> document.write(difficultyAvg) </script>
-                                            </div>
-                                                <div class="panel-body">
-                                                <div>
-                                                    <canvas id="canvas2" height="450" width="600"></canvas>
-                                                </div>
-                                                </div>
-                                        </div>
-                                    </div>   
                                 </div>
                             </div>
-                        </div>
-                        <!--Reviews Section-->
-                        <div class="row">
-                            <div class="col-md-1"></div>
-                            <div class="panel panel-default col-md-10">
-                                <div class="panel-heading">
-                                    Reviews
-                                </div>
-                                <div class="panel-body">
-                                    <script>
-                                        for(var i = 0; i < reviews.length; i++){
-                                            document.write("<div class='row'> \
-                                                                <div class='col-md-1'></div> \
-                                                                <div class='panel panel-default col-md-10'> \
-                                                                    <div class='panel-body'> \
-                                                                        <span id='rating-" + reviews[i].review_id + "'></span> <span style='color:#aaa;font-family:verdana;font-size:11px'>on August 28, 2015</span> <br> \
-                                                                        <i>'" + reviews[i].comment + "'</i> \
+                            <!--Reviews Section-->
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="panel panel-default col-md-10">
+                                    <div class="panel-heading">
+                                        Reviews
+                                    </div>
+                                    <div class="panel-body">
+                                        <script>
+                                            for(var i = 0; i < reviews.length; i++){
+                                                document.write("<div class='row'> \
+                                                                    <div class='col-md-1'></div> \
+                                                                    <div class='panel panel-default col-md-10'> \
+                                                                        <div class='panel-body'> \
+                                                                            <span id='rating-" + reviews[i].review_id + "'></span> <span style='color:#aaa;font-family:verdana;font-size:11px'>on August 28, 2015</span> <br> \
+                                                                            <i>'" + reviews[i].comment + "'</i> \
+                                                                        </div> \
                                                                     </div> \
-                                                                </div> \
-                                                                <div class='col-md-1'></div> \
-                                                            </div>");
-                                            for(var j = 0; j < reviews[i].rating; j++){
-                                                document.getElementById("rating-"+reviews[i].review_id).innerHTML = document.getElementById("rating-"+reviews[i].review_id).innerHTML + "☆";
+                                                                    <div class='col-md-1'></div> \
+                                                                </div>");
+                                                for(var j = 0; j < reviews[i].rating; j++){
+                                                    document.getElementById("rating-"+reviews[i].review_id).innerHTML = document.getElementById("rating-"+reviews[i].review_id).innerHTML + "☆";
+                                                }
                                             }
-                                        }
-                                        
-                                    </script>
+                                            
+                                        </script>
+                                    </div>
                                 </div>
+                                <div class="col-md-1"></div>
                             </div>
-                            <div class="col-md-1"></div>
                         </div>
                     </div>			
                 </div>	
