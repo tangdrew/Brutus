@@ -25,6 +25,7 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 
 var accounts = db.collection('accounts');
 
+
 // Creating new account for new users
 
 exports.createAccount = function(data, callback)
@@ -62,7 +63,16 @@ exports.createAccount = function(data, callback)
                     "lastName": data.lastName,
                     "email": data.email,
                     "pass": data.pass,
-                    "date": data.date
+                    "date": data.date,
+                    "gpa": 0,
+                    "reviewed": false,
+                    "year": null,
+                    "major": {},
+                    "minor": {},
+                    "school": null,
+                    "credits": 0,
+                    "courses_taken": [],
+                    "current_courses": []
                 };
                 
                 accounts.insert(data, {safe: true}, callback);
@@ -130,5 +140,22 @@ var validatePassword = function(plainPass, combined, callback)
         }
 
         callback(null, salt + new Buffer(verify).toString('hex') === combined);
+    });
+}
+
+exports.checkEnrollment = function(userEmail, courseId, callback){
+    accounts.findOne({email:userEmail}, function(e, o) 
+    {       
+        if (o)
+        {
+            if(o.current_courses.indexOf(courseId) >= 0){
+                callback(true);
+            }
+            callback(false);
+        }	
+        else
+        {
+            callback(false);
+        }
     });
 }
