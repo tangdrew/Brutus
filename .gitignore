@@ -1,5 +1,7 @@
 nohup.out
 
+./bin/www
+
 *.rar
 *.tar
 *.zip
