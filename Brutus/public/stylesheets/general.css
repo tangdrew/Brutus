@@ -122,7 +122,23 @@ body {
 }
 
 
+
 /* Navbar Brutus Brand */
 .brutus-brand {
     font-weight: 600;
+}
+
+/*Gold button*/
+.gold-text {
+    color: #ffdf32;
+}
+
+.btn-gold {
+    color: #fff;
+    font-weight: 500;
+    background-color: #ffdf32;
+}
+
+.btn-gold:hover {
+    background-color: #ffe766;
 }

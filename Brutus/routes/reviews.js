@@ -18,17 +18,17 @@ router.route('/')
     })
     .post(function(req, res, next) {
         courses.addReview({
-            user_email : req.session.user.email,
-			course_id : req.body['couse_id'],
+			course_id : req.body['course_id'],
             grade : req.body['grade'],
             rating : req.body['rating'],
             difficulty : req.body['difficulty'],
             comments : req.body['comments']
-		}, function(e){
+		}, req.session.user.email, function(e){
 			if (e){
+                console.log('Error');
 				res.status(400).send(e);
 			}	else{
-				res.render('reviews/index', { title: 'Review Classes', user: req.session.user });
+                res.render('reviews/index', { title: 'Review Classes', user: req.session.user });
 			}
 		});
 });
