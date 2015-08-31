@@ -21,6 +21,19 @@ router.get('/search', function(req, res, next)
     res.render('search', { user: req.session.user, title: 'Search' });
 });
 
+/* GET dashboard page. */
+router.get('/dashboard', function(req, res, next) 
+{
+    if(req.session.user == undefined)
+    {
+        res.redirect('/login');
+    }
+    else
+    {
+        res.render('dashboard', { user: req.session.user, title: 'Dashboard' });
+    }
+});
+
 /* GET course profile page. */
 router.get('/course', function(req, res, next) 
 {
@@ -91,7 +104,7 @@ router.get('/login', function(req, res, next)
     }
     else
     {   
-        res.redirect('accountSummary');
+        res.redirect('dashboard');
     }  
 });
 
@@ -111,10 +124,10 @@ router.post('/login', function(req, res, next)
            req.session.user = o;
            if (req.body['remember-me'] == 'true')
            {
-					   res.cookie('user', o.email, { maxAge: 900000 });
-					   res.cookie('pass', o.password, { maxAge: 900000 });
+					   res.cookie('user', o.email, { maxAge: 86400000 });
+					   res.cookie('pass', o.password, { maxAge: 86400000 });
 				   }
-           res.redirect('search');
+           res.redirect('dashboard');
        }
    }); 
 });

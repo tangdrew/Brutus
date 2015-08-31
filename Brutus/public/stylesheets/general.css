@@ -126,3 +126,9 @@ body {
 .brutus-brand {
     font-weight: 600;
 }
+
+/* Brutus Logo*/
+.brutus-logo {
+    height: 60px;
+    margin-top: 15px;
+}
