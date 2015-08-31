@@ -21,6 +21,19 @@ router.get('/search', function(req, res, next)
     res.render('search', { user: req.session.user, title: 'Search' });
 });
 
+/* GET dashboard page. */
+router.get('/dashboard', function(req, res, next) 
+{
+    if(req.session.user == undefined)
+    {
+        res.redirect('/login');
+    }
+    else
+    {
+        res.render('dashboard', { user: req.session.user, title: 'Dashboard' });
+    }
+});
+
 /* GET course profile page. */
 router.get('/course', function(req, res, next) 
 {
@@ -33,14 +46,23 @@ router.get('/course', function(req, res, next)
         var courseId = req.query.course;
         courses.getCourseByCourseId(courseId, function(obj,e){
             if(obj){
-                console.log(obj);
-                res.render('course', {user: req.session.user, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+                //Send Course data and whether user is already enrolled
+                accounts.checkEnrollment(req.session.user.email, courseId, function(enrolled){
+                    res.render('course', {enrolled: enrolled, user: req.session.user, course_id: courseId, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+                });
             }
             if(e){
                 res.status(400).send(e);
             } 
         });  
     }
+});
+
+//POST to course profile page when hit add class button, saves class to db
+router.post('/course', function(req, res, next) { 
+    courses.addClass(req.session.user.email, req.body.course_id, function(o){
+       res.send(o);
+   });
 });
 
 /* GET course profile page. */
@@ -91,7 +113,7 @@ router.get('/login', function(req, res, next)
     }
     else
     {   
-        res.redirect('accountSummary');
+        res.redirect('dashboard');
     }  
 });
 
@@ -111,10 +133,10 @@ router.post('/login', function(req, res, next)
            req.session.user = o;
            if (req.body['remember-me'] == 'true')
            {
-					   res.cookie('user', o.email, { maxAge: 900000 });
-					   res.cookie('pass', o.password, { maxAge: 900000 });
+					   res.cookie('user', o.email, { maxAge: 86400000 });
+					   res.cookie('pass', o.password, { maxAge: 86400000 });
 				   }
-           res.redirect('search');
+           res.redirect('dashboard');
        }
    }); 
 });
@@ -176,29 +198,6 @@ router.post('/search', function(req, res){
        res.send(o);
    });
 });
-/*
-/* GET course review page. 
-router.get('/review', function(req, res, next) {
-  res.render('review', { title: 'Review Classes', user: req.session.user});
-});
 
-/* POST course review data to the user collection in the db 
-router.post('/review', function(req, res, next) {
-     courses.addReview({
-            user_email : req.session.user.email,
-			course_id : req.body['couse_id'],
-            grade : req.body['grade'],
-            rating : req.body['rating'],
-            difficulty : req.body['difficulty'],
-            comments : req.body['comments']
-		}, function(e){
-			if (e){
-				res.status(400).send(e);
-			}	else{
-				res.render('review', { title: 'Review Classes', user: req.session.user });
-			}
-		});
-});
-*/
 module.exports = router;
 

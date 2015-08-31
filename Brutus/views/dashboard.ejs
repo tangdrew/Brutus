@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+	<head>
+        <title><%= title %></title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
+		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
+		<link rel="stylesheet" href="/stylesheets/general.css"/>
+        <script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script src="/javascripts/Chart.js"></script>
+		<script type="text/javascript" src="/javascripts/bootstrap.js"></script>
+        <script type="text/javascript" src="/javascripts/data.js"></script>
+        
+        <body>
+
+        <% include ../shared/_navbar %>
+        <div class="container" style="padding-top: 100px">
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <h1 class="panel-heading">
+                            <%= title %> <!--Welcome Yong-->
+                        </h1>
+                        <!-- First Section-->
+                        <div class="panel-body">
+                            <div class="row">
+                                <!--Weekly Course Schedule-->
+                                <div class="col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            My Weekly Schedule
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <canvas id="canvas3" height="300" width="600"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <!--Current courses-->
+                                <div class="col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Current Courses
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <canvas id="canvas4" height="300" width="600"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Second Section-->
+                        <div class="panel-body">
+                            <div class="row">
+                                <!--Quarter GPA-->
+                                <div class="col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            My Difficulty Load vs GPA
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <canvas id="canvas" height="300" width="600"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <!--Overall GPA-->
+                                <div class="col-md-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            My GPA Progress
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <canvas id="canvas2" height="300" width="600"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Third Section-->
+                        <div class="panel-body">
+                            <div class="row">
+                                <!--Quarter GPA-->
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Each Major's Average GPA
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <canvas id="canvas5" height="200" width="600"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>                                
+                            </div>
+                        </div>
+                        <!-- Fourth Section-->
+                        <div class="panel-body">
+                            <div class="row">
+                                <!--Quarter GPA-->
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Major vs Minor Courses that I took on this Quarter
+                                        </div>
+                                        <div class="panel-body">
+                                            <div>
+                                                <canvas id="canvas6" height="200" width="600"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+            var lineChartData = {
+                labels : ["January","February","March","April","May","June","July"],
+                datasets : [
+                    {
+                        label: "My First dataset",
+                        fillColor : "rgba(220,220,220,0.2)",
+                        strokeColor : "rgba(220,220,220,1)",
+                        pointColor : "rgba(220,220,220,1)",
+                        pointStrokeColor : "#fff",
+                        pointHighlightFill : "#fff",
+                        pointHighlightStroke : "rgba(220,220,220,1)",
+                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                    },
+                    {
+                        label: "My Second dataset",
+                        fillColor : "rgba(151,187,205,0.2)",
+                        strokeColor : "rgba(151,187,205,1)",
+                        pointColor : "rgba(151,187,205,1)",
+                        pointStrokeColor : "#fff",
+                        pointHighlightFill : "#fff",
+                        pointHighlightStroke : "rgba(151,187,205,1)",
+                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                    }
+                ]
+    
+            }
+    
+            window.onload = function(){
+                var ctx = document.getElementById("canvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx2 = document.getElementById("canvas2").getContext("2d");
+                window.myLine = new Chart(ctx2).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx3 = document.getElementById("canvas3").getContext("2d");
+                window.myLine = new Chart(ctx3).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx4 = document.getElementById("canvas4").getContext("2d");
+                window.myLine = new Chart(ctx4).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx5 = document.getElementById("canvas5").getContext("2d");
+                window.myLine = new Chart(ctx5).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx6 = document.getElementById("canvas6").getContext("2d");
+                window.myLine = new Chart(ctx6).Line(lineChartData, {
+                    responsive: true
+                });
+            }
+        </script>
+        </body>
+    </head>
+</html>

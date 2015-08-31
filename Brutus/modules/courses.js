@@ -42,17 +42,30 @@ exports.getCourseByCourseId = function(value, callback){
     });
 }
 
-exports.addReview = function(data, callback){
-    accounts.findOne({email:data.user_email}, function(e,o) {
+exports.addReview = function(data, userEmail, callback){
+    accounts.findOne({email:userEmail}, function(e,o) {
         if (o){
-            var id = o._id;
-            console.log(o);
-            console.log(data);
-            accounts.courses_taken.save( { _id: id, courses_taken: data } );
-            callback(o);
+            var courses_taken = o.courses_taken;
+            courses_taken.push(data);
+            accounts.update ({email: userEmail}, {$set: {"courses_taken" : courses_taken} });
+            callback(e, o);
+        }
+        else{
+            callback(e, o);
+        }
+    });
+}
+
+exports.addClass = function(userEmail, course_id, callback){
+    accounts.findOne({email:userEmail}, function(e,o) {
+        if (o){
+            var current_courses = o.current_courses;
+            current_courses.push(course_id);
+            accounts.update ({email: userEmail}, {$set: {"current_courses" : current_courses} });
+            callback('success');
         }
         else{
             callback(e);
         }
     });
-}
+};
