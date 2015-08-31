@@ -104,7 +104,7 @@ router.get('/login', function(req, res, next)
 {
     if (req.query.registered)
     {
-        res.render('login', {registered: true, user: null});
+        res.render('login', {registered: true, user: null, title: 'Login to Brutus'});
     }
     // Check if user is already logged in. If they are, redirect them to their account page
     if (req.session.user == undefined)
