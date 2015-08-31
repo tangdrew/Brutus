@@ -1,0 +1,32 @@
+################# Merging Into Master Branch #############
+
+
+
+# make sure you are on non master branch
+
+git add .
+git commit -m "insert your message"
+
+git push origin "your branch name"
+
+
+
+# move to the master branch
+
+git checkout master
+
+# if you are behind the remote master pull in master
+git pull origin master
+
+# then pull in your branch
+git pull origin "your branch name"
+
+# if you have merge conflicts, fix them, then run
+
+git commit -a
+git push origin master
+
+
+# else just
+
+git push origin master
