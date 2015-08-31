@@ -103,6 +103,8 @@ body {
     background-color: #6f5499;
 }
 
+/* search panel on search page */
+
 .search-panel-body {
     border: 2px solid #7d65a3;
     background-color: #634b89;
@@ -117,4 +119,10 @@ body {
 .search-panel-body:hover{
     cursor: pointer;
     background-color: #8b76ad;
+}
+
+
+/* Navbar Brutus Brand */
+.brutus-brand {
+    font-weight: 600;
 }
