@@ -103,13 +103,13 @@ body {
     background-color: #6f5499;
 }
 
-.panel-body {
+.search-panel-body {
     border: 2px solid #7d65a3;
     background-color: #634b89;
     color: #fff;
 }
 
-.panel-body:hover{
+.search-panel-body:hover{
     cursor: pointer;
     background-color: #8b76ad;
 }
