@@ -8,11 +8,17 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
 		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
 		<link rel="stylesheet" href="/stylesheets/general.css"/>
-        <script type="text/javascript" src="/javascripts/jquery.js"></script>
-        <script src="/javascripts/Chart.js"></script>
-		<script type="text/javascript" src="/javascripts/bootstrap.js"></script>
+        <link rel="stylesheet" href="/stylesheets/calendar.css"/>
+        <script type="text/javascript" src="/javascripts/Chart.js"></script>
         <script type="text/javascript" src="/javascripts/data.js"></script>
         
+        <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
+        <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <script src='/javascripts/moment.min.js'></script>
+        <script src='/javascripts/jquery.js'></script>
+        <script src='/javascripts/fullcalendar.min.js'></script>
+        
+        <script type="text/javascript" src="/javascripts/bootstrap.js"></script>
         <body>
 
         <% include ../shared/_navbar %>
@@ -28,20 +34,19 @@
                         <div class="panel-body">
                             <div class="row">
                                 <!--Weekly Course Schedule-->
-                                <div class="col-md-6">
+                                <div class="col-xs-12 col-sm-8 col-md-8">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             My Weekly Schedule
                                         </div>
                                         <div class="panel-body">
-                                            <div>
-                                                <canvas id="canvas3" height="300" width="600"></canvas>
+                                            <div id="calendar">
                                             </div>
                                         </div>
                                     </div>                                       
                                 </div>
                                 <!--Current courses-->
-                                <div class="col-md-6">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             Current Courses
@@ -165,10 +170,6 @@
                 window.myLine = new Chart(ctx2).Line(lineChartData, {
                     responsive: true
                 });
-                var ctx3 = document.getElementById("canvas3").getContext("2d");
-                window.myLine = new Chart(ctx3).Line(lineChartData, {
-                    responsive: true
-                });
                 var ctx4 = document.getElementById("canvas4").getContext("2d");
                 window.myLine = new Chart(ctx4).Line(lineChartData, {
                     responsive: true
@@ -182,6 +183,107 @@
                     responsive: true
                 });
             }
+
+
+            $(document).ready(function() {
+
+                // full calendar plugin to add weekly schedule
+                $('#calendar').fullCalendar({
+                    theme: true,
+                    defaultView: 'agendaWeek',
+                    height: "auto",
+                    header: false,
+                    allDaySlot: false,
+                    minTime: "07:00:00",
+                    maxTime: "22:00:00",
+                    selectable: true,
+                    editable: false,
+                    eventLmit: true,
+                    eventBackgroundColor: "#B8860B",
+                    eventTextColor: "#fff",
+                    eventBorderColor: "B8860B",
+                    eventColor: "B8860B",
+                    events: [
+                        {
+                            title: 'Long Event',
+                            start: '2015-08-28',
+                            end: '2015-09-03'
+                        },
+                        {
+                            id: 999,
+                            title: 'Repeating Event',
+                            start: '2015-09-01T16:00:00'
+                        },
+                        {
+                            id: 999,
+                            title: 'Repeating Event',
+                            start: '2015-09-01T16:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-30T07:00:00',
+                            end: '2015-08-30T08:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-30T08:00:00',
+                            end: '2015-08-30T11:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-30T10:00:00',
+                            end: '2015-08-30T14:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-31T07:00:00',
+                            end: '2015-08-31T08:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-31T08:00:00',
+                            end: '2015-08-31T11:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-31T10:00:00',
+                            end: '2015-08-31T14:00:00'
+                        },
+                        {
+                            title: 'Meeting',
+                            start: '2015-09-02T10:30:00',
+                            end: '2015-09-02T12:30:00'
+                        },
+                        {
+                            title: 'Lunch',
+                            start: '2015-09-05T12:00:00'
+                        },
+                        {
+                            title: 'Meeting',
+                            start: '2015-09-05T14:30:00'
+                        },
+                        {
+                            title: 'Happy Hour',
+                            start: '2015-09-04T17:30:00'
+                        },
+                        {
+                            title: 'Dinner',
+                            start: '2015-09-06T20:00:00'
+                        },
+                        {
+                            title: 'Birthday Party',
+                            start: '2015-09-05T07:00:00'
+                        },
+                        {
+                            title: 'Click for Google',
+                            url: 'http://google.com/',
+                            start: '2015-09-01'
+                        }
+                    ]
+                });
+
+            });
+
         </script>
         </body>
     </head>
