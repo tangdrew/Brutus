@@ -84,7 +84,7 @@
                 <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
                     <select id="subject" class="subject-select">
                         <option value="ALL">All Subjects</option>
-                        <option value="ACCOUNTING">ACCOUNT - Accounting</option>
+                        <option value="ACCOUNT">ACCOUNT - Accounting</option>
                         <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
                         <option value="ECON">ECON - Economics</option>
                         <option value="EECS">EECS - Electrical Engineering and Computer Science</option>
@@ -131,7 +131,7 @@
                                 if (matches[i].room)
                                 {
                                     building_name = matches[i].room.building_name;
-                                    room_name = matches[i].room.building_name;
+                                    room_name = matches[i].room.name;
                                 }
                                 html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
                                                     <div class='panel-body search-panel-body'> \

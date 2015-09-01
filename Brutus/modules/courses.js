@@ -61,7 +61,14 @@ exports.searchCourses = function(searchVal, subjectVal, termVal, callback){
     courses.find(query).toArray(function(err, result) {
         if (err) throw err;
         var matches = fuzzySearch(result, searchVal);
-        matches = matches.slice(0,9);
+        matches.sort(function(x, y) {
+            var strX = x.subject + x.catlog_num + x.title;
+            var strY = y.subject + y.catlog_num + y.title;
+            strX = strX.trim();
+            strY = strY.trim();
+            return strX.toLowerCase().localeCompare(strY.toLowerCase());
+        });
+        matches = matches.slice(0,10);
         console.log('done');
         callback(matches);
     });
