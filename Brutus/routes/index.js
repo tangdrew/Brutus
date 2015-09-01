@@ -55,8 +55,7 @@ router.get('/course', function(req, res, next)
             if(obj){
                 //Send Course data and whether user is already enrolled
                 accounts.checkEnrollment(req.session.user.email, courseId, function(enrolled){
-                    console.log(obj);
-                    res.render('course', {title: 'Review Class', enrolled: enrolled, user: req.session.user, courseObj: obj});
+                    res.render('course', {title: 'Review Class', enrolled: enrolled, user: req.session.user, courseObj: obj[0]});
                 });
             }
             else if(e){
