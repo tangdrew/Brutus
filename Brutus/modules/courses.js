@@ -68,7 +68,7 @@ exports.searchCourses = function(searchVal, subjectVal, termVal, callback){
 }
 
 exports.getCourseByCourseId = function(value, callback){
-    courses.findOne({course_id:value}, function(e,o) {
+    courses.find({_id:parseInt(value)}).toArray(function(e,o) {
         if (o){
             callback(o);
         }

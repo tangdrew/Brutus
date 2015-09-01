@@ -50,16 +50,16 @@ router.get('/course', function(req, res, next)
     }
     else
     {
-        console.log(req.query);
         var courseId = req.query.course;
-        courses.getCourseByCourseId(courseId, function(obj,e){
+        courses.getCourseByCourseId(courseId, function(obj, e){
             if(obj){
                 //Send Course data and whether user is already enrolled
                 accounts.checkEnrollment(req.session.user.email, courseId, function(enrolled){
-                    res.render('course', {enrolled: enrolled, user: req.session.user, course_id: courseId, title: obj.title, instructor: obj.instructor, term: obj.term, meeting_days: obj.meeting_days, start_time: obj.start_time, end_time: obj.end_time, room: obj.room, seats: obj.seats});
+                    console.log(obj);
+                    res.render('course', {title: 'Review Class', enrolled: enrolled, user: req.session.user, courseObj: obj});
                 });
             }
-            if(e){
+            else if(e){
                 res.status(400).send(e);
             } 
         });  

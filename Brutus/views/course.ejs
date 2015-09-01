@@ -8,7 +8,7 @@
         <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>
 		
 		<script>
-	/*		function getQuerystringNameValue(name){
+			function getQuerystringNameValue(name){
 				var winURL = window.location.href;
 				var queryStringArray = winURL.split("?");
 				var queryStringParamArray = queryStringArray[1].split("&");
@@ -25,7 +25,7 @@
 				}
 			
 				return nameValue;
-			}	*/
+			}	
 			function getObjects(obj, key, val) {
 				var objects = [];
 				for (var i in obj) {
@@ -87,7 +87,7 @@
             
             //AJAX post request to database, returns list of all courses
             function addCourse(){
-                var course_id = <%= course_id %>;
+                var course_id = getQuerystringNameValue('course');
                 $.ajax( {
                     url: '/course',
                     type: 'POST',
@@ -124,11 +124,11 @@
                             <div class="row">
                                 <!--Basic Course Information-->
                                 <div class="col-md-4">
-                                    <label>Instructor: </label><a href="#"><%= instructor %></a><br>
-                                    <label>Term: </label><%= term %><br>
-                                    <label>Class Times: </label><%= meeting_days %> <%= start_time %> to <%= end_time %><br>
-                                    <label>Room: </label><%= room %><br>
-                                    <label>Seats Available: </label><%= seats %><br>
+                                    <label>Instructor: </label><a href="#"><%= courseObj %></a><br>
+                                    <label>Term: </label><%= courseObj.term %><br>
+                                    <label>Class Times: </label><%= courseObj.meeting_days %> <%= courseObj.start_time %> to <%= courseObj.end_time %><br>
+                                    <label>Room: </label><%= courseObj %><br>
+                                    <label>Seats: </label><%= courseObj.seats %><br>
                                     <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
                                     <div style="width: 100%; text-align: center">
                                         <% if(enrolled == true){ %>
