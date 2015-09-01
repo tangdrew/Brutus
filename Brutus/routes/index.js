@@ -168,19 +168,19 @@ router.post('/register', function(req, res)
   {
 			if (e == 'email-taken')
       {				
-                res.render('register', { emailTaken : e , user: null  });
+                res.render('register', { title: 'Register for Brutus', emailTaken : e , user: null  });
 			}
       else if (e == 'missingData')
       {				
-                res.render('register', { missingData : e , user: null });
+                res.render('register', { title: 'Register for Brutus', missingData : e , user: null });
 			}
       else if (e == 'invalidEmail')
       {
-                res.render('register', { invalidEmail : e , user: null });
+                res.render('register', { title: 'Register for Brutus', invalidEmail : e , user: null });
       }
       else if (e == 'passwordNotMatch')
       {				
-                res.render('register', { passwordNotMatch : e , user: null });
+                res.render('register', { title: 'Register for Brutus', passwordNotMatch : e , user: null });
         }	
       else
       {
