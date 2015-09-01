@@ -1,5 +1,6 @@
-body {
+.search-body {
     height: 1400px;
+    padding: 30px 0px 0px 0px;
 }
 
 .listing-top-row{

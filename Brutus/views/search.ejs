@@ -64,7 +64,7 @@
             
 		</script>
   </head>
-  <body style="background-color: #42325b; padding: 30px 0px 0px 0px;">
+  <body class="search-body">
         
         <!-- navbar -->
         <% include ../shared/_navbar %>
@@ -72,8 +72,8 @@
         <!--Body-->
         <div class="container-fluid" style="padding-top: 100px">
             <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-4 col-xs-12" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
+                <div class="col-md-2"></div>
+                <div class="col-md-4 col-xs-12" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
                     <div style="padding-right: 15px">
                         <input class="typeahead tt-hint form-control" id="search" type="search" type="text" placeholder="Course">
                         <button class="btn search-btn" type="button">
@@ -81,8 +81,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-lg-2 col-xs-12" style="margin-top: 4px;">
-                    <select id="subject" class="subject-select">
+                <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
+                    <select class="subject-select">
                         <option value="ALL">All Subjects</option>
                         <option value="ACCOUNTING">ACCOUNT - Accounting</option>
                         <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
@@ -91,18 +91,31 @@
                         <option value="PHYSICS">PHYSICS - Physics</option>
                     </select>  
                 </div>
-                <div class="col-lg-2 col-xs-12" style="margin-top: 4px;">
-                    <select id="term" class="term-select">
-                        <option value="2015 Fall">Fall 2015</option>
-                        <option value="2016 Winter">Winter 2016</option>
-                        <option value="2016 Spring">Spring 2016</option>
-                        <option value="2016 Fall">Fall 2016</option>
+                <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
+                    <select class="term-select">
+                        <option value="FALL2015">Fall 2015</option>
+                        <option value="WINTER2016">Winter 2016</option>
+                        <option value="SPRING2016">Spring 2016</option>
+                        <option value="FALL2016">Fall 2016</option>
                     </select>  
                 </div>
-                <div class="col-lg-2"></div>
+                <div class="col-md-2"></div>
             </div>
             <br>
-            
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
+                    <select class="term-select">
+                        <option value="default">Sort By ...</option>
+                        <option value="name">Name</option>
+                        <option value="schedule">Class Time</option>
+                        <option value="rating">Professor Rating</option>
+                        <option value="difficulty">Class Difficulty</option>                        
+                        <option value="time">Time Commitment</option>
+                    </select>  
+                </div>
+                <div class="col-md-2"></div>
+            </div>
             <div class="row" style="padding-top:60px">
                 <div class="col-md-2"></div>
                 <div class="col-md-8 col-xs-12">

@@ -50,6 +50,7 @@ router.get('/course', function(req, res, next)
     }
     else
     {
+        console.log(req.query);
         var courseId = req.query.course;
         courses.getCourseByCourseId(courseId, function(obj,e){
             if(obj){

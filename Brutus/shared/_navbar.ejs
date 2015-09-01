@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <img class="navbar-brand brutus-logo" src="images/logo.gif">
+            <a href="/"><img class="navbar-brand brutus-logo" src="images/logo.gif"></a>
             <a class="navbar-brand brutus-brand" href="/">Brutus</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -18,6 +18,11 @@
                 <li>
                 <a href="/search" class="navbar-heading">Search</a>
                 </li>
+            <% if (user) { %>
+                <li>
+                <a href="/dashboard" class="navbar-heading">Dashboard</a>
+                </li>
+            <% } %>
             <% if (user) { %>
                 <li>
                 <a href="/reviews" class="navbar-heading">Submit Reviews</a>
