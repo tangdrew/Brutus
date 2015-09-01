@@ -124,6 +124,16 @@
                             var html = "";
                             for(var i = 0; i < matches.length; i++){
                                 console.log(matches[i].title + " " + matches[i].course_id);
+                                
+                                
+                                
+                                var building_name = "";
+                                var room_name = "";
+                                if (matches[i].room)
+                                {
+                                    building_name = matches[i].room.building_name;
+                                    room_name = matches[i].room.building_name;
+                                }
                                 html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
                                                     <div class='panel-body search-panel-body'> \
                                                         <div style='display: inline-block; width: 100%'> \
@@ -132,7 +142,7 @@
                                                         </div> \
                                                         <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
                                                         <label style='color: #fff'>Class Times: </label> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
-                                                        <label style='color: #fff'>Room: </label> " + matches[i].room.building_name + " " + matches[i].room.name + "<br> \
+                                                        <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
                                                         <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
                                                         <label style='color: #fff'>Rating: </label> 3.5/5.0 <br> \
                                                     </div> \
