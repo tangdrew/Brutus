@@ -1,7 +1,7 @@
 <!DOCTYPE html>
   <head>
     <meta charset="utf-8">
-    <% include ../shared/_header.ejs %>
+    <% include ../shared/_header %>
   </head>
   
   <body>
@@ -28,7 +28,7 @@
                 <% } %>               
                     
                 <h1>Sign Up</h1><br>
-                <form action="#" method="post" autocomplete = "on">
+                <form action="/register" method="post" autocomplete = "on">
                   <p>First Name</p>
                   <p><input type="text" class="form-control" name="firstName" value=""></p>
                   <p>Last Name</p>

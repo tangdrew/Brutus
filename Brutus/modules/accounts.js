@@ -31,6 +31,11 @@ var accounts = db.collection('accounts');
 exports.createAccount = function(data, callback)
 {
     var index = data.email.indexOf("@");
+    if (index == -1)
+    {
+        callback('invalidEmail');
+        return;
+    }
     var validEmail = data.email.substring(index + 1 , data.email.length);
     
     if(data.firstName == "" || data.lastName == "" || data.email == "" || data.password ==  "" || data.passwordConfirm == "")
@@ -39,46 +44,49 @@ exports.createAccount = function(data, callback)
     }
     else if(validEmail != "u.northwestern.edu" && validEmail != "northwestern.edu")
     {        
-            callback('invalidEmail');             
+        callback('invalidEmail');             
     }           
     else if(data.password != data.passwordConfirm)
     {
        callback('passwordNotMatch');
-    }    
-    accounts.findOne({email:data.email}, function(e, o) 
-    {
-        if (o)
+    }
+    else
+    {     
+        accounts.findOne({email:data.email}, function(e, o) 
         {
-            callback('email-taken');
-        }       	
-        else
-        {
-            saltAndHash(data.password, function(e, hash){
-                data.pass = hash;
-                // append date stamp when record was created 
-                data.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-                
-                data = {
-                    "firstName": data.firstName,
-                    "lastName": data.lastName,
-                    "email": data.email,
-                    "pass": data.pass,
-                    "date": data.date,
-                    "gpa": 0,
-                    "reviewed": false,
-                    "year": null,
-                    "major": {},
-                    "minor": {},
-                    "school": null,
-                    "credits": 0,
-                    "courses_taken": [],
-                    "current_courses": []
-                };
-                
-                accounts.insert(data, {safe: true}, callback);
-            });
-        }
-    });
+            if (o)
+            {
+                callback('email-taken');
+            }       	
+            else
+            {
+                saltAndHash(data.password, function(e, hash){
+                    data.pass = hash;
+                    // append date stamp when record was created 
+                    data.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+                    
+                    data = {
+                        "firstName": data.firstName,
+                        "lastName": data.lastName,
+                        "email": data.email,
+                        "pass": data.pass,
+                        "date": data.date,
+                        "gpa": 0,
+                        "reviewed": false,
+                        "year": null,
+                        "major": {},
+                        "minor": {},
+                        "school": null,
+                        "credits": 0,
+                        "courses_taken": [],
+                        "current_courses": []
+                    };
+                    
+                    accounts.insert(data, {safe: true}, callback);
+                });
+            }
+        });
+    }
 }
 
 // Check login for existing users

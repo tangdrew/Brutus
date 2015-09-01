@@ -152,6 +152,7 @@ router.post('/login', function(req, res, next)
 /* GET registration page. */
 router.get('/register', function(req, res, next) 
 {
+                                  console.log("in get");
   res.render('register', { title: 'Register for Brutus', user: null });
 });
 
@@ -168,18 +169,22 @@ router.post('/register', function(req, res)
   {
 			if (e == 'email-taken')
       {				
+          console.log("email");
                 res.render('register', { title: 'Register for Brutus', emailTaken : e , user: null  });
 			}
       else if (e == 'missingData')
       {				
+                    console.log("missing");
                 res.render('register', { title: 'Register for Brutus', missingData : e , user: null });
 			}
       else if (e == 'invalidEmail')
       {
+                              console.log("invalid");
                 res.render('register', { title: 'Register for Brutus', invalidEmail : e , user: null });
       }
       else if (e == 'passwordNotMatch')
       {				
+                                        console.log("password");
                 res.render('register', { title: 'Register for Brutus', passwordNotMatch : e , user: null });
         }	
       else
