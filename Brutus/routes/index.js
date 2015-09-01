@@ -127,7 +127,7 @@ router.post('/login', function(req, res, next)
    function(e, o){       
        if(e == 'fail')
        {
-           res.render('login', { error : e, user: null });
+           res.render('login', {title: "Login to Brutus", error : e, user: null });
        }       
        else
        {

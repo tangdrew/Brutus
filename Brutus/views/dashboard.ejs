@@ -8,14 +8,17 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
 		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
 		<link rel="stylesheet" href="/stylesheets/general.css"/>
-        <link rel="stylesheet" href="/stylesheets/fullcalendar.css"/>
-        <link rel="stylesheet" href="/stylesheets/fullcalendar.print.css"/>
-        <script type="text/javascript" src="/javascripts/moment.min.js"></script>
-        <script type="text/javascript" src="/javascripts/jquery.js"></script>
-        <script src="/javascripts/Chart.js"></script>
-		<script type="text/javascript" src="/javascripts/bootstrap.js"></script>
+        <link rel="stylesheet" href="/stylesheets/calendar.css"/>
+        <script type="text/javascript" src="/javascripts/Chart.js"></script>
         <script type="text/javascript" src="/javascripts/data.js"></script>
-        <script type="text/javascript" src="/javascripts/fullcalendar.min.js"></script>
+        
+        <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
+        <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <script src='/javascripts/moment.min.js'></script>
+        <script src='/javascripts/jquery.js'></script>
+        <script src='/javascripts/fullcalendar.min.js'></script>
+        
+        <script type="text/javascript" src="/javascripts/bootstrap.js"></script>
         <body>
 
         <% include ../shared/_navbar %>
@@ -188,20 +191,93 @@
                 $('#calendar').fullCalendar({
                     theme: true,
                     defaultView: 'agendaWeek',
-                    header: {
-                        left: 'prev, next today',
-                        center: 'title',
-                        right: 'month,agendaWeek, agendaDay'
-                    },
+                    height: "auto",
+                    header: false,
+                    allDaySlot: false,
+                    minTime: "07:00:00",
+                    maxTime: "22:00:00",
                     selectable: true,
                     editable: false,
                     eventLmit: true,
+                    eventBackgroundColor: "#B8860B",
+                    eventTextColor: "#fff",
+                    eventBorderColor: "B8860B",
+                    eventColor: "B8860B",
                     events: [
                         {
-                            title: 'Google',
-                            url: 'http://google.com',
-                            start: '2015-08-31T12:00:00',
+                            title: 'Long Event',
+                            start: '2015-08-28',
+                            end: '2015-09-03'
+                        },
+                        {
+                            id: 999,
+                            title: 'Repeating Event',
+                            start: '2015-09-01T16:00:00'
+                        },
+                        {
+                            id: 999,
+                            title: 'Repeating Event',
+                            start: '2015-09-01T16:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-30T07:00:00',
+                            end: '2015-08-30T08:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-30T08:00:00',
+                            end: '2015-08-30T11:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-30T10:00:00',
+                            end: '2015-08-30T14:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-31T07:00:00',
+                            end: '2015-08-31T08:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-31T08:00:00',
+                            end: '2015-08-31T11:00:00'
+                        },
+                        {
+                            title: 'Conference',
+                            start: '2015-08-31T10:00:00',
                             end: '2015-08-31T14:00:00'
+                        },
+                        {
+                            title: 'Meeting',
+                            start: '2015-09-02T10:30:00',
+                            end: '2015-09-02T12:30:00'
+                        },
+                        {
+                            title: 'Lunch',
+                            start: '2015-09-05T12:00:00'
+                        },
+                        {
+                            title: 'Meeting',
+                            start: '2015-09-05T14:30:00'
+                        },
+                        {
+                            title: 'Happy Hour',
+                            start: '2015-09-04T17:30:00'
+                        },
+                        {
+                            title: 'Dinner',
+                            start: '2015-09-06T20:00:00'
+                        },
+                        {
+                            title: 'Birthday Party',
+                            start: '2015-09-05T07:00:00'
+                        },
+                        {
+                            title: 'Click for Google',
+                            url: 'http://google.com/',
+                            start: '2015-09-01'
                         }
                     ]
                 });
