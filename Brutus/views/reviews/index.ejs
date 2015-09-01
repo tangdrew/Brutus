@@ -1,8 +1,12 @@
 <!DOCTYPE html>
   <head>
     <meta charset="utf-8">
-	   <% include ../../shared/_header %>	
-
+	   <% include ../../shared/_header %>
+       <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
+       <link rel="stylesheet" href="/stylesheets/select2.css"/>
+       <link rel="stylesheet" href="/stylesheets/index.css"/>
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+       <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>  	
   </head>
   <body>
     <!--Navbar-->
@@ -14,22 +18,116 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-4">                 
                     <form action="reviews" method="post" name="addReviewForm" style="margin-top: 150px">
-                        <h2>Review a Course</h2>
-                        <label>Course ID</label> (ex. 4)
-                        <input type="text" class="form-control" name="course_id">
-                        <label>Grade</label> (ex. B+)
+                        <h2>Review a Course</h2><br>
+                        <p>Term
+                        <select class="term-select">
+                            <option value="FALL2015">Fall 2015</option>
+                            <option value="WINTER2016">Winter 2016</option>
+                            <option value="SPRING2016">Spring 2016</option>
+                            <option value="FALL2016">Fall 2016</option>
+                        </select>
+                        </p>
+                        <p>Subject                   
+                        <select class="term-select">
+                            <option value="ALL">All Subjects</option>
+                            <option value="ACCOUNTING">ACCOUNT - Accounting</option>
+                            <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
+                            <option value="ECON">ECON - Economics</option>
+                            <option value="EECS">EECS - Electrical Engineering and Computer Science</option>
+                            <option value="PHYSICS">PHYSICS - Physics</option>
+                        </select>
+                        </p>                        
+                        <p>Grade (ex. B+)
                         <input type="text" class="form-control" name="grade">
-                        <label>Overall Rating</label> (1 to 5)
+                        </p>
+                        <p>Overall Rating  (1 to 6)
                         <input type="text" class="form-control" name="rating">
-                        <label>Difficulty Level</label> (1 to 5)
+                        </p>
+                        <p>Difficulty Level (1 to 5)
                         <input type="text" class="form-control" name="difficulty">
-                        <label>Comments</label> (optional)
+                        </p>
+                        <p>Average Time Spent Outside Class Per Week (ex. 5)
+                        <input type="text" class="form-control" name="time">
+                        </p> 
+                        <p>Comments  (optional)
                         <input type="text" class="form-control" name="comments">
-                        <input type="submit" class="form-control" style="margin-top: 25px">
+                        </p> <br>                       
+                        <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Submit!"></p>
                     </form>
                 </div>
                 <div class="col-md-4"></div>
             </div>
         </div>
   </body>
+      <script type="text/javascript">
+		$(document).ready(function() {
+            $(".subject-select").select2();
+            $(".term-select").select2(); 
+            
+            $(".btn").click(function() {
+                alert("button clicked");
+            });
+        });
+        
+        function search(courses, substr){
+            var matches = [];
+            substr = substr.toLowerCase();
+            substr = substr.replace(/\s+/g, '');
+            console.log(substr);
+            for(var i = 0; i < courses.length; i++){
+                if(typeof courses[i].title != 'undefined' && typeof courses[i].subject != 'undefined' && typeof courses[i].catalog_num != 'undefined'){
+                    var fullString = courses[i].title.toLowerCase() + " " + courses[i].subject.toLowerCase() + " " + courses[i].catalog_num.toLowerCase()
+                    fullString = fullString.replace(/\s+/g, '');
+                    if(fullString.indexOf(substr) >= 0){
+                        matches.push(courses[i]);
+                    }
+                }
+            }
+            return matches;
+        }
+        
+        
+        var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+                var matches, substringRegex;
+
+                var selectedText = $( "#subject-select option:selected" ).text();
+                if (selectedText.indexOf('econ') > -1)
+                {
+                    strs = ['ECON 201', 'ECON 202'];
+                }
+
+                // an array that will be populated with substring matches
+                matches = [];
+            
+                // regex used to determine if a string contains the substring `q`
+                substrRegex = new RegExp(q, 'i');
+            
+                // iterate through the pool of strings and for any string that
+                // contains the substring `q`, add it to the `matches` array
+                $.each(strs, function(i, str) {
+                    if (substrRegex.test(str)) {
+                        matches.push(str);
+                    }
+                });
+            
+                cb(matches);
+            };
+        };
+
+        var courses = ['ECON 201', 'EECS 203', 'EECS 349', 'EECS 361', 'PHYSICS 135-2',
+            'CHEM 101-1', 'ECON 202'
+        ];
+
+        $('#search-box .typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'Courses',
+            source: substringMatcher(courses)
+        });
+        
+	</script>
 </html>
