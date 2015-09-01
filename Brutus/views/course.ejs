@@ -124,10 +124,14 @@
                             <div class="row">
                                 <!--Basic Course Information-->
                                 <div class="col-md-4">
-                                    <label>Instructor: </label><a href="#"><%= courseObj %></a><br>
+                                    <label>Instructor: </label><a href="#"><%= courseObj.instructor.name %></a><br>
                                     <label>Term: </label><%= courseObj.term %><br>
                                     <label>Class Times: </label><%= courseObj.meeting_days %> <%= courseObj.start_time %> to <%= courseObj.end_time %><br>
-                                    <label>Room: </label><%= courseObj %><br>
+                                    <% if(courseObj.room != null){ %>
+                                    <label>Room: </label><%= courseObj.room.name%> <%=courseObj.room.building_name %><br>
+                                    <% }else{%>
+                                    <label>Room: </label>NA<br>
+                                    <% } %>
                                     <label>Seats: </label><%= courseObj.seats %><br>
                                     <label>Rating: </label> <script> document.write(ratingAvg) </script>/5.0<br>
                                     <div style="width: 100%; text-align: center">
