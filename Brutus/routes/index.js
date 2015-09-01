@@ -21,6 +21,13 @@ router.get('/search', function(req, res, next)
     res.render('search', { user: req.session.user, title: 'Search' });
 });
 
+/*Return course data as JSON*/
+router.post('/search', function(req, res){
+   courses.searchCourses(req.body.search, req.body.subject, req.body.term, function(o){
+       res.send(o);
+   });
+});
+
 /* GET dashboard page. */
 router.get('/dashboard', function(req, res, next) 
 {
@@ -190,13 +197,6 @@ router.get('/logout', function(req, res, next)
 		res.clearCookie('pass');
 		req.session.destroy();
     res.redirect('/');
-});
-
-/*GET course data and return as JSON */
-router.post('/search', function(req, res){
-   courses.getAllCourses(req.body, function(o){
-       res.send(o);
-   });
 });
 
 module.exports = router;

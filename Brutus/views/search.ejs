@@ -21,10 +21,13 @@
             var matches;
             //AJAX post request to database, returns list of all courses
             function getCourses(){
+                var search = document.getElementById('search').value;
+                var subject = document.getElementById('subject').value;
+                var term = document.getElementById('term').value;
                 $.ajax( {
                     url: '/search',
                     type: 'POST',
-                 //   data: {"search" : document.getElementById('search').value},
+                    data: {"search" : search, "subject" : subject, "term" : term},
                     success: function(items) {
                         courseArray = items;
                         createListings(courseArray);
@@ -44,9 +47,17 @@
                 //Calls function while user types in the search input              
                 $('#search').keyup(function() {
                     delay(function(){
-                        matches = search(courseArray, document.getElementById('search').value);
+                        //matches = search(courseArray, document.getElementById('search').value);
+                        getCourses();
+                        matches = courseArray;
                         createListings(matches);
                     }, 500 );
+                });
+                //Calls search function when filter dropdown values are changed
+                $("select").change(function() {
+                    getCourses();
+                    matches = courseArray;
+                    createListings(matches);
                 });
 			});
             
@@ -71,7 +82,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2 col-xs-12" style="margin-top: 4px;">
-                    <select class="subject-select">
+                    <select id="subject" class="subject-select">
                         <option value="ALL">All Subjects</option>
                         <option value="ACCOUNTING">ACCOUNT - Accounting</option>
                         <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
@@ -81,11 +92,11 @@
                     </select>  
                 </div>
                 <div class="col-lg-2 col-xs-12" style="margin-top: 4px;">
-                    <select class="term-select">
-                        <option value="FALL2015">Fall 2015</option>
-                        <option value="WINTER2016">Winter 2016</option>
-                        <option value="SPRING2016">Spring 2016</option>
-                        <option value="FALL2016">Fall 2016</option>
+                    <select id="term" class="term-select">
+                        <option value="2015 Fall">Fall 2015</option>
+                        <option value="2016 Winter">Winter 2016</option>
+                        <option value="2016 Spring">Spring 2016</option>
+                        <option value="2016 Fall">Fall 2016</option>
                     </select>  
                 </div>
                 <div class="col-lg-2"></div>
@@ -132,25 +143,7 @@
             $(".btn").click(function() {
                 alert("button clicked");
             });
-        });
-        
-        function search(courses, substr){
-            var matches = [];
-            substr = substr.toLowerCase();
-            substr = substr.replace(/\s+/g, '');
-            console.log(substr);
-            for(var i = 0; i < courses.length; i++){
-                if(typeof courses[i].title != 'undefined' && typeof courses[i].subject != 'undefined' && typeof courses[i].catalog_num != 'undefined'){
-                    var fullString = courses[i].title.toLowerCase() + " " + courses[i].subject.toLowerCase() + " " + courses[i].catalog_num.toLowerCase()
-                    fullString = fullString.replace(/\s+/g, '');
-                    if(fullString.indexOf(substr) >= 0){
-                        matches.push(courses[i]);
-                    }
-                }
-            }
-            return matches;
-        }
-        
+        });       
         
         var substringMatcher = function(strs) {
             return function findMatches(q, cb) {

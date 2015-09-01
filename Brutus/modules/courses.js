@@ -31,6 +31,42 @@ exports.getAllCourses = function(data, callback){
     });
 }
 
+//Fuzzy search function for title+subject+catalog num
+function fuzzySearch(courses, substr){
+    var matches = [];
+    substr = substr.toLowerCase();
+    substr = substr.replace(/\s+/g, '');
+    for(var i = 0; i < courses.length; i++){
+        if(typeof courses[i].title != 'undefined' && typeof courses[i].subject != 'undefined' && typeof courses[i].catalog_num != 'undefined'){
+            var fullString = courses[i].title.toLowerCase() + " " + courses[i].subject.toLowerCase() + " " + courses[i].catalog_num.toLowerCase()
+            fullString = fullString.replace(/\s+/g, '');
+            if(fullString.indexOf(substr) >= 0){
+                matches.push(courses[i]);
+            }
+        }
+    }
+    console.log(matches.length);
+    return matches;
+}
+        
+//Function that returns the courses as specified by search parameters
+exports.searchCourses = function(searchVal, subjectVal, termVal, callback){
+    var query;
+    if(subjectVal == "ALL"){
+        query = {term: termVal};
+    }
+    else{
+        query = {subject: subjectVal, term: termVal};
+    }
+    courses.find(query).toArray(function(err, result) {
+        if (err) throw err;
+        var matches = fuzzySearch(result, searchVal);
+        matches = matches.slice(0,9);
+        console.log('done');
+        callback(matches);
+    });
+}
+
 exports.getCourseByCourseId = function(value, callback){
     courses.findOne({course_id:value}, function(e,o) {
         if (o){
