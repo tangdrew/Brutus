@@ -44,7 +44,7 @@ print term_ids
 # look through terms to get the course data for each term
 for term_id in term_ids:
     # time.sleep(5)
-    if term_id == 4390:
+    if term_id == 4560:
         break
 
     # get all the subjects for the term
