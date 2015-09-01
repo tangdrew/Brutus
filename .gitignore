@@ -58,3 +58,6 @@ data/
 
 update-production.txt
 merge-doc.txt
+
+
+*.py
