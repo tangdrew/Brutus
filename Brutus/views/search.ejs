@@ -126,7 +126,6 @@
                                 console.log(matches[i].title + " " + matches[i].course_id);
                                 
                                 
-                                
                                 var building_name = "";
                                 var room_name = "";
                                 if (matches[i].room)
@@ -146,8 +145,9 @@
                                                         <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
                                                         <label style='color: #fff'>Rating: </label> 3.5/5.0 <br> \
                                                     </div> \
-                                                </div> \
-                                                ";
+                                                </div>";
+
+                                
                             }
                             document.getElementById('listings').innerHTML = html;
                         }
