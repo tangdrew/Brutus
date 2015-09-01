@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var accounts = require('../modules/accounts');
 var courses = require('../modules/courses');
+var terms = require('../modules/terms');
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
@@ -23,9 +24,25 @@ router.get('/search', function(req, res, next)
 
 /*Return course data as JSON*/
 router.post('/search', function(req, res){
-   courses.searchCourses(req.body.search, req.body.subject, req.body.term, function(o){
-       res.send(o);
-   });
+    
+    if (req.body.search != undefined)
+    {
+        courses.searchCourses(req.body.search, req.body.subject, req.body.term, function(o){
+            res.send(o);
+        });    
+    }
+    else if (req.body.findTerms)
+    {
+        terms.getAllTerms(function(o) {
+            res.send(o); 
+        });
+    }
+    else if (req.body.findSubjects)
+    {
+        terms.getAllSubjects(req.body.term, function(o) {
+            res.send(o); 
+        });
+    }
 });
 
 /* GET dashboard page. */
