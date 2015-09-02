@@ -75,14 +75,14 @@
                         <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Overall Rating</p>                       
                                               
                         <p class="col-md-12 col-xs-12">
-                        <input id="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]' tooltip="show"/>
+                        <input id="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
                         </p>
                         
                         
                         <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Class Difficulty</p>                       
                                               
                         <p class="col-md-12 col-xs-12">
-                        <input id="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]' tooltip="hide"/>
+                        <input id="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
                         </p>
                         <div class="row">
                             <p class="col-md-12 col-xs-12">Average Time Spent Outside Class Per Week
@@ -136,13 +136,15 @@
         var slider = new Slider("#rating", {
         ticks: [1, 2, 3, 4, 5],
         ticks_labels: ['1', '2', '3', '4', '5'],
-        ticks_snap_bounds: 100
+        ticks_snap_bounds: 100,
+        tooltip: 'hide'
     });
     
         var slider = new Slider("#difficulty", {
         ticks: [1, 2, 3, 4, 5],
         ticks_labels: ['1', '2', '3', '4', '5'],
-        ticks_snap_bounds: 100
+        ticks_snap_bounds: 100,
+        tooltip: 'hide'
     });
 	</script>
     
