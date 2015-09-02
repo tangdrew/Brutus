@@ -8,10 +8,10 @@
       <% include ../shared/_navbar %>
       
       <!--Body-->
-      <div class="container" style="padding-top: 100px">
+      <div class="container-fluid" style="padding-top: 100px">
         <div class="row">
-          <div class="col-md-4"></div>
-          <div class="col-md-4">                 
+          <div class="col-xs-12 col-sm-12 col-md-4"></div>
+          <div class="col-xs-12 col-sm-12 col-md-4">                 
                 <% if (typeof registered != 'undefined') { %>
                     <div class="alert alert-success" role="alert">Registration complete! Please login.</div>
                 <% } %>
@@ -37,7 +37,7 @@
                   <p>New to Brutus? &nbsp<a href="/register">Create an account now</a></p>               
             </div>
           </div>
-          <div class="col-md-4"></div>
+          <div class="col-xs-12 col-sm-12 col-md-4" style="padding-top: 0px"></div>
         </div>
       </div>
   </body>

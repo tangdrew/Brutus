@@ -51,23 +51,27 @@ function fuzzySearch(courses, substr){
         
 //Function that returns the courses as specified by search parameters
 exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
+    var query, sortQuery;
+    console.log(searchVal);
     if(subjectVal == "ALL"){
-        var query = {term: termVal};
+        query = {term: termVal};
     }else{
-        var query = {subject: subjectVal, term: termVal};
+        query = {subject: subjectVal, term: termVal};
     }
     if(sortByVal == "default"){
-        var sortQuery = { subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+        sortQuery = { subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }else if(sortByVal == "rating"){
-        var sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+        sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }else if(sortByVal == "difficulty"){
-        var sortQuery = { difficulty: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+        sortQuery = { difficulty: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }else if(sortByVal == "avghours"){
-        var sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+        sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }
     console.log(sortQuery);
-    courses.find(query).sort(sortQuery).toArray(function(err, result) {
+    console.log(query);
+    courses.find(query, {batchSize: 20000}).sort(sortQuery).toArray(function(err, result) {
         if (err) throw err;
+        console.log(result.length);
         var matches = fuzzySearch(result, searchVal);
         matches = matches.slice(0,10);
         console.log('done');
