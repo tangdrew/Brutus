@@ -28,7 +28,6 @@ router.post('/search', function(req, res){
     if (req.body.search != undefined)
     {
         courses.searchCourses(req.body.search, req.body.subject, req.body.term, req.body.order, req.body.sortBy, function(o){
-            console.log(req.body.search + ": " + o);
             res.send(o);
         });    
     }
@@ -163,8 +162,7 @@ router.post('/login', function(req, res, next)
 /* GET registration page. */
 router.get('/register', function(req, res, next) 
 {
-                                  console.log("in get");
-  res.render('register', { title: 'Register for Brutus', user: null });
+    res.render('register', { title: 'Register for Brutus', user: null });
 });
 
 router.post('/register', function(req, res)
@@ -176,33 +174,29 @@ router.post('/register', function(req, res)
             password	: req.body['password'],
             passwordConfirm : req.body['passwordConfirm']
 	}, 
-  function(e)
-  {
-			if (e == 'email-taken')
-      {				
-          console.log("email");
-                res.render('register', { title: 'Register for Brutus', emailTaken : e , user: null  });
-			}
-      else if (e == 'missingData')
-      {				
-                    console.log("missing");
-                res.render('register', { title: 'Register for Brutus', missingData : e , user: null });
-			}
-      else if (e == 'invalidEmail')
-      {
-                              console.log("invalid");
-                res.render('register', { title: 'Register for Brutus', invalidEmail : e , user: null });
-      }
-      else if (e == 'passwordNotMatch')
-      {				
-                                        console.log("password");
-                res.render('register', { title: 'Register for Brutus', passwordNotMatch : e , user: null });
+    function(e)
+    {
+        if (e == 'email-taken')
+        {				
+            res.render('register', { title: 'Register for Brutus', emailTaken : e , user: null  });
+        }
+        else if (e == 'missingData')
+        {				
+            res.render('register', { title: 'Register for Brutus', missingData : e , user: null });
+        }
+        else if (e == 'invalidEmail')
+        {
+            res.render('register', { title: 'Register for Brutus', invalidEmail : e , user: null });
+        }
+        else if (e == 'passwordNotMatch')
+        {				
+            res.render('register', { title: 'Register for Brutus', passwordNotMatch : e , user: null });
         }	
-      else
-      {
+        else
+        {
           
-        res.redirect('/login?registered=true');
-        //res.render('login', { registered: true , user: null });
+            res.redirect('/login?registered=true');
+            //res.render('login', { registered: true , user: null });
         }
 	});
 });

@@ -52,7 +52,6 @@ function fuzzySearch(courses, substr){
 //Function that returns the courses as specified by search parameters
 exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
     var query, sortQuery;
-    console.log(searchVal);
     if(subjectVal == "ALL"){
         query = {term: termVal};
     }else{
@@ -67,8 +66,6 @@ exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortB
     }else if(sortByVal == "avghours"){
         sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }
-    console.log(sortQuery);
-    console.log(query);
     courses.find(query, {batchSize: 20000}).sort(sortQuery).toArray(function(err, result) {
         if (err) throw err;
         console.log(result.length);
