@@ -17,8 +17,6 @@
                     };
                 })();
             
-            var courseArray;
-            var matches;
             //AJAX post request to database, returns list of all courses
             function getCourses(){
                 var search = document.getElementById('search').value;
@@ -54,15 +52,16 @@
             //AJAX post request to database, returns list of all subjects
             function getSubjects(){
                 var term = document.getElementById('term').value;
+                term = "2015 Fall";
                 $.ajax( {
                     url: '/search',
                     type: 'POST',
                     data: {"findSubjects" : true, term: term},
                     success: function(items) {
-                        console.log(items.length);
+                        console.log("success in subjects");
                         subjectsArray = items;
                         createSubjects(subjectsArray);
-                        
+                        getCourses();
                     }
                 });
             }
@@ -77,21 +76,22 @@
 			$(document).ready(function(){
                 getTerms();
 
-
                 //Calls function while user types in the search input              
                 $('#search').keyup(function() {
                     delay(function(){
                         //matches = search(courseArray, document.getElementById('search').value);
                         getCourses();
-                        matches = courseArray;
-                        createListings(matches);
                     }, 500 );
                 });
                 //Calls search function when filter dropdown values are changed
-                $("select").change(function() {
+                $("#term").change(function() {
+                    $('#subject').val($('#subject').find('option:first').val());
+                    $('#subject').find('option:first').prop('selected', true);
+                    $('#subject').change();
+                    getSubjects();
+                });
+                $("#subject").change(function() {
                     getCourses();
-                    matches = courseArray;
-                    createListings(matches);
                 });
 			});
             
@@ -118,16 +118,11 @@
                 <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
                     <select id="subject" class="subject-select">
                         <option value="ALL">All Subjects</option>
-                        <option value="ACCOUNT">ACCOUNT - Accounting</option>
-                        <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
-                        <option value="ECON">ECON - Economics</option>
-                        <option value="EECS">EECS - Electrical Engineering and Computer Science</option>
-                        <option value="PHYSICS">PHYSICS - Physics</option>
                     </select>  
                 </div>
                 <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
                     <select id="term" class="term-select">
-                        
+
                     </select>  
                 </div>
                 <div class="col-md-2"></div>
@@ -154,8 +149,6 @@
                         function createListings(matches){
                             var html = "";
                             for(var i = 0; i < matches.length; i++){
-                                console.log(matches[i].title + " " + matches[i].course_id);
-                                
                                 
                                 var building_name = "";
                                 var room_name = "";
@@ -205,8 +198,7 @@
             
             for (var i = 0; i < termsArray.length; i++) {
                 if (i == 0) {
-                    html = html + "<option selected value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
-                    $('term').val(termsArray[i].name);
+                    html = html + "<option selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
                 }
                 else {
                     html = html + "<option value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
@@ -214,20 +206,21 @@
                 
             }
             
-            document.getElementById('term').innerHTML = html;
-            
+            document.getElementById('term').innerHTML += html;
+            $('#term').val($('#term').find('option:first').val());
+            $('#term').find('option:first').prop('selected', true);
+            $('#term').change();
         }
         
         function createSubjects(subjectsArray) {
-            
             var html;       // to be placed in the select listing
-            html = "<option selected value='ALL'>All Subjects</option>";
-            for (var i = 0; i < subjectsArray; i++)
+            for (var i = 0; i < subjectsArray.length; i++)
             {
-                    html = html + "<option value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].name + "</option>";
+                    html = html + "<option value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
             }
-            document.getElementById('term').innerHTML = html;
-            $('subject').val('ALL');
+
+            document.getElementById('subject').innerHTML += html;
+
         }
         
 	</script>
