@@ -71,9 +71,16 @@ router.get('/course', function(req, res, next)
 
 //POST to course profile page when hit add class button, saves class to db
 router.post('/course', function(req, res, next) { 
+   if(req.body.id){
+       courses.getCourseByCourseId(req.body.id, function(obj, e){
+           res.send(obj);
+       });
+   }
+   else if(req.body.course_id){
     courses.addClass(req.session.user.email, req.body.course_id, function(o){
-       res.send(o);
-   });
+        res.send(o);
+    });
+   }
 });
 
 /* GET course profile page. */
