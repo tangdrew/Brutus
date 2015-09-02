@@ -21,7 +21,14 @@ router.route('/')
         }
     })
     .post(function(req, res, next) {
-        res.send("test");
-});
+        console.log(req.session.user);
+        if (req.session.user) {
+            if (req.body.getCurrentEvents) {
+                dashboard.getCurrentCourses(req.session.user, function(o){
+                    res.send(o);
+                });    
+            }   
+        }
+    });
 
 module.exports = router;
