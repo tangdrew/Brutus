@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
 		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
 		<link rel="stylesheet" href="/stylesheets/general.css"/>
-        <link rel="stylesheet" href="/stylesheets/calendar.css"/>
+        <link rel="stylesheet" href="/stylesheets/dashboard.css"/>
         <script type="text/javascript" src="/javascripts/Chart.js"></script>
         <script type="text/javascript" src="/javascripts/data.js"></script>
         
@@ -53,10 +53,8 @@
                                         <div class="panel-heading">
                                             Current Courses
                                         </div>
-                                        <div class="panel-body">
-                                            <div>
-                                                <canvas id="canvas4" height="300" width="600"></canvas>
-                                            </div>
+                                        <div class="list-group" id="course-list">
+                                            
                                         </div>
                                     </div>                                       
                                 </div>
@@ -189,7 +187,6 @@
 
             $(document).ready(function() {
 
-
                 // full calendar plugin to add weekly schedule
                 $('#calendar').fullCalendar({
                     theme: true,
@@ -206,6 +203,8 @@
                     eventTextColor: "#fff",
                     eventBorderColor: "B8860B",
                     eventColor: "B8860B",
+                    timeFormat: 'h(:mm)t',
+                    columnFormat: 'ddd',
                     events: []
                         
                 })
@@ -221,9 +220,14 @@
                     data: {getCurrentEvents: true},
                     success: function(courses) {
                         
+                        var html = '';
+                        
                         for (var i = 0; i < courses.length; i++) {
+                            html += "<a href='/course?course=" + courses[i]._id + "' class='course-list-item list-group-item'>";    
+                            html += courses[i].subject + " " + courses[i].catalog_num + " - " + courses[i].title;
+                            html += "<p>" + courses[i].meeting_days + courses[i].start_time + " - " + courses[i].end_time + "</p>";
+                            html += "</a>";
                             
-                                
                             var meetingDays = [0, 0, 0, 0, 0, 0, 0];
                             if (courses[i].meeting_days == undefined || courses[i].start_time == undefined || courses[i].end_time == undefined)
                                 continue;
@@ -251,7 +255,6 @@
                             var events = [];
                             for (var j = 0; j < 7; j++) {
                                 if (meetingDays[j] == 1) {
-                                    console.log(j);
                                     var date = new Date(sunday).add(j).days();                                    
                                     var datestr = date.toISOString().substr(0, 11);
                                     events.push({
@@ -262,12 +265,14 @@
                                     });
                                 }
                             }
-                            console.log(events);
+
                             for (var k = 0; k < events.length; k++) {
                                 $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
                                 $('#calendar').fullCalendar( 'rerenderEvents' );    
                             }
                         }
+                        
+                        document.getElementById('course-list').innerHTML = html;
                     }
                 });
             }
