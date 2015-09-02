@@ -14,7 +14,13 @@ router.use(session({secret: '1234567890QWERTY',resave: false,saveUninitialized: 
 /* GET course review page. */ 
 router.route('/')
     .get(function(req, res, next) {
-        res.render('reviews/index', { title: 'Review Classes', user: req.session.user});
+        
+        if (req.session.user == undefined) {
+            res.redirect('/');
+        }
+        else {
+            res.render('reviews/index', { title: 'Review Classes', user: req.session.user});
+        }
     })
     .post(function(req, res, next) {
         courses.addReview({

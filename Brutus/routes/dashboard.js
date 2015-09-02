@@ -13,7 +13,12 @@ router.use(session({secret: '1234567890QWERTY',resave: false,saveUninitialized: 
 /* GET course review page. */ 
 router.route('/')
     .get(function(req, res, next) {
-        res.send("test");
+        if (req.session.user == undefined) {
+            res.redirect("/login");
+        }
+        else {
+            res.render('dashboard/index', {title: 'Dashboard', user: req.session.user})
+        }
     })
     .post(function(req, res, next) {
         res.send("test");
