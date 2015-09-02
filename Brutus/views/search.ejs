@@ -22,10 +22,17 @@
                 var search = document.getElementById('search').value;
                 var subject = document.getElementById('subject').value;
                 var term = document.getElementById('term').value;
+                var sortBy = document.getElementById('sortBy').value;
+                if(document.getElementById('arrow-up').style.display == 'none'){
+                    var order = -1;
+                }
+                else{
+                    var order = 1;
+                }
                 $.ajax( {
                     url: '/search',
                     type: 'POST',
-                    data: {"search" : search, "subject" : subject, "term" : term},
+                    data: {"search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
                     success: function(items) {
                         console.log("success in courses");
                         courseArray = items;
@@ -131,14 +138,24 @@
             <div class="row">
                 <div class="col-md-8"></div>
                 <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
-                    <select class="term-select">
-                        <option value="default">Sort By ...</option>
-                        <option value="name">Name</option>
-                        <option value="schedule">Class Time</option>
-                        <option value="rating">Professor Rating</option>
-                        <option value="difficulty">Class Difficulty</option>                        
-                        <option value="time">Time Commitment</option>
-                    </select>  
+                    <div class="row">
+                        <div class="col-xs-2 option-heading" style="cursor: pointer; text-align: right">
+                            <div class="row">
+                                <div class="arrow-up" id='arrow-up'>&#9650;</div>
+                            </div>
+                            <div class="row" style="margin-top: 15px">
+                                <div class="arrow-down" id='arrow-down'>&#9660;</div>
+                            </div>
+                        </div>
+                        <div class="col-xs-10">
+                            <select class="term-select" id='sortBy'>
+                                <option value="default">Sort By ...</option>
+                                <option value="rating">Professor Rating</option>
+                                <option value="difficulty">Class Difficulty</option>                        
+                                <option value="avghours">Time Commitment</option>
+                            </select>  
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -185,12 +202,20 @@
     
     <script type="text/javascript">
 		$(document).ready(function() {
-            
             // add the select complete component
             $(".subject-select").select2();
             $(".term-select").select2(); 
-            
-        });       
+        });      
+        
+        //Sort arrows toggle
+        $(document).ready(function() {
+            $(".arrow-up").hide();
+            $(".option-heading").click(function(){
+                    $(this).next(".option-content").slideToggle(500);
+                    $(this).find(".arrow-up, .arrow-down").toggle();
+                    getCourses();
+            });
+        }); 
         
         function createTerms(termsArray) {
             

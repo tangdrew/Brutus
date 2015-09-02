@@ -50,24 +50,25 @@ function fuzzySearch(courses, substr){
 }
         
 //Function that returns the courses as specified by search parameters
-exports.searchCourses = function(searchVal, subjectVal, termVal, callback){
-    var query;
+exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
     if(subjectVal == "ALL"){
-        query = {term: termVal};
+        var query = {term: termVal};
+    }else{
+        var query = {subject: subjectVal, term: termVal};
     }
-    else{
-        query = {subject: subjectVal, term: termVal};
+    if(sortByVal == "default"){
+        var sortQuery = { subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+    }else if(sortByVal == "rating"){
+        var sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+    }else if(sortByVal == "difficulty"){
+        var sortQuery = { difficulty: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
+    }else if(sortByVal == "avghours"){
+        var sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }
-    courses.find(query).toArray(function(err, result) {
+    console.log(sortQuery);
+    courses.find(query).sort(sortQuery).toArray(function(err, result) {
         if (err) throw err;
         var matches = fuzzySearch(result, searchVal);
-        matches.sort(function(x, y) {
-            var strX = x.subject + x.catlog_num + x.title;
-            var strY = y.subject + y.catlog_num + y.title;
-            strX = strX.trim();
-            strY = strY.trim();
-            return strX.toLowerCase().localeCompare(strY.toLowerCase());
-        });
         matches = matches.slice(0,10);
         console.log('done');
         callback(matches);
