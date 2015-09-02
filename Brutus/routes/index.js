@@ -124,7 +124,7 @@ router.get('/login', function(req, res, next)
     }
     else
     {   
-        res.redirect('/dashboard/index');
+        res.redirect('/dashboard');
     }  
 });
 
@@ -147,7 +147,7 @@ router.post('/login', function(req, res, next)
 					   res.cookie('user', o.email, { maxAge: 86400000 });
 					   res.cookie('pass', o.password, { maxAge: 86400000 });
 				   }
-           res.redirect('/dashboard/index');
+           res.redirect('/dashboard');
        }
    }); 
 });
