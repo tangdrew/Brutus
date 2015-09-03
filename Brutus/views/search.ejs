@@ -187,20 +187,97 @@
                                             html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
                                                                 <div class='panel-body search-panel-body'> \
                                                                     <div style='display: inline-block; width: 100%'> \
-                                                                        <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
+                                                                        <a href='#' style='color: #FFD700'><span>"  + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</span></a> \
                                                                         <label style='float: right; color: #fff'> " + matches[i].term + "</label> \
                                                                     </div> \
                                                                     <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
-                                                                    <label style='color: #fff'>Class Times: </label> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
+                                                                    <label style='color: #fff'>Class Times: </label><span>" + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "</span><br> \
                                                                     <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
                                                                     <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
                                                                     <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
+                                                                    <span id='title' hidden='true'>" + matches[i].subject + " " + matches[i].catalog_num + "</span> \
+                                                                    <span id='times' hidden='true'>" + matches[i].meeting_days + " " + matches[i].start_time + " " + matches[i].end_time + "</span> \
                                                                 </div> \
                                                             </div>";
             
                                             
                                         }
                                         document.getElementById('listings').innerHTML = html;
+                                        
+                                        // calendar hover feature
+                                        var hoveredCourseEvents = [];
+                                        $('.search-panel-body').hover(function () {
+                                            
+                                            var timesStr = $(this).find('#times').text().trim();
+                                            var title = $(this).find('#title').text();
+                                            if (timesStr.indexOf('null') == -1 && timesStr)
+                                            {
+                                                var timesArr = timesStr.split(" ");
+                                                var daysStr = timesArr[0].trim().toLowerCase();
+                                                var start = timesArr[1].trim();
+                                                var end = timesArr[2].trim();
+                                                
+                                                var days = [0, 0, 0, 0, 0, 0, 0];
+                                                
+                                                if (daysStr.indexOf("su") > -1)
+                                                    days[0] = 1;
+                                                if (daysStr.indexOf("mo") > -1)
+                                                    days[1] = 1;
+                                                if (daysStr.indexOf("tu") > -1)
+                                                    days[2] = 1;
+                                                if (daysStr.indexOf("we") > -1)
+                                                    days[3] = 1;
+                                                if (daysStr.indexOf("th") > -1)
+                                                    days[4] = 1;
+                                                if (daysStr.indexOf("fr") > -1)
+                                                    days[5] = 1;
+                                                if (daysStr.indexOf("sa") > -1)
+                                                    days[6] = 1;
+                                                
+                                                
+                                                    
+                                                addHoverCourse(days, title, start, end);
+                                                
+                                            }
+                                            
+                                                
+                                        },
+                                        function () {
+                                            removeHoverCourse(null);
+                                        });
+                                        
+                                        
+                                        function addHoverCourse(daysArr, title, start, end) {
+                                            var sunday = Date.today().add( - (new Date()).getDay()).days();
+                                            
+                                            for (var j = 0; j < 7; j++) {
+                                                if (daysArr[j] == 1) {
+                                                    var date = new Date(sunday).add(j).days();                                    
+                                                    var datestr = date.toISOString().substr(0, 11);
+                                                    hoveredCourseEvents.push({
+                                                        title: title,
+                                                        start: datestr + start,
+                                                        end: datestr + end 
+                                                    });
+                                                }
+                                            }
+                
+                                            for (var k = 0; k < hoveredCourseEvents.length; k++) {
+                                                $('#calendar').fullCalendar('renderEvent', hoveredCourseEvents[k], stick=false);
+                                            }
+                                            
+                                        }
+                                        
+                                        function removeHoverCourse(courseEvents) {
+                                            $('#calendar').fullCalendar('refetchEvents');
+                                            hoveredCourseEvents = [];
+                                        }
+                                        
+                                        // scroll calendar based on scroll position
+                                        $(window).scroll(function() {
+                                            var fromTop = $(window).scrollTop();
+                                            $('#calendar').css('margin-top', '+' + (50 + fromTop) + 'px');
+                                        });
                                     }
                                 </script>
                                 <div id="listings" style="width: 100%"></div>
