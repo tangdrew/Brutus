@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="/stylesheets/index.css"/>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
         <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>
-		
+		<script type="text/javascript" src="/javascripts/Chart.js"></script>
 		<script>
 			function getQuerystringNameValue(name){
 				var winURL = window.location.href;
@@ -43,7 +43,7 @@
      //       var course = getObjects(obj.courses, "course_id", courseID);
     //        var reviews = getObjects(obj.users, "course_id", courseID);
             //Calculate average rating
-            var ratingSum = 0;
+    /*        var ratingSum = 0;
             for(var i = 0; i < reviews.length; i++){
                 ratingSum += reviews[i].rating;
             }
@@ -84,17 +84,31 @@
             else{
                 var avgLetterGrade = "NA";
             }
-            
+            */
             //AJAX post request to database, returns course object
             function getCourse(){
                 var id = getQuerystringNameValue('course');
                 $.ajax( {
                     url: '/course',
                     type: 'POST',
-                    data: {"id" : id},
+                    data: {"query": "courses", "id" : id},
                     success: function(course) {
-                        //render comments from course object
-                        renderReviews(course.comments);
+                        getReviews(course);
+                    }
+                });
+            }
+            
+            //AJAX post request to database, returns course object
+            function getReviews(course){
+                var id = getQuerystringNameValue('course');
+                var course_id = course[0].course_id;
+                $.ajax( {
+                    url: '/course',
+                    type: 'POST',
+                    data: {"query": "reviews", "id" : id, "course_id": course_id},
+                    success: function(reviews) {
+                        //render comments from array of reviews
+                        renderReviews(reviews);
                     }
                 });
             }
@@ -105,7 +119,7 @@
                 $.ajax( {
                     url: '/course',
                     type: 'POST',
-                    data: {"course_id" : course_id},
+                    data: {"query": "add", "course_id" : course_id},
                     success: function(response) {
                         if(response == 'success'){
                             //On success of adding class to db, change class button
@@ -175,7 +189,7 @@
                                                 </div>
                                                 <div class="panel-body">
                                                     <div>
-                                                        <canvas id="canvas" height="450" width="600"></canvas>
+                                                        <canvas id="canvas" height="250" width="auto"></canvas>
                                                     </div>
                                                 </div>
                                             </div>
@@ -191,7 +205,7 @@
                                                 </div>
                                                 <div class="panel-body">
                                                     <div>
-                                                        <canvas id="canvas2" height="450" width="600"></canvas>
+                                                        <canvas id="canvas2" height="250" width="auto"></canvas>
                                                     </div>
                                                 </div>
                                             </div>
@@ -204,24 +218,32 @@
                                 <div class="col-md-1"></div>
                                 <div class="panel panel-default col-md-10">
                                     <div class="panel-heading">
-                                        Reviews
+                                        Comments
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" id="comments">
                                         <script>
                                             function renderReviews(reviews){
+                                                var html = "";
                                                 for(var i = 0; i < reviews.length; i++){
-                                                    document.write("<div class='row'> \
-                                                                        <div class='col-md-1'></div> \
-                                                                        <div class='panel panel-default col-md-10'> \
-                                                                            <div class='panel-body'> \
-                                                                                <span id='rating-" + reviews[i].review_id + "'></span> <span style='color:#aaa;font-family:verdana;font-size:11px'>on August 28, 2015</span> <br> \
-                                                                                <i>'" + reviews[i].comment + "'</i> \
+                                                    if(reviews[i].comments.length > 0){
+                                                        html += '<div class="row"> \
+                                                                        <div class="col-md-1"></div> \
+                                                                        <div class="panel panel-default col-md-10"> \
+                                                                            <div class="panel-body"> \
+                                                                                <span id="rating-' + reviews[i]._id + '"></span> <span style="color:#aaa;font-family:verdana;font-size:11px">' + reviews[i].timestamp + '</span> <br> \
+                                                                                <i>"' + reviews[i].comments + '"</i> \
                                                                             </div> \
                                                                         </div> \
-                                                                        <div class='col-md-1'></div> \
-                                                                    </div>");
-                                                    for(var j = 0; j < reviews[i].rating; j++){
-                                                        document.getElementById("rating-"+reviews[i].review_id).innerHTML = document.getElementById("rating-"+reviews[i].review_id).innerHTML + "☆";
+                                                                        <div class="col-md-1"></div> \
+                                                                    </div>'; 
+                                                    }
+                                                }
+                                                document.getElementById('comments').innerHTML = html;
+                                                for(var i = 0; i < reviews.length; i++){
+                                                    if(reviews[i].comments.length > 0){
+                                                        for(var j = 0; j < Math.round(reviews[i].rating); j++){
+                                                            document.getElementById("rating-"+reviews[i]._id).innerHTML = document.getElementById("rating-"+reviews[i]._id).innerHTML + "☆";
+                                                        }
                                                     }
                                                 }
                                             }
@@ -239,6 +261,10 @@
 			
 		
         <script>
+            $(document).ready(function() {  
+                getCourse(); 
+            });
+            
             var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
             var lineChartData = {
                 labels : ["January","February","March","April","May","June","July"],
