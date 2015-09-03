@@ -62,13 +62,63 @@ router.route('/')
                 res.send(o);
             });   
         }
-        else{
+        else
+        {            
+            console.log(typeof req.body.avghours);
             var course_id_unique;
+            if(req.body.myCourseID == '' && req.body.searchCourseID == ''){
+                console.log("nocourse");                
+                res.render('reviews/index', { title: 'Review Classes', noCourse : 'yes', user: req.session.user });
+            }
+            else if(req.body.grade == '')
+            {
+                console.log("grade");
+                res.render('reviews/index', { title: 'Review Classes', noGrade : 'yes', user: req.session.user });                
+            }
+            else if(req.body.avghours == '')
+            {
+                console.log("avghours");
+                res.render('reviews/index', { title: 'Review Classes', noTime : 'yes', user: req.session.user });                
+            }            
+            else if(isNaN(req.body.avghours) == true)
+            {
+                console.log("nan not working");                
+                res.render('reviews/index', { title: 'Review Classes', invalidTime : 'yes', user: req.session.user });                
+            }      
+            else
+            {
+                if(req.body.myCourseID == '' && req.body.searchCourseID != '')
+                {
+                    course_id_unique = req.body.searchCourseID;                    
+                }
+                else
+                {                   
+                    course_id_unique = req.body.myCourseID;                    
+                }
+                console.log("all passed");
+                courses.getCourseByCourseId(course_id_unique, function(obj, e){
+                    if(obj){
+                        courses.addReview(obj, req, req.session.user.email, function(e){
+                            if (e){
+                                console.log('Error');
+                                res.status(400).send(e);
+                            }	else{
+                                res.render('reviews/index', { title: 'Review Classes', submitted: 'yes', user: req.session.user });
+                            }
+                        });
+                    }
+                });                
+            }            
+        }
+        
+        /*
+        else{
+            var course_id_unique;            
             if(req.body.myCourseID != ''){
                 course_id_unique = req.body.myCourseID;
             }
             else{
-                course_id_unique = req.body.myCourseID;
+                course_id_unique = req.body.searchCourseID;
             }
             courses.getCourseByCourseId(course_id_unique, function(obj, e){
                 if(obj){
@@ -82,7 +132,7 @@ router.route('/')
                     });
                 }
             });
-            } 
+            } */
         });
 
 

@@ -100,22 +100,38 @@
     <% include ../../shared/_navbar %>
       
       <!--Body-->
-        <div class="container">
+        <div class="container" style="padding-top: 150px">
             <div class="row">
                 <div class="col-md-4"></div>
-                <div class="col-md-4">                 
-                    <form action="reviews" method="post" name="addReviewForm" style="margin-top: 150px">
-                        <h2>Review a Course</h2><br>                 
+                <div class="col-md-4">
+                    <% if (typeof noCourse != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please select a course!</div>
+                    <% } %>
+                    <% if (typeof noTime != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please fill out Average Time Spent!</div>
+                    <% } %>
+                    <% if (typeof invalidTime != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please input a number for Average Time Spent!</div>
+                    <% } %>
+                    <% if (typeof noGrade != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please choose your grade!</div>
+                    <% } %>                    
+                    <% if (typeof submitted != 'undefined') { %>
+                    <div class="alert alert-success" role="alert">Review Submitted. Thank you!</div>
+                    <% } %>
+                    <form action="reviews" method="post" name="addReviewForm">
+                        <h2>Review a Course</h2><br><br>                 
                         <!--Course Selection-->
                         <ul id="tabs" class="nav nav-tabs" data-tabs="tabs" style="text-align: center">
-                            <li class="active" style="width: 50%" onclick="clearValues('#search')"><a href="#myCoursesTab" data-toggle="tab">Your Courses</a></li>
-                            <li style="width: 50%"><a href="#searchTab" onclick="clearValues('#mycourses')" data-toggle="tab">Search</a></li>
-                        </ul>
+                            <li class="active" style="width: 50%; background-color:#7a6f8c" onclick="clearValues('#search')"><a href="#myCoursesTab" data-toggle="tab">Your Courses</a></li>
+                            <li style="width: 50%; background-color:#7a6f8c"><a href="#searchTab" onclick="clearValues('#mycourses')" data-toggle="tab">Search</a></li>
+                        </ul><br><br>
                         <div id="my-tab-content" class="tab-content">
                             <div class="tab-pane active" id="myCoursesTab">
                                 <div class="row">
-                                    <p class="col-md-12 col-xs-12">Select From Your courses
-                                        <select id="mycourses" class="term-select" name="myCourseID">       
+                                    <span style="padding-left: 15px">Select From Your courses</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="mycourses" class="term-select" name="myCourseID" style="padding-top: 15px">       
                                             <option value=''>Select from your Courses</option>                           
                                         </select> 
                                     </p>
@@ -123,25 +139,36 @@
                             </div>
                             <div class="tab-pane" id="searchTab">
                                 <div class="row">
-                                    <p class="col-md-12 col-xs-12">Term
+                                    <span style="padding-left: 15px">Term</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                         <select id="term" class="term-select" name="term">                                  
                                         </select> 
                                     </p>
-                                    <p class="col-md-12 col-xs-12">Subject
-                                        <select id="subject" class="subject-select" name="subject">                                  
+                                </div>
+                                <div class="row">
+                                    <span style="padding-left: 15px">Subject</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="subject" class="subject-select" name="subject">
+                                            <option value="">Select a subject</option>                                  
                                         </select> 
                                     </p>
-                                    <p class="col-md-12 col-xs-12">Courses
-                                        <select id="search" class="search-select" name="searchCourseID">                                  
+                                </div>
+                                <div class="row">
+                                    <span style="padding-left: 15px">Courses</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="search" class="search-select" name="searchCourseID">
+                                            <option value="">Select a course</option>                                  
                                         </select> 
                                     </p>
                                 </div>   
                             </div>
                         </div>              
                                               
-                        <div class="row">                        
-                            <p class="col-md-12 col-xs-12">Grade (optional)
+                        <div class="row">
+                            <span style="padding-left: 15px">Grade</span>                       
+                            <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                 <select id="grade" class="subject-select" name="grade">
+                                    <option value="">Choose your grade</option>                                    
                                     <option value="4.0">A</option>
                                     <option value="3.7">A-</option>
                                     <option value="3.3">B+</option>
@@ -157,28 +184,32 @@
                                 </select> 
                             </p>
                         </div>
-                        <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Overall Rating</p>                       
+                        <p class="col-xs-12 col-md-12 " style="padding-left: 0px"> Overall Rating</p>                       
                                               
-                        <p class="col-md-12 col-xs-12">
-                        <input id="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
+                        <p class="col-xs-12 col-md-12 ">
+                        <input id="rating" style="width: 330px;" name="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
                         </p>
                         
                         
                         <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Class Difficulty</p>                       
                                               
-                        <p class="col-md-12 col-xs-12">
+                        <p class="col-xs-12 col-md-12 ">
 
-                        <input id="difficulty" name="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]' tooltip="hide"/>
+                        <input id="difficulty" style="width: 330px;" name="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
                         </p>
                         <div class="row">
-                            <p class="col-md-12 col-xs-12">Average Time Spent Outside Class Per Week
+                            <span style="padding-left: 15px">Average Time Spent Outside Class Per Week</span>     
+                            <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                 <input type="text" class="form-control" name="avghours">
-                            </p>
-                        </div> 
-                        <p>Comments  (optional)
-                        <input type="text" class="form-control" name="comments">
-                        </p> <br>                       
-                        <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Submit!"></p>
+                            </p>    
+                        </div>
+                        <div class="row">
+                            <span style="padding-left: 15px">Comments  (optional)</span>      
+                            <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                            <input type="text" class="form-control" name="comments">
+                            </p>                            
+                        </div> <br>                       
+                        <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Submit!"></p><br><br><br>
                     </form>
                 </div>
                 <div class="col-md-4"></div>
@@ -256,14 +287,16 @@
         ticks: [1, 2, 3, 4, 5],
         ticks_labels: ['1', '2', '3', '4', '5'],
         ticks_snap_bounds: 100,
-        tooltip: 'hide'
+        tooltip: 'hide',
+        value: 3       
     });
     
         var slider = new Slider("#difficulty", {
         ticks: [1, 2, 3, 4, 5],
         ticks_labels: ['1', '2', '3', '4', '5'],
         ticks_snap_bounds: 100,
-        tooltip: 'hide'
+        tooltip: 'hide',
+        value: 3
     });
 	</script>
     
