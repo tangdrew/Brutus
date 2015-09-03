@@ -68,7 +68,7 @@ router.route('/')
                 course_id_unique = req.body.myCourseID;
             }
             else{
-                course_id_unique = req.body.myCourseID;
+                course_id_unique = req.body.searchCourseID;
             }
             courses.getCourseByCourseId(course_id_unique, function(obj, e){
                 if(obj){
