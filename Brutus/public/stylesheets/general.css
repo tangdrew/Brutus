@@ -111,6 +111,10 @@ body {
 
 /* search panel on search page */
 
+.search-panel {
+    margin-bottom: 5px;
+}
+
 .search-panel-body {
     border: 2px solid #7d65a3;
     background-color: #634b89;

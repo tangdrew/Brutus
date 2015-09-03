@@ -6,7 +6,15 @@
         <link rel="stylesheet" href="/stylesheets/select2.css"/>
         <link rel="stylesheet" href="/stylesheets/index.css"/>
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
-        <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>  
+        <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script> 
+        
+        <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
+        <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <script src='/javascripts/moment.min.js'></script>
+        <script src='/javascripts/fullcalendar.min.js'></script>
+        
+        <script type="text/javascript" src="/javascripts/date.js"></script>
+         
         <script>
             //Creates a delay of n milliseconds
             var delay = (function(){
@@ -112,94 +120,102 @@
         <!--Body-->
         <div class="container-fluid" style="padding-top: 100px">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-4 col-xs-12" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
-                    <div style="padding-right: 15px">
-                        <input class="typeahead tt-hint form-control" id="search" type="search" type="text" placeholder="Course">
-                        <button class="btn search-btn" type="button">
-                            <span style="font-size: 1.3em" class="glyphicon glyphicon-search"></span>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
-                    <select id="subject" class="subject-select">
-                        <option value="ALL">All Subjects</option>
-                    </select>  
-                </div>
-                <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
-                    <select id="term" class="term-select">
-                    </select>  
-                </div>
-                <div class="col-md-2"></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-8"></div>
-                <div class="col-md-2 col-xs-12" style="margin-top: 4px;">
-                    <div class="row">
-                        <div class="col-xs-2 option-heading" style="cursor: pointer; text-align: right">
-                            <div class="row">
-                                <div class="arrow-up" id='arrow-up'>&#9650;</div>
+                <div class="col-xs-12 col-md-8">
+                    <div class="col-md-1"></div>
+                    <div class="col-xs-12 col-md-11" style="padding-right: 0px; padding-left: 0px">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
+                                <div style="padding-right: 15px">
+                                    <input class="typeahead tt-hint form-control" id="search" type="search" type="text" placeholder="Course">
+                                    <button class="btn search-btn" type="button">
+                                        <span style="font-size: 1.3em" class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="row" style="margin-top: 15px">
-                                <div class="arrow-down" id='arrow-down'>&#9660;</div>
+                            <div class="col-md-3 col-xs-12" style="margin-top: 4px;">
+                                <select id="subject" class="subject-select">
+                                    <option value="ALL">All Subjects</option>
+                                </select>  
+                            </div>
+                            <div class="col-md-3 col-xs-12" style="margin-top: 4px;">
+                                <select id="term" class="term-select">
+                                </select>  
+                            </div>    
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-9"></div>
+                            <div class="col-md-3 col-xs-12" style="margin-top: 4px;">
+                                <div class="row">
+                                    <div class="col-xs-2 option-heading" style="cursor: pointer; text-align: right">
+                                        <div class="row">
+                                            <div class="arrow-up" id='arrow-up'>&#9650;</div>
+                                        </div>
+                                        <div class="row" style="margin-top: 15px">
+                                            <div class="arrow-down" id='arrow-down'>&#9660;</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <select class="term-select" id='sortBy'>
+                                            <option value="default">Sort By ...</option>
+                                            <option value="rating">Professor Rating</option>
+                                            <option value="difficulty">Class Difficulty</option>                        
+                                            <option value="avghours">Time Commitment</option>
+                                        </select>  
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-10">
-                            <select class="term-select" id='sortBy'>
-                                <option value="default">Sort By ...</option>
-                                <option value="rating">Professor Rating</option>
-                                <option value="difficulty">Class Difficulty</option>                        
-                                <option value="avghours">Time Commitment</option>
-                            </select>  
+                        <div class="row" style="padding-top:60px">
+                            <div class="col-md-12 col-xs-12">
+                                <script>
+                                    function createListings(matches){
+                                        var html = "";
+                                        for(var i = 0; i < matches.length; i++){
+                                            
+                                            var building_name = "";
+                                            var room_name = "";
+                                            var ratingStr = "NA";
+                                            if(matches[i].rating != ""){
+                                                ratingStr = matches[i].rating + "/5.0";
+                                            }
+                                            if (matches[i].room)
+                                            {
+                                                building_name = matches[i].room.building_name;
+                                                room_name = matches[i].room.name;
+                                            }
+                                            html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
+                                                                <div class='panel-body search-panel-body'> \
+                                                                    <div style='display: inline-block; width: 100%'> \
+                                                                        <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
+                                                                        <label style='float: right; color: #fff'> " + matches[i].term + "</label> \
+                                                                    </div> \
+                                                                    <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
+                                                                    <label style='color: #fff'>Class Times: </label> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
+                                                                    <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
+                                                                    <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
+                                                                    <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
+                                                                </div> \
+                                                            </div>";
+            
+                                            
+                                        }
+                                        document.getElementById('listings').innerHTML = html;
+                                    }
+                                </script>
+                                <div id="listings" style="width: 100%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2"></div>
-            </div>
-            <div class="row" style="padding-top:60px">
-                <div class="col-md-2"></div>
-                <div class="col-md-8 col-xs-12">
-                    <script>
-                        function createListings(matches){
-                            var html = "";
-                            for(var i = 0; i < matches.length; i++){
-                                
-                                var building_name = "";
-                                var room_name = "";
-                                var ratingStr = "NA";
-                                if(matches[i].rating != ""){
-                                    ratingStr = matches[i].rating + "/5.0";
-                                }
-                                if (matches[i].room)
-                                {
-                                    building_name = matches[i].room.building_name;
-                                    room_name = matches[i].room.name;
-                                }
-                                html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
-                                                    <div class='panel-body search-panel-body'> \
-                                                        <div style='display: inline-block; width: 100%'> \
-                                                            <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
-                                                            <label style='float: right; color: #fff'> " + matches[i].term + "</label> \
-                                                        </div> \
-                                                        <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
-                                                        <label style='color: #fff'>Class Times: </label> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
-                                                        <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
-                                                        <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
-                                                        <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
-                                                    </div> \
-                                                </div>";
-
-                                
-                            }
-                            document.getElementById('listings').innerHTML = html;
-                        }
-                    </script>
-                    <div id="listings" style="width: 100%"></div>
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div id="calendar">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2"></div>
             </div>
-        </div>	
+        </div>
 	</body>
     
     <script type="text/javascript">
@@ -217,6 +233,24 @@
                     $(this).find(".arrow-up, .arrow-down").toggle();
                     getCourses();
             });
+            $('#calendar').fullCalendar({
+                    theme: true,
+                    defaultView: 'agendaWeek',
+                    height: "auto",
+                    header: false,
+                    allDaySlot: false,
+                    minTime: "07:00:00",
+                    maxTime: "22:00:00",
+                    selectable: true,
+                    editable: false,
+                    eventLmit: true,
+                    //eventBackgroundColor: "#B8860B",
+                    eventBackgroundColor: "#634b89",
+                    eventTextColor: "#fff",
+                    timeFormat: 'h(:mm)t',
+                    columnFormat: 'ddd',
+                    events: []
+                })
         }); 
         
         function createTerms(termsArray) {
