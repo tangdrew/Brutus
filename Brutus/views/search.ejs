@@ -335,6 +335,7 @@
         var fromTop = $(window).scrollTop();
         $('#calendar').css('margin-top', '+' + (fromTop) + 'px');
         
+        getCurrentCourses();
         
         // AJAX post request to database, returns list of all courses
         function getCurrentCourses() {
