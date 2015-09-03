@@ -1,6 +1,7 @@
 .fc-event {
     border-color: #fff !important;
     font-size: .75em !important;
+    overflow: visible;
 }
 
 
