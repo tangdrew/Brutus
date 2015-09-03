@@ -23,7 +23,7 @@ var terms = db.collection('terms');
 
 // get all terms in the db
 exports.getAllTerms = function(callback){
-    terms.find().toArray(function (err, items) {
+    terms.find({}, {name: 1}).toArray(function (err, items) {
         console.log("finding terms");
         callback(items);
     });
