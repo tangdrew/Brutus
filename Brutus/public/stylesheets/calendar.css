@@ -1,5 +1,21 @@
 .fc-event {
     border-color: #fff !important;
+    font-size: .75em !important;
+}
+
+
+@media (max-width: 1000px) {
+    .fc-event {
+        border-color: #fff !important;
+        font-size: .6em !important;
+    }
+}
+
+@media (max-width: 320px) {
+    .fc-event {
+        border-color: #fff !important;
+        font-size: .3em !important;
+    }
 }
 
 td {
@@ -15,3 +31,4 @@ td {
 .fc-minor td {
     border: 0px !important;
 }
+

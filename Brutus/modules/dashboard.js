@@ -17,4 +17,24 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
         }
     });
     
-    
+var accounts = db.collection('accounts');
+var courses = db.collection('courses');
+
+
+// return array of all the user's current courses  
+exports.getCurrentCourses = function(user, callback) {
+    accounts.findOne({email: user.email}, function(e, o) {
+        if (o) {
+            var currentCourses = o.current_courses;
+            for (var i = 0; i < currentCourses.length; i++) {
+                currentCourses[i] = parseInt(currentCourses[i]);
+            }
+            courses.find({_id: {$in: currentCourses}}).toArray(function(e, o) {
+                if (o) {
+                    callback(o);
+                }
+            });
+        }
+    })
+       
+}

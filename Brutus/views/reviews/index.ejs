@@ -5,8 +5,95 @@
        <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
        <link rel="stylesheet" href="/stylesheets/select2.css"/>
        <link rel="stylesheet" href="/stylesheets/index.css"/>
+       <link rel="stylesheet" href="/stylesheets/bootstrap-slider.css">     
+       
        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
-       <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>  	
+       <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>
+       <script type="text/javascript" src="/javascripts/bootstrap-slider.js"></script>
+       
+       <script>
+            
+            
+            //AJAX post request to database, returns list of all terms
+            function getTerms(){
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "terms"},
+                    success: function(terms) {
+                        createTerms(terms);
+                        getSubjects();
+                    }
+                });
+            }         
+            //AJAX post request to database, returns list of all subjects
+            function getSubjects(){
+                var term = document.getElementById('term').value;
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "subjects", term: term},
+                    success: function(subjects) {
+                        createSubjects(subjects);
+                    }
+                });
+            }
+            //AJAX post request to database, returns list of current courses
+            function getCurrentCourses(){
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "current"},
+                    success: function(courses) {
+                        //For each current course, grab course data and render the select option
+                         for (var i = 0; i < courses.current_courses.length; i++) {
+                            console.log(courses.current_courses[i]);    
+                            renderCourse(courses.current_courses[i]);                   
+                        }
+                    }
+                });
+            }         
+            
+            //AJAX post request to database, returns list of courses based on term and subject
+            function getCourses(){
+                var search = "";
+                var subject = document.getElementById('subject').value;
+                var term = document.getElementById('term').value;
+                var order = 1;
+                var sortBy = "default";
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query": "search", "search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
+                    success: function(courses) {
+                        createCourses(courses);
+                    }
+                });
+            }
+
+            
+            //AJAX post request to database, returns course object by id and then renders the select option
+            function renderCourse(_id){
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "oneCourse", "_id" : _id},
+                    success: function(course) {
+                        var html;
+                        html = html + "<option value='" + course[0]._id + "'>" + course[0].title + "</option>";
+                        document.getElementById('mycourses').innerHTML += html;
+                    }
+                });
+            }            
+            
+            //Clear course values when you click away from tab
+            function clearValues(id){
+                $(id).val("").trigger("change");
+                console.log(document.getElementById('mycourses').value);
+                console.log(document.getElementById('search').value);
+            }
+                     
+		</script>  	
   </head>
   <body>
     <!--Navbar-->
@@ -19,36 +106,81 @@
                 <div class="col-md-4">                 
                     <form action="reviews" method="post" name="addReviewForm" style="margin-top: 150px">
                         <h2>Review a Course</h2><br>
-                        <p>Term
-                        <select class="term-select">
-                            <option value="FALL2015">Fall 2015</option>
-                            <option value="WINTER2016">Winter 2016</option>
-                            <option value="SPRING2016">Spring 2016</option>
-                            <option value="FALL2016">Fall 2016</option>
-                        </select>
+                        
+                        <!--Course Selection-->
+                        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs" style="text-align: center">
+                            <li class="active" style="width: 50%" onclick="clearValues('#search')"><a href="#myCoursesTab" data-toggle="tab">Your Courses</a></li>
+                            <li style="width: 50%"><a href="#searchTab" onclick="clearValues('#mycourses')" data-toggle="tab">Search</a></li>
+                        </ul>
+                        <div id="my-tab-content" class="tab-content">
+                            <div class="tab-pane active" id="myCoursesTab">
+                                <div class="row">
+                                    <p class="col-md-12 col-xs-12">Select From Your courses
+                                        <select id="mycourses" class="term-select" name="myCourseID">       
+                                            <option value=''>Select from your Courses</option>                           
+                                        </select> 
+                                    </p>
+                                </div>  
+                            </div>
+                            <div class="tab-pane" id="searchTab">
+                                <div class="row">
+                                    <p class="col-md-12 col-xs-12">Term
+                                        <select id="term" class="term-select" name="term">                                  
+                                        </select> 
+                                    </p>
+                                    <p class="col-md-12 col-xs-12">Subject
+                                        <select id="subject" class="subject-select" name="subject">                                  
+                                        </select> 
+                                    </p>
+                                    <p class="col-md-12 col-xs-12">Courses
+                                        <select id="search" class="search-select" name="searchCourseID">                                  
+                                        </select> 
+                                    </p>
+                                </div>   
+                            </div>
+                        </div>              
+                                              
+                        <div class="row">                        
+                            <p class="col-md-12 col-xs-12">Grade (optional)
+                                <select id="grade" class="subject-select" name="grade">
+                                    <option value="4.0">A</option>
+                                    <option value="3.7">A-</option>
+                                    <option value="3.3">B+</option>
+                                    <option value="3.0">B</option>
+                                    <option value="2.7">B-</option>
+                                    <option value="2.3">C+</option>
+                                    <option value="2.0">C</option>
+                                    <option value="1.7">C-</option>
+                                    <option value="1.3">D+</option>
+                                    <option value="1.0">D</option>
+                                    <option value="0.7">D-</option>
+                                    <option value="0.3">F</option>                         
+                                </select> 
+                            </p>
+                        </div>
+                        <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Overall Rating</p>                       
+                                              
+                        <p class="col-md-12 col-xs-12">
+                        <input id="rating" name="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]' tooltip="show"/>
                         </p>
-                        <p>Subject                   
-                        <select class="term-select">
-                            <option value="ALL">All Subjects</option>
-                            <option value="ACCOUNTING">ACCOUNT - Accounting</option>
-                            <option value="EARTH">EARTH - Earth and Planetary Sciences</option>
-                            <option value="ECON">ECON - Economics</option>
-                            <option value="EECS">EECS - Electrical Engineering and Computer Science</option>
-                            <option value="PHYSICS">PHYSICS - Physics</option>
-                        </select>
-                        </p>                        
-                        <p>Grade (ex. B+)
-                        <input type="text" class="form-control" name="grade">
+                        
+                        
+                        <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Class Difficulty</p>                       
+                                              
+                        <p class="col-md-12 col-xs-12">
+                        <input id="difficulty" name="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]' tooltip="hide"/>
                         </p>
-                        <p>Overall Rating  (1 to 6)
-                        <input type="text" class="form-control" name="rating">
-                        </p>
-                        <p>Difficulty Level (1 to 5)
-                        <input type="text" class="form-control" name="difficulty">
-                        </p>
-                        <p>Average Time Spent Outside Class Per Week (ex. 5)
-                        <input type="text" class="form-control" name="time">
-                        </p> 
+                        <div class="row">
+                            <p class="col-md-12 col-xs-12">Average Time Spent Outside Class Per Week
+                            <!--    <select id="term" class="term-select" name="avghours">
+                                    <option value="under5">0~5 Hours</option>
+                                    <option value="under10">5~10 Hours</option>
+                                    <option value="under15">10~15 Hours</option>
+                                    <option value="over15">15~ Hours</option>                                  
+                                </select> -->
+                                <input type="text" class="form-control" name="avghours">
+                            </p>
+                        </div> 
                         <p>Comments  (optional)
                         <input type="text" class="form-control" name="comments">
                         </p> <br>                       
@@ -59,75 +191,87 @@
             </div>
         </div>
   </body>
-      <script type="text/javascript">
+    <script type="text/javascript">
 		$(document).ready(function() {
-            $(".subject-select").select2();
-            $(".term-select").select2(); 
             
-            $(".btn").click(function() {
-                alert("button clicked");
+            // add the select complete component
+            $(".search-select").select2();
+            $(".term-select").select2(); 
+            $(".subject-select").select2();
+            $('#tabs').tab();
+            getCurrentCourses();
+            getTerms();
+            $('#subject').change(function() {
+                getCourses();
             });
-        });
+        });       
         
-        function search(courses, substr){
-            var matches = [];
-            substr = substr.toLowerCase();
-            substr = substr.replace(/\s+/g, '');
-            console.log(substr);
-            for(var i = 0; i < courses.length; i++){
-                if(typeof courses[i].title != 'undefined' && typeof courses[i].subject != 'undefined' && typeof courses[i].catalog_num != 'undefined'){
-                    var fullString = courses[i].title.toLowerCase() + " " + courses[i].subject.toLowerCase() + " " + courses[i].catalog_num.toLowerCase()
-                    fullString = fullString.replace(/\s+/g, '');
-                    if(fullString.indexOf(substr) >= 0){
-                        matches.push(courses[i]);
-                    }
+        
+        function createTerms(termsArray) {
+            
+            var html;       // to be placed in the select listing
+            
+            for (var i = 0; i < termsArray.length; i++) {
+                if (i == 0) {
+                    html = html + "<option selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
                 }
+                else {
+                    html = html + "<option value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                }
+                
             }
-            return matches;
+            
+            document.getElementById('term').innerHTML += html;
+            $('#term').val($('#term').find('option:first').val());
+            $('#term').find('option:first').prop('selected', true);
+            $('#term').change();            
         }
         
-        
-        var substringMatcher = function(strs) {
-            return function findMatches(q, cb) {
-                var matches, substringRegex;
-
-                var selectedText = $( "#subject-select option:selected" ).text();
-                if (selectedText.indexOf('econ') > -1)
-                {
-                    strs = ['ECON 201', 'ECON 202'];
-                }
-
-                // an array that will be populated with substring matches
-                matches = [];
-            
-                // regex used to determine if a string contains the substring `q`
-                substrRegex = new RegExp(q, 'i');
-            
-                // iterate through the pool of strings and for any string that
-                // contains the substring `q`, add it to the `matches` array
-                $.each(strs, function(i, str) {
-                    if (substrRegex.test(str)) {
-                        matches.push(str);
+        function createSubjects(subjectsArray) {
+            var html;       // to be placed in the select listing
+            for (var i = 0; i < subjectsArray.length; i++)
+            {
+                    if (i == 0) {
+                        html = html + "<option selected='selected' value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
                     }
-                });
-            
-                cb(matches);
-            };
-        };
+                    else {
+                        html = html + "<option value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
+                    }
+            }
 
-        var courses = ['ECON 201', 'EECS 203', 'EECS 349', 'EECS 361', 'PHYSICS 135-2',
-            'CHEM 101-1', 'ECON 202'
-        ];
+            document.getElementById('subject').innerHTML += html;
 
-        $('#search-box .typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'Courses',
-            source: substringMatcher(courses)
-        });
+        }
         
+        function createCourses(coursesArray) {
+            var html;       // to be placed in the select listing
+            for (var i = 0; i < coursesArray.length; i++)
+            {
+                    if (i == 0) {
+                        html = html + "<option selected='selected' value='" + coursesArray[i]._id + "'>" + coursesArray[i].catalog_num + " - " + coursesArray[i].title + " - " + coursesArray[i].instructor.name + "</option>";
+                    }
+                    else {
+                        html = html + "<option value='" + coursesArray[i]._id + "'>" + coursesArray[i].catalog_num + " - " + coursesArray[i].title + " - " + coursesArray[i].instructor.name + "</option>";
+                    }
+            }
+
+            document.getElementById('search').innerHTML = html;
+
+        }
+        
+        var slider = new Slider("#rating", {
+        ticks: [1, 2, 3, 4, 5],
+        ticks_labels: ['1', '2', '3', '4', '5'],
+        ticks_snap_bounds: 100,
+        tooltip: 'hide'
+    });
+    
+        var slider = new Slider("#difficulty", {
+        ticks: [1, 2, 3, 4, 5],
+        ticks_labels: ['1', '2', '3', '4', '5'],
+        ticks_snap_bounds: 100,
+        tooltip: 'hide'
+    });
 	</script>
+    
 </html>

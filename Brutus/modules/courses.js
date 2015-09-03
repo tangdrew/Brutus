@@ -20,6 +20,7 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 });
 var courses = db.collection('courses');
 var accounts = db.collection('accounts');
+var reviews = db.collection('reviews');
 
 exports.addCourse = function(data, callback){
     courses.insert(data, {safe: true}, callback);
@@ -50,7 +51,7 @@ function fuzzySearch(courses, substr){
 }
         
 //Function that returns the courses as specified by search parameters
-exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
+exports.searchCourses = function(limit,searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
     if(subjectVal == "ALL"){
         var query = {term: termVal};
     }else{
@@ -69,7 +70,9 @@ exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortB
     courses.find(query).sort(sortQuery).toArray(function(err, result) {
         if (err) throw err;
         var matches = fuzzySearch(result, searchVal);
-        matches = matches.slice(0,10);
+        if(limit != 'none'){
+            matches = matches.slice(0,limit);
+        }
         console.log('done');
         callback(matches);
     });
@@ -86,17 +89,56 @@ exports.getCourseByCourseId = function(value, callback){
     });
 }
 
-exports.addReview = function(data, userEmail, callback){
-    accounts.findOne({email:userEmail}, function(e,o) {
-        if (o){
-            var courses_taken = o.courses_taken;
-            courses_taken.push(data);
-            accounts.update ({email: userEmail}, {$set: {"courses_taken" : courses_taken} });
-            callback(e, o);
-        }
-        else{
-            callback(e, o);
-        }
+exports.addReview = function(course, req, userEmail, callback){
+    //Add review to reviews collection in db
+    reviews.insert({
+        user_id: req.session.user._id,
+        course_id_unique: course[0]._id,
+        course_id: course[0].course_id,
+        instructor: course[0].instructor.name,
+        timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
+        title: course[0].title,
+        rating: req.body.rating,
+        grade: req.body.grade,
+        difficulty: req.body.difficulty,
+        avghours: req.body.avghours,
+        comments: req.body.comments
+    });
+    //Gets the review that was just written to the db to use
+    reviews.find().sort({timestamps : -1}).limit(1).toArray(function(err,obj) { 
+        //Add course to courses_taken for user
+        accounts.findOne({email:userEmail}, function(e,o) {
+            if (o){
+                var courses_taken = o.courses_taken;
+                var current_courses = o.current_courses;
+                var index = current_courses.indexOf(course[0]._id.toString());
+                if (index > -1) {
+                    current_courses.splice(index, 1);
+                }
+                courses_taken.push({"review_id": obj[0]._id, "course_id_unique": course[0]._id});
+                //Update users courses taken and current courses
+                accounts.update ({email: userEmail}, {$set: {"courses_taken" : courses_taken} });
+                accounts.update ({email: userEmail}, {$set: {"current_courses" : current_courses} });
+                //Update the courses ratings for every course instance with same course_id+instructor combination
+                reviews.find({"course_id": course[0].course_id, "instructor": course[0].instructor.name}).toArray(function(err, reviews) { 
+                    var ratingSum = 0;
+                    var gradeSum = 0;
+                    var difficultySum = 0;
+                    var avghoursSum = 0;
+                    for(var i = 0; i < reviews.length; i++){
+                        ratingSum += reviews[i].rating;
+                        gradeSum += reviews[i].grade;
+                        difficultySum += reviews[i].difficulty;
+                        avghoursSum += reviews[i].avghours;
+                    }
+                    console.log(ratingSum/reviews.length);
+                });
+                callback(e, o);
+            }
+            else{
+                callback(e, o);
+            }
+        });
     });
 }
 
