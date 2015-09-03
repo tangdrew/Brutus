@@ -161,28 +161,6 @@
     
             }
     
-            window.onload = function(){
-                var ctx = document.getElementById("canvas").getContext("2d");
-                window.myLine = new Chart(ctx).Line(lineChartData, {
-                    responsive: true
-                });
-                var ctx2 = document.getElementById("canvas2").getContext("2d");
-                window.myLine = new Chart(ctx2).Line(lineChartData, {
-                    responsive: true
-                });
-                var ctx4 = document.getElementById("canvas4").getContext("2d");
-                window.myLine = new Chart(ctx4).Line(lineChartData, {
-                    responsive: true
-                });
-                var ctx5 = document.getElementById("canvas5").getContext("2d");
-                window.myLine = new Chart(ctx5).Line(lineChartData, {
-                    responsive: true
-                });
-                var ctx6 = document.getElementById("canvas6").getContext("2d");
-                window.myLine = new Chart(ctx6).Line(lineChartData, {
-                    responsive: true
-                });
-            }
 
 
             $(document).ready(function() {
@@ -209,6 +187,24 @@
                 })
             });
             getCurrentCourses();
+
+            var ctx = document.getElementById("canvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx2 = document.getElementById("canvas2").getContext("2d");
+                window.myLine = new Chart(ctx2).Line(lineChartData, {
+                    responsive: true
+                });
+
+                var ctx5 = document.getElementById("canvas5").getContext("2d");
+                window.myLine = new Chart(ctx5).Line(lineChartData, {
+                    responsive: true
+                });
+                var ctx6 = document.getElementById("canvas6").getContext("2d");
+                window.myLine = new Chart(ctx6).Line(lineChartData, {
+                    responsive: true
+                });
 
 
             // AJAX post request to database, returns list of all courses
