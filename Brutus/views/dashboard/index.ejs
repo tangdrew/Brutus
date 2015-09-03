@@ -244,38 +244,38 @@
                                 meetingDays[6] = 1;
                             
 
-                // full calendar plugin to add weekly schedule
-                $('#calendar').fullCalendar({
-                    theme: true,
-                    defaultView: 'agendaWeek',
-                    height: "auto",
-                    header: false,
-                    allDaySlot: false,
-                    minTime: "07:00:00",
-                    maxTime: "22:00:00",
-                    selectable: true,
-                    editable: false,
-                    eventLmit: true,
-                    eventBackgroundColor: "#B8860B",
-                    eventTextColor: "#fff",
-                    eventBorderColor: "B8860B",
-                    eventColor: "B8860B",
-                    events: []
-                        
-                })
-            });
-            getCurrentCourses();
+                            
+                            var sunday = Date.today().add( - (new Date()).getDay()).days();
+                            
+                            var events = [];
+                            for (var j = 0; j < 7; j++) {
+                                if (meetingDays[j] == 1) {
+                                    var date = new Date(sunday).add(j).days();                                    
+                                    var datestr = date.toISOString().substr(0, 11);
+                                    events.push({
+                                        url: "/course?course=" + courses[i]._id,
+                                        title: courses[i].subject + " " + courses[i].catalog_num,
+                                        start: datestr + courses[i].start_time,
+                                        end: datestr + courses[i].end_time 
+                                    });
+                                }
+                            }
 
-
-            // AJAX post request to database, returns list of all courses
-            function getCurrentCourses() {
-                $.ajax( {
-                    url: '/dashboard',
-                    type: 'POST',
-                    data: {getCurrentEvents: true},
-                    success: function(courses) {
+                            for (var k = 0; k < events.length; k++) {
+                                $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
+                                $('#calendar').fullCalendar( 'rerenderEvents' );    
+                            }
+                        }
                         
-                        for (var i = 0; i < courses.length; i++) {
+                        document.getElementById('course-list').innerHTML = html;
+                    }
+                });
+            }
+
+        </script>
+        </body>
+    </head>
+</html>
                             
                                 
                             var meetingDays = [0, 0, 0, 0, 0, 0, 0];
