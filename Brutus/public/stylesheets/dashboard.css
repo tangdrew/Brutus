@@ -1,9 +1,11 @@
 .fc-event {
     border-color: #fff !important;
     font-size: .75em !important;
-    overflow: visible;
 }
 
+.panel {
+    overflow: visible;
+}
 
 @media (max-width: 1000px) {
     .fc-event {
@@ -20,9 +22,7 @@
 }
 
 td {
-    border-top: 1px solid #fff !important;
-
-
+    border-top: 1px solid #634b89 !important;
 }
 
 .fc-event-container {
@@ -30,9 +30,45 @@ td {
 }
 
 .fc-minor td {
-    border: 0px !important;
+    border: 0px solid #fff !important;
 }
 
+/* course listing styles */
 .course-list-item {
-    border: 1px solid rgba(255, 255, 255, .3) !important;
+    border: 1px solid #634b89 !important;
+    background-color: #fff;
+}
+
+a.list-group-item, button.list-group-item {
+    color: #634b89   
+}
+
+.panel {
+    background-color: #fff;
+}
+
+.fc-axis {
+    color: #634b89;
+}
+
+.fc-day-header {
+    color: #634b89;
+}
+
+#calendar {
+    border-bottom: 1px solid #634b89 !important;
+    border-left: 1px solid #634b89 !important;
+    border-right: 1px solid #634b89 !important;
+}
+
+/* remove border shadow on calendar panel */
+.course-panel {
+    -webkit-box-shadow: none;
+    box-shadow: none;    
+}
+
+/* calendar make fit heading */
+.calendar-body {
+    padding-left: 0px;
+    padding-right: 0px;
 }
