@@ -34,6 +34,7 @@ router.post('/search', function(req, res){
     else if (req.body.findTerms)
     {
         terms.getAllTerms(function(o) {
+            console.log("in finding terms");
             res.send(o); 
         });
     }

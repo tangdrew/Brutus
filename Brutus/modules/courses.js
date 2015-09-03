@@ -66,7 +66,7 @@ exports.searchCourses = function(searchVal, subjectVal, termVal, orderVal, sortB
     }else if(sortByVal == "avghours"){
         sortQuery = { rating: parseInt(orderVal), subject: 1, catalog_num: 1, title: 1, start_time: 1 };
     }
-    courses.find(query, {batchSize: 20000}).sort(sortQuery).toArray(function(err, result) {
+    courses.find(query).sort(sortQuery).toArray(function(err, result) {
         if (err) throw err;
         console.log(result.length);
         var matches = fuzzySearch(result, searchVal);
