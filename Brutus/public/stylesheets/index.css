@@ -104,7 +104,8 @@ header .header-content .header-content-inner p {
 .btn-gold {
     color: #fff;
     font-weight: 500;
-    background-color: #ffdf32;
+    background-color: #e4c000;
+    /*background-color: #ffdf32;*/
 }
 
 .btn-gold:hover {
@@ -129,7 +130,7 @@ header .header-content .header-content-inner p {
     margin-left: 0;
     margin-top: 80px;
     text-align: center;
-    height: 300px;
+    height: 250px;
     font-weight: 900;
     color: #42325b;
 }
@@ -153,4 +154,92 @@ header .header-content .header-content-inner p {
     margin-top: 80px;
     text-align: center;
     height: 500px;
+}
+
+/* bottom section of landing page */
+.grey {
+
+    position: absolute;    
+    top: 850px;
+    width: 100%;
+    margin: 0;
+    /*
+    background: url('/images/search.png') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    */
+    background-color: #e8e8e8;
+    left: 0px;
+    margin-left: 0;    
+    /*text-align: center;*/
+    height: 450px;
+    font-weight: 900;
+    color: #42325b;
+}
+
+.white {
+
+    position: absolute;    
+    top: 1300px;
+    width: 100%;
+    margin: 0;
+    /*
+    background: url('/images/search.png') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    */
+    background-color: #fff;
+    left: 0px;
+    margin-left: 0;
+    /*text-align: center;*/
+    height: 450px;
+    font-weight: 900;
+    color: #42325b;
+}
+
+.grey2 {
+
+    position: absolute;    
+    top: 1750px;
+    width: 100%;
+    margin: 0;
+    /*
+    background: url('/images/search.png') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    */
+    background-color: #e8e8e8;
+    left: 0px;
+    margin-left: 0;    
+    /*text-align: center;*/
+    height: 450px;
+    font-weight: 900;
+    color: #42325b;
+}
+
+.white2 {
+
+    position: relative;    
+    top: 0;
+    width: 100%;
+    margin: 0;
+    /*
+    background: url('/images/search.png') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    */
+    background-color: #fff;
+    left: 0px;
+    margin-left: 0;    
+    height: 350px;
+    font-weight: 900;
+    color: #42325b;
 }
