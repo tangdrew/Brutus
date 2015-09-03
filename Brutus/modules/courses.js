@@ -126,12 +126,24 @@ exports.addReview = function(course, req, userEmail, callback){
                     var difficultySum = 0;
                     var avghoursSum = 0;
                     for(var i = 0; i < reviews.length; i++){
-                        ratingSum += reviews[i].rating;
-                        gradeSum += reviews[i].grade;
-                        difficultySum += reviews[i].difficulty;
-                        avghoursSum += reviews[i].avghours;
+                        ratingSum += parseInt(reviews[i].rating);
+                        gradeSum += parseInt(reviews[i].grade);
+                        difficultySum += parseInt(reviews[i].difficulty);
+                        avghoursSum += parseInt(reviews[i].avghours);
                     }
-                    console.log(ratingSum/reviews.length);
+                    courses.find({"course_id": course[0].course_id, "instructor.name": course[0].instructor.name}).toArray(function(err, courseMatches){
+                        //Updates all of the matches with the average scores
+                        console.log(courseMatches);
+                        for(var j = 0; j < courseMatches.length; j++){
+                            courses.update ({_id: courseMatches[j]._id}, {$set: {
+                                "rating" : ratingSum/reviews.length,
+                                "grade" : gradeSum/reviews.length,
+                                "difficulty" : difficultySum/reviews.length,
+                                "avghours" : avghoursSum/reviews.length,
+                                "numreviews" : courseMatches[j].numreviews + 1
+                            } });
+                        }   
+                    });
                 });
                 callback(e, o);
             }
