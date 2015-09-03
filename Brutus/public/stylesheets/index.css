@@ -117,7 +117,10 @@ header .header-content .header-content-inner p {
 /* middle section of landing page */
 .middle {
 
-    position: relative;
+    position: relative;    
+    /*top: 500px;*/
+    width: 100%;
+    margin: 0;
     /*
     background: url('/images/search.png') no-repeat;
     -webkit-background-size: cover;
@@ -137,8 +140,8 @@ header .header-content .header-content-inner p {
 
 /* bottom section of landing page */
 .bottom {
-    position: absolute;
-    top: 1000px;
+    position: relative;
+    
     width: 100%;
     margin: 0;
     /*
@@ -159,8 +162,8 @@ header .header-content .header-content-inner p {
 /* bottom section of landing page */
 .grey {
 
-    position: absolute;    
-    top: 850px;
+    position: relative;    
+    
     width: 100%;
     margin: 0;
     /*
@@ -181,8 +184,8 @@ header .header-content .header-content-inner p {
 
 .white {
 
-    position: absolute;    
-    top: 1300px;
+    position: relative;    
+    
     width: 100%;
     margin: 0;
     /*
@@ -203,8 +206,8 @@ header .header-content .header-content-inner p {
 
 .grey2 {
 
-    position: absolute;    
-    top: 1750px;
+    position: relative;    
+    
     width: 100%;
     margin: 0;
     /*
@@ -218,7 +221,7 @@ header .header-content .header-content-inner p {
     left: 0px;
     margin-left: 0;    
     /*text-align: center;*/
-    height: 450px;
+    height: 525px;
     font-weight: 900;
     color: #42325b;
 }
@@ -226,7 +229,7 @@ header .header-content .header-content-inner p {
 .white2 {
 
     position: relative;    
-    top: 0;
+    
     width: 100%;
     margin: 0;
     /*
@@ -239,7 +242,7 @@ header .header-content .header-content-inner p {
     background-color: #fff;
     left: 0px;
     margin-left: 0;    
-    height: 350px;
+    height: 450px;
     font-weight: 900;
     color: #42325b;
 }
