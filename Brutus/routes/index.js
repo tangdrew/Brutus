@@ -19,7 +19,14 @@ router.get('/', function(req, res, next) {
 /* GET search page. */
 router.get('/search', function(req, res, next) 
 {
-    res.render('search', { user: req.session.user, title: 'Search' });
+    if(req.session.user == undefined)
+    {
+        res.redirect('/login');
+    }
+    else
+    {
+        res.render('search', { user: req.session.user, title: 'Search' });
+    }
 });
 
 /*Return course data as JSON*/

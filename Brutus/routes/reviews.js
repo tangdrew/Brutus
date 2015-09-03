@@ -16,7 +16,7 @@ router.route('/')
     .get(function(req, res, next) {
         
         if (req.session.user == undefined) {
-            res.redirect('/');
+            res.redirect('/login');
         }
         else {
             res.render('reviews/index', { title: 'Review Classes', user: req.session.user});
