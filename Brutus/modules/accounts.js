@@ -89,6 +89,18 @@ exports.createAccount = function(data, callback)
     }
 }
 
+// Returns object of courses user is currently enrolled in
+exports.getCurrentCourses = function(userEmail, callback){
+    accounts.findOne({email: userEmail}, function(e,o){
+        if(o){
+            callback(o, null);
+        }
+        else if(e){
+            callback(null, 'fail');
+        }
+    });
+}
+
 // Check login for existing users
 
 exports.checkLogin = function(data, callback)
