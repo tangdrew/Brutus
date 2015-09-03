@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap-superhero.css"/>
 		<link rel="stylesheet" href="/stylesheets/bootstrap-tags.css"/>
 		<link rel="stylesheet" href="/stylesheets/general.css"/>
-        <link rel="stylesheet" href="/stylesheets/calendar.css"/>
+        <link rel="stylesheet" href="/stylesheets/dashboard.css"/>
         <script type="text/javascript" src="/javascripts/Chart.js"></script>
         <script type="text/javascript" src="/javascripts/data.js"></script>
         
@@ -19,7 +19,9 @@
         <script src='/javascripts/fullcalendar.min.js'></script>
         
         <script type="text/javascript" src="/javascripts/bootstrap.js"></script>
-        <body>
+        <script type="text/javascript" src="/javascripts/date.js"></script>
+	</head>
+    <body>
 
         <% include ../../shared/_navbar %>
         <div class="container" style="padding-top: 100px">
@@ -51,10 +53,8 @@
                                         <div class="panel-heading">
                                             Current Courses
                                         </div>
-                                        <div class="panel-body">
-                                            <div>
-                                                <canvas id="canvas4" height="300" width="600"></canvas>
-                                            </div>
+                                        <div class="list-group" id="course-list">
+                                            
                                         </div>
                                     </div>                                       
                                 </div>
@@ -203,86 +203,79 @@
                     eventTextColor: "#fff",
                     eventBorderColor: "B8860B",
                     eventColor: "B8860B",
-                    events: [
-                        {
-                            title: 'Long Event',
-                            start: '2015-08-28',
-                            end: '2015-09-03'
-                        },
-                        {
-                            id: 999,
-                            title: 'Repeating Event',
-                            start: '2015-09-01T16:00:00'
-                        },
-                        {
-                            id: 999,
-                            title: 'Repeating Event',
-                            start: '2015-09-01T16:00:00'
-                        },
-                        {
-                            title: 'Conference',
-                            start: '2015-08-30T07:00:00',
-                            end: '2015-08-30T08:00:00'
-                        },
-                        {
-                            title: 'Conference',
-                            start: '2015-08-30T08:00:00',
-                            end: '2015-08-30T11:00:00'
-                        },
-                        {
-                            title: 'Conference',
-                            start: '2015-08-30T10:00:00',
-                            end: '2015-08-30T14:00:00'
-                        },
-                        {
-                            title: 'Conference',
-                            start: '2015-08-31T07:00:00',
-                            end: '2015-08-31T08:00:00'
-                        },
-                        {
-                            title: 'Conference',
-                            start: '2015-08-31T08:00:00',
-                            end: '2015-08-31T11:00:00'
-                        },
-                        {
-                            title: 'Conference',
-                            start: '2015-08-31T10:00:00',
-                            end: '2015-08-31T14:00:00'
-                        },
-                        {
-                            title: 'Meeting',
-                            start: '2015-09-02T10:30:00',
-                            end: '2015-09-02T12:30:00'
-                        },
-                        {
-                            title: 'Lunch',
-                            start: '2015-09-05T12:00:00'
-                        },
-                        {
-                            title: 'Meeting',
-                            start: '2015-09-05T14:30:00'
-                        },
-                        {
-                            title: 'Happy Hour',
-                            start: '2015-09-04T17:30:00'
-                        },
-                        {
-                            title: 'Dinner',
-                            start: '2015-09-06T20:00:00'
-                        },
-                        {
-                            title: 'Birthday Party',
-                            start: '2015-09-05T07:00:00'
-                        },
-                        {
-                            title: 'Click for Google',
-                            url: 'http://google.com/',
-                            start: '2015-09-01'
-                        }
-                    ]
-                });
-
+                    timeFormat: 'h(:mm)t',
+                    columnFormat: 'ddd',
+                    events: []
+                        
+                })
             });
+            getCurrentCourses();
+
+
+            // AJAX post request to database, returns list of all courses
+            function getCurrentCourses() {
+                $.ajax( {
+                    url: '/dashboard',
+                    type: 'POST',
+                    data: {getCurrentEvents: true},
+                    success: function(courses) {
+                        
+                        var html = '';
+                        
+                        for (var i = 0; i < courses.length; i++) {
+                            html += "<a href='/course?course=" + courses[i]._id + "' class='course-list-item list-group-item'>";    
+                            html += courses[i].subject + " " + courses[i].catalog_num + " - " + courses[i].title;
+                            html += "<p>" + courses[i].meeting_days + courses[i].start_time + " - " + courses[i].end_time + "</p>";
+                            html += "</a>";
+                            
+                            var meetingDays = [0, 0, 0, 0, 0, 0, 0];
+                            if (courses[i].meeting_days == undefined || courses[i].start_time == undefined || courses[i].end_time == undefined)
+                                continue;
+                                
+                            var meetingDaysStr = courses[i].meeting_days.toLowerCase();
+                            if (meetingDaysStr.indexOf("su") > -1)
+                                meetingDays[0] = 1;
+                            if (meetingDaysStr.indexOf("mo") > -1)
+                                meetingDays[1] = 1;
+                            if (meetingDaysStr.indexOf("tu") > -1)
+                                meetingDays[2] = 1;
+                            if (meetingDaysStr.indexOf("we") > -1)
+                                meetingDays[3] = 1;
+                            if (meetingDaysStr.indexOf("th") > -1)
+                                meetingDays[4] = 1;
+                            if (meetingDaysStr.indexOf("fr") > -1)
+                                meetingDays[5] = 1;
+                            if (meetingDaysStr.indexOf("sa") > -1)
+                                meetingDays[6] = 1;
+                            
+
+                            
+                            var sunday = Date.today().add( - (new Date()).getDay()).days();
+                            
+                            var events = [];
+                            for (var j = 0; j < 7; j++) {
+                                if (meetingDays[j] == 1) {
+                                    var date = new Date(sunday).add(j).days();                                    
+                                    var datestr = date.toISOString().substr(0, 11);
+                                    events.push({
+                                        url: "/course?course=" + courses[i]._id,
+                                        title: courses[i].subject + " " + courses[i].catalog_num,
+                                        start: datestr + courses[i].start_time,
+                                        end: datestr + courses[i].end_time 
+                                    });
+                                }
+                            }
+
+                            for (var k = 0; k < events.length; k++) {
+                                $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
+                                $('#calendar').fullCalendar( 'rerenderEvents' );    
+                            }
+                        }
+                        
+                        document.getElementById('course-list').innerHTML = html;
+                    }
+                });
+            }
 
         </script>
         </body>
