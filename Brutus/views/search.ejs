@@ -9,6 +9,7 @@
         
         <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
         <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <link href='/stylesheets/search-calendar.css' rel = 'stylesheet' />
         <script src='/javascripts/moment.min.js'></script>
         <script src='/javascripts/fullcalendar.min.js'></script>
         
@@ -276,7 +277,7 @@
                                         // scroll calendar based on scroll position
                                         $(window).scroll(function() {
                                             var fromTop = $(window).scrollTop();
-                                            $('#calendar').css('margin-top', '+' + (50 + fromTop) + 'px');
+                                            $('#calendar').css('margin-top', '+' + (fromTop) + 'px');
                                         });
                                     }
                                 </script>
@@ -328,7 +329,69 @@
                     columnFormat: 'ddd',
                     events: []
                 })
-        }); 
+        });
+        
+        // scroll calendar at beginning
+        var fromTop = $(window).scrollTop();
+        $('#calendar').css('margin-top', '+' + (fromTop) + 'px');
+        
+        
+        // AJAX post request to database, returns list of all courses
+            function getCurrentCourses() {
+                $.ajax( {
+                    url: '/dashboard',
+                    type: 'POST',
+                    data: {getCurrentEvents: true},
+                    success: function(courses) {
+                        
+                        for (var i = 0; i < courses.length; i++) {
+                            
+                            var meetingDays = [0, 0, 0, 0, 0, 0, 0];
+                            if (courses[i].meeting_days == undefined || courses[i].start_time == undefined || courses[i].end_time == undefined)
+                                continue;
+                                
+                            var meetingDaysStr = courses[i].meeting_days.toLowerCase();
+                            if (meetingDaysStr.indexOf("su") > -1)
+                                meetingDays[0] = 1;
+                            if (meetingDaysStr.indexOf("mo") > -1)
+                                meetingDays[1] = 1;
+                            if (meetingDaysStr.indexOf("tu") > -1)
+                                meetingDays[2] = 1;
+                            if (meetingDaysStr.indexOf("we") > -1)
+                                meetingDays[3] = 1;
+                            if (meetingDaysStr.indexOf("th") > -1)
+                                meetingDays[4] = 1;
+                            if (meetingDaysStr.indexOf("fr") > -1)
+                                meetingDays[5] = 1;
+                            if (meetingDaysStr.indexOf("sa") > -1)
+                                meetingDays[6] = 1;
+                            
+
+                            
+                            var sunday = Date.today().add( - (new Date()).getDay()).days();
+                            
+                            var events = [];
+                            for (var j = 0; j < 7; j++) {
+                                if (meetingDays[j] == 1) {
+                                    var date = new Date(sunday).add(j).days();                                    
+                                    var datestr = date.toISOString().substr(0, 11);
+                                    events.push({
+                                        url: "/course?course=" + courses[i]._id,
+                                        title: courses[i].subject + " " + courses[i].catalog_num,
+                                        start: datestr + courses[i].start_time,
+                                        end: datestr + courses[i].end_time 
+                                    });
+                                }
+                            }
+
+                            for (var k = 0; k < events.length; k++) {
+                                $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
+                                $('#calendar').fullCalendar( 'rerenderEvents' );    
+                            }
+                        }
+                    }
+                });
+        
         
         function createTerms(termsArray) {
             
