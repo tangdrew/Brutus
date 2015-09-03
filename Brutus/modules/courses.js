@@ -155,6 +155,7 @@ exports.addReview = function(course, req, userEmail, callback){
     });
 }
 
+//Add class to user's account
 exports.addClass = function(userEmail, course_id, callback){
     accounts.findOne({email:userEmail}, function(e,o) {
         if (o){
@@ -168,3 +169,10 @@ exports.addClass = function(userEmail, course_id, callback){
         }
     });
 };
+
+//Returns all reviews about course_id
+exports.getReviews = function(id, course_id, callback){
+    reviews.find({"course_id": parseInt(course_id)}).sort({_id: -1}).toArray(function(err, reviews) { 
+        callback(reviews, err);
+    });
+}
