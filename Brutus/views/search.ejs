@@ -124,12 +124,21 @@
                 });
 			});
             
-            $(window).scroll(function(){
+            
+            // on mobile displays scroll does not work
+            $(window).on('touchmove', function(e){
                 if($(window).scrollTop() + $(window).height() == $(document).height()){                    
                     index += 10;
                     getCourses();                                    
                 }
-            });      
+            });
+            
+            $(window).scroll(function() {
+                if($(window).scrollTop() + $(window).height() == $(document).height()){                    
+                    index += 10;
+                    getCourses();                                    
+                }
+            });     
             
 		</script>
   </head>
@@ -312,6 +321,8 @@
                                             var fromTop = $(window).scrollTop();
                                             $('#calendar').css('margin-top', '+' + (fromTop) + 'px');
                                         });
+                                        
+                                        
                                     }
                                 </script>
                                 <div id="listings" style="width: 100%"></div>
@@ -423,6 +434,10 @@
                             $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
                             $('#calendar').fullCalendar( 'rerenderEvents' );    
                         }
+                        
+                        //adjust calendar height based on viewport
+            
+                        $('tr').css('height', Math.floor($(window).height() / 38) + 'px');
                     }
                 }
             });
