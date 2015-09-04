@@ -59,7 +59,7 @@ router.route('/')
         else if (req.body.query == 'search')
         {
             courses.searchCourses('none', req.body.search, req.body.subject, req.body.term, req.body.order, req.body.sortBy, function(o){
-                res.send(o);
+                res.send(o.courses);
             });   
         }
         else

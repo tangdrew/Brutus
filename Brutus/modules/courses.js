@@ -54,7 +54,6 @@ function fuzzySearch(courses, substr){
 
 exports.searchCourses = function(index,searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
     
-    index = parseInt(index);
     if(subjectVal == "ALL"){
         query = {term: termVal};
     }else{
@@ -71,46 +70,32 @@ exports.searchCourses = function(index,searchVal, subjectVal, termVal, orderVal,
     }
     courses.find(query).sort(sortQuery).toArray(function(err, result) {
         if (err) throw err;
-        console.log(result.length);
+        
         var matches = fuzzySearch(result, searchVal);
+        console.log(index);
         console.log(matches.length);
-        
-        if(index + 10 < matches.length)
+        if (index != 'none')
         {
-            matches = matches.slice(index,index+10);        
-            console.log('return course');            
-            callback({courses: matches, flag: "success"});              
+            index = parseInt(index);
+            
+            if(index + 10 < matches.length)
+            {
+                matches = matches.slice(index,index+10);        
+                callback({courses: matches, flag: "success"});              
+            }
+            else if(matches.length - index < 10)
+            {
+                matches = matches.slice(index, matches.length);
+                callback({courses: matches, flag: "success"});  
+            }
+            else
+            {
+                callback({courses: "", flag: "fail"});
+            }
         }
-        else if(matches.length - index < 10)
-        {
-            matches = matches.slice(index, matches.length);
-            callback({courses: matches, flag: "success"});  
-        }
-        else
-        {
-            callback({courses: "", flag: "fail"});
-        }
-        
-        /*
-        if(matches.length <= 10)
-        {
-            callback({courses: matches, flag: "success"}); 
-        }       
-        else if(index+10 <= matches.length)
-        {        
-            matches = matches.slice(index,index+10);        
-            console.log('return course');            
-            callback({courses: matches, flag: "success"});            
-        }
-        else if(index - matches.length > 9)
-        {
-            matches=matches.slice()
+        else {
+            callback({courses: matches});              
         }        
-        else
-        {
-            matches = matches.slice(index,matches.length);            
-            callback({courses: matches, flag: "success"});
-        }      */
     });
 }
 
