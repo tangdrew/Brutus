@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../shared/_header.ejs %>
+        <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
+        <link rel="stylesheet" href="/stylesheets/select2.css"/>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+        <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script> 
+        
+        <link href='/stylesheets/fullcalendar.css' rel='stylesheet' />
+        <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <script src='/javascripts/moment.min.js'></script>
+        <script src='/javascripts/fullcalendar.min.js'></script>
+        
+        <script type="text/javascript" src="/javascripts/date.js"></script>
+         
+        <script>
+            //Creates a delay of n milliseconds
+            var delay = (function(){
+                    var timer = 0;
+                    return function(callback, ms){
+                        clearTimeout (timer);
+                        timer = setTimeout(callback, ms);
+                    };
+                })();
+            
+            //AJAX post request to database, returns list of all courses
+            function getCourses(){
+                var search = document.getElementById('search').value;
+                var subject = document.getElementById('subject').value;
+                var term = document.getElementById('term').value;
+                var sortBy = document.getElementById('sortBy').value;
+                if(document.getElementById('arrow-up').style.display == 'none'){
+                    var order = -1;
+                }
+                else{
+                    var order = 1;
+                }
+                $.ajax( {
+                    url: '/search',
+                    type: 'POST',
+                    data: {"search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
+                    success: function(items) {
+                        console.log("success in courses");
+                        courseArray = items;
+                        createListings(courseArray);
+                    }
+                });
+            }
+            
+            //AJAX post request to database, returns list of all terms
+            function getTerms(){
+                $.ajax( {
+                    url: '/search',
+                    type: 'POST',
+                    data: {"findTerms" : true},
+                    success: function(items) {
+                        console.log("success in terms");
+                        termsArray = items;
+                        createTerms(termsArray);
+
+                    }
+                });
+            }
+            
+            //AJAX post request to database, returns list of all subjects
+            function getSubjects(){
+                var term = document.getElementById('term').value;
+                $.ajax( {
+                    url: '/search',
+                    type: 'POST',
+                    data: {"findSubjects" : true, term: term},
+                    success: function(items) {
+                        console.log("success in subjects");
+                        subjectsArray = items;
+                        createSubjects(subjectsArray);
+                        getCourses();
+                    }
+                });
+            }
+                      
+            //Links course listings to their profile pages
+            function goToCourse(id){
+                var link = "/course?course=" + id;
+                console.log(link);
+                window.location = link;
+            }
+
+			$(document).ready(function(){
+                console.log("calling get terms");
+                getTerms();
+
+                //Calls function while user types in the search input              
+                $('#search').keyup(function() {
+                    delay(function(){
+                        //matches = search(courseArray, document.getElementById('search').value);
+                        getCourses();
+                    }, 250 );
+                });
+                //Calls search function when filter dropdown values are changed
+                $("#term").change(function() {
+                    $('#subject').val($('#subject').find('option:first').val());
+                    $('#subject').find('option:first').prop('selected', true);
+                    $('#subject').change();
+                    getSubjects();
+                });
+                $("#subject").change(function() {
+                    getCourses();
+                });
+			});
+            
+            
+		</script>
+  </head>
+  <body class="search-body">
+        
+        <!-- navbar -->
+        <% include ../shared/_navbar %>
+        
+        <!--Body-->
+        <div class="container-fluid" style="padding-top: 100px">            
+            <div class="row">
+                <div class="col-xs-12 col-md-8">
+                    <div class="col-md-1"></div>
+                    <div class="col-xs-12 col-md-11" style="padding-right: 0px; padding-left: 0px">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12" style="margin-top: 4px; padding-left: 0px; padding-right: 15px;" id="search-box">
+                                <div style="padding-right: 15px">
+                                    <input class="typeahead tt-hint form-control" id="search" type="search" type="text" placeholder="Course">
+                                    <button class="btn search-btn" type="button">
+                                        <span style="font-size: 1.3em" class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-12" style="margin-top: 4px;">
+                                <select id="subject" class="subject-select">
+                                    <option value="ALL">All Subjects</option>
+                                </select>  
+                            </div>
+                            <div class="col-md-3 col-xs-12" style="margin-top: 4px;">
+                                <select id="term" class="term-select">
+                                </select>  
+                            </div>    
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-9"></div>
+                            <div class="col-md-3 col-xs-12" style="margin-top: 4px;">
+                                <div class="row">
+                                    <div class="col-xs-2 option-heading" style="cursor: pointer; text-align: right">
+                                        <div class="row">
+                                            <div class="arrow-up" id='arrow-up'>&#9650;</div>
+                                        </div>
+                                        <div class="row" style="margin-top: 15px">
+                                            <div class="arrow-down" id='arrow-down'>&#9660;</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <select class="term-select" id='sortBy'>
+                                            <option value="default">Sort By ...</option>
+                                            <option value="rating">Professor Rating</option>
+                                            <option value="difficulty">Class Difficulty</option>                        
+                                            <option value="avghours">Time Commitment</option>
+                                        </select>  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:60px">
+                            <div class="col-md-12 col-xs-12">
+                                <script>
+                                    function createListings(matches){
+                                        var html = "";
+                                        for(var i = 0; i < matches.length; i++){
+                                            
+                                            var building_name = "";
+                                            var room_name = "";
+                                            var ratingStr = "NA";
+                                            if(matches[i].rating != ""){
+                                                ratingStr = matches[i].rating + "/5.0";
+                                            }
+                                            if (matches[i].room)
+                                            {
+                                                building_name = matches[i].room.building_name;
+                                                room_name = matches[i].room.name;
+                                            }
+                                            html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
+                                                                <div class='panel-body search-panel-body'> \
+                                                                    <div style='display: inline-block; width: 100%'> \
+                                                                        <a href='#' style='color: #FFD700'>" + matches[i].subject + " " + matches[i].catalog_num + ": " + matches[i].title + "</a> \
+                                                                        <label style='float: right; color: #fff'> " + matches[i].term + "</label> \
+                                                                    </div> \
+                                                                    <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
+                                                                    <label style='color: #fff'>Class Times: </label> " + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "<br> \
+                                                                    <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
+                                                                    <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
+                                                                    <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
+                                                                </div> \
+                                                            </div>";
+            
+                                            
+                                        }
+                                        document.getElementById('listings').innerHTML = html;
+                                    }
+                                </script>
+                                <div id="listings" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="hidden-sm col-md-12">
+                        <div id="calendar">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+    
+    <script type="text/javascript">
+		$(document).ready(function() {
+            // add the select complete component
+            $(".subject-select").select2();
+            $(".term-select").select2(); 
+        });      
+        
+        //Sort arrows toggle
+        $(document).ready(function() {
+            $(".arrow-up").hide();
+            $(".option-heading").click(function(){
+                    $(this).next(".option-content").slideToggle(500);
+                    $(this).find(".arrow-up, .arrow-down").toggle();
+                    getCourses();
+            });
+            $('#calendar').fullCalendar({
+                    theme: true,
+                    defaultView: 'agendaWeek',
+                    height: "auto",
+                    header: false,
+                    allDaySlot: false,
+                    minTime: "07:00:00",
+                    maxTime: "22:00:00",
+                    selectable: true,
+                    editable: false,
+                    eventLmit: true,
+                    //eventBackgroundColor: "#B8860B",
+                    eventBackgroundColor: "#634b89",
+                    eventTextColor: "#fff",
+                    timeFormat: 'h(:mm)t',
+                    columnFormat: 'ddd',
+                    events: []
+                })
+        }); 
+        
+        function createTerms(termsArray) {
+            
+            var html;       // to be placed in the select listing
+            
+            for (var i = 0; i < termsArray.length; i++) {
+                if (i == 0) {
+                    html = html + "<option selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                }
+                else {
+                    html = html + "<option value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                }
+                
+            }
+            
+            document.getElementById('term').innerHTML += html;
+            $('#term').val($('#term').find('option:first').val());
+            $('#term').find('option:first').prop('selected', true);
+            $('#term').change();
+        }
+        
+        function createSubjects(subjectsArray) {
+            var html;       // to be placed in the select listing
+            for (var i = 0; i < subjectsArray.length; i++)
+            {
+                    html = html + "<option value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
+            }
+
+            document.getElementById('subject').innerHTML += html;
+
+        }
+        
+	</script>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+		<% include ../shared/_header %>
+  </head>
+  <body>
+      <!--Navbar-->
+      <% include ../shared/_navbar %>
+      
+      <!--Body-->
+      <div class="container" style="padding-top: 100px">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-4"></div>
+          <div class="col-xs-12 col-sm-12 col-md-4">                 
+                <% if (typeof registered != 'undefined') { %>
+                    <div class="alert alert-success" role="alert">Registration complete! Please login.</div>
+                <% } %>
+                <% if (typeof error != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Login failed! Please try again.</div>
+                <% } %>              
+                <h1>Login to Brutus</h1><br><br>
+                <form action = "login" autofocus="autofocus" autocomplete = "on" method = "post">
+                  <p><input type="text" class="form-control" name="email" value="" placeholder="Email@u.northwestern.edu"></p>
+                  <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
+                  <p class="remember_me">
+                    <div style="vertical-align: top">
+                      <input type="checkbox" checked='checked' name="remember-me" id="remember-me">
+                      Remember me on this computer
+                    </div>
+                  </p>
+                  <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Login"></p>
+                </form><br><br><br>
+                <div class="login-help" style="margin-bottom: 0px"><br>
+                  <p>Forgot your password? &nbsp<a href="index.html">Click here to reset it</a></p>
+                </div>
+                <div class="login-help" style="margin: 0px">
+                  <p>New to Brutus? &nbsp<a href="/register">Create an account now</a></p>               
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-4" style="padding-top: 0px"></div>
+        </div>
+      </div>
+  </body>
+</html>

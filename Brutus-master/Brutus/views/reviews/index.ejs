@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+	   <% include ../../shared/_header %>
+       <link rel="stylesheet" href="/stylesheets/typeahead.css"/>
+       <link rel="stylesheet" href="/stylesheets/select2.css"/>
+       <link rel="stylesheet" href="/stylesheets/index.css"/>
+       <link rel="stylesheet" href="/stylesheets/bootstrap-slider.css">     
+       
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+       <script type="text/javascript" src="/javascripts/typeahead.bundle.js"></script>
+       <script type="text/javascript" src="/javascripts/bootstrap-slider.js"></script>
+       
+       <script>
+            
+            
+            //AJAX post request to database, returns list of all terms
+            function getTerms(){
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "terms"},
+                    success: function(terms) {
+                        createTerms(terms);
+                        getSubjects();
+                    }
+                });
+            }         
+            //AJAX post request to database, returns list of all subjects
+            function getSubjects(){
+                var term = document.getElementById('term').value;
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "subjects", term: term},
+                    success: function(subjects) {
+                        createSubjects(subjects);
+                    }
+                });
+            }
+            //AJAX post request to database, returns list of current courses
+            function getCurrentCourses(){
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "current"},
+                    success: function(courses) {
+                        //For each current course, grab course data and render the select option
+                         for (var i = 0; i < courses.current_courses.length; i++) {
+                            console.log(courses.current_courses[i]);    
+                            renderCourse(courses.current_courses[i]);                   
+                        }
+                    }
+                });
+            }         
+            
+            //AJAX post request to database, returns list of courses based on term and subject
+            function getCourses(){
+                var search = "";
+                var subject = document.getElementById('subject').value;
+                var term = document.getElementById('term').value;
+                var order = 1;
+                var sortBy = "default";
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query": "search", "search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
+                    success: function(courses) {
+                        createCourses(courses);
+                    }
+                });
+            }
+
+            
+            //AJAX post request to database, returns course object by id and then renders the select option
+            function renderCourse(_id){
+                $.ajax( {
+                    url: '/reviews',
+                    type: 'POST',
+                    data: {"query" : "oneCourse", "_id" : _id},
+                    success: function(course) {
+                        var html;
+                        html = html + "<option value='" + course[0]._id + "'>" + course[0].title + "</option>";
+                        document.getElementById('mycourses').innerHTML += html;
+                    }
+                });
+            }            
+            
+            //Clear course values when you click away from tab
+            function clearValues(id){
+                $(id).val("").trigger("change");
+                console.log(document.getElementById('mycourses').value);
+                console.log(document.getElementById('search').value);
+            }
+                     
+		</script>  	
+  </head>
+  <body>
+    <!--Navbar-->
+    <% include ../../shared/_navbar %>
+      
+      <!--Body-->
+        <div class="container" style="padding-top: 150px">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <% if (typeof noCourse != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please select a course!</div>
+                    <% } %>
+                    <% if (typeof noTime != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please fill out Average Time Spent!</div>
+                    <% } %>
+                    <% if (typeof invalidTime != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please input a number for Average Time Spent!</div>
+                    <% } %>
+                    <% if (typeof noGrade != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please choose your grade!</div>
+                    <% } %>                    
+                    <% if (typeof submitted != 'undefined') { %>
+                    <div class="alert alert-success" role="alert">Review Submitted. Thank you!</div>
+                    <% } %>
+                    <form action="reviews" method="post" name="addReviewForm">
+                        <h2>Review a Course</h2><br><br>                 
+                        <!--Course Selection-->
+                        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs" style="text-align: center">
+                            <li class="active" style="width: 50%; background-color:#7a6f8c" onclick="clearValues('#search')"><a href="#myCoursesTab" data-toggle="tab">Your Courses</a></li>
+                            <li style="width: 50%; background-color:#7a6f8c"><a href="#searchTab" onclick="clearValues('#mycourses')" data-toggle="tab">Search</a></li>
+                        </ul><br><br>
+                        <div id="my-tab-content" class="tab-content">
+                            <div class="tab-pane active" id="myCoursesTab">
+                                <div class="row">
+                                    <span style="padding-left: 15px">Select From Your courses</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="mycourses" class="term-select" name="myCourseID" style="padding-top: 15px">       
+                                            <option value=''>Select from your Courses</option>                           
+                                        </select> 
+                                    </p>
+                                </div>  
+                            </div>
+                            <div class="tab-pane" id="searchTab">
+                                <div class="row">
+                                    <span style="padding-left: 15px">Term</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="term" class="term-select" name="term">                                  
+                                        </select> 
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <span style="padding-left: 15px">Subject</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="subject" class="subject-select" name="subject">
+                                            <option value="">Select a subject</option>                                  
+                                        </select> 
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <span style="padding-left: 15px">Courses</span>
+                                    <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                        <select id="search" class="search-select" name="searchCourseID">
+                                            <option value="">Select a course</option>                                  
+                                        </select> 
+                                    </p>
+                                </div>   
+                            </div>
+                        </div>              
+                                              
+                        <div class="row">
+                            <span style="padding-left: 15px">Grade</span>                       
+                            <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                <select id="grade" class="subject-select" name="grade">
+                                    <option value="">Choose your grade</option>                                    
+                                    <option value="4.0">A</option>
+                                    <option value="3.7">A-</option>
+                                    <option value="3.3">B+</option>
+                                    <option value="3.0">B</option>
+                                    <option value="2.7">B-</option>
+                                    <option value="2.3">C+</option>
+                                    <option value="2.0">C</option>
+                                    <option value="1.7">C-</option>
+                                    <option value="1.3">D+</option>
+                                    <option value="1.0">D</option>
+                                    <option value="0.7">D-</option>
+                                    <option value="0.3">F</option>                         
+                                </select> 
+                            </p>
+                        </div>
+                        <p class="col-xs-12 col-md-12 " style="padding-left: 0px"> Overall Rating</p>                    
+                                              
+
+                        <p class="col-xs-12 col-md-12 ">
+                        <input id="rating" style="width: 330px;" name="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
+
+                        </p>
+                        
+                        
+                        <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Class Difficulty</p>                       
+                                              
+                        <p class="col-xs-12 col-md-12 ">
+
+                        <input id="difficulty" style="width: 330px;" name="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
+                        </p>
+                        <div class="row">
+                            <span style="padding-left: 15px">Average Time Spent Outside Class Per Week</span>     
+                            <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                                <input type="text" class="form-control" name="avghours">
+                            </p>    
+                        </div>
+                        <div class="row">
+                            <span style="padding-left: 15px">Comments  (optional)</span>      
+                            <p class="col-md-12 col-xs-12" style="margin-top: 10px">
+                            <input type="text" class="form-control" name="comments">
+                            </p>                            
+                        </div> <br>                       
+                        <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Submit!"></p><br><br><br>
+                    </form>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+  </body>
+    <script type="text/javascript">
+		$(document).ready(function() {      
+            // add the select complete component
+            $(".search-select").select2();
+            $(".term-select").select2(); 
+            $(".subject-select").select2();
+            $('#tabs').tab();
+            getCurrentCourses();
+            getTerms();
+            $('#subject').change(function() {
+                getCourses();
+            });
+        });       
+        
+        
+        function createTerms(termsArray) {
+            
+            var html;       // to be placed in the select listing
+            
+            for (var i = 0; i < termsArray.length; i++) {
+                if (i == 0) {
+                    html = html + "<option selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                }
+                else {
+                    html = html + "<option value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                }
+                
+            }
+            
+            document.getElementById('term').innerHTML += html;
+            $('#term').val($('#term').find('option:first').val());
+            $('#term').find('option:first').prop('selected', true);
+            $('#term').change();            
+        }
+        
+        function createSubjects(subjectsArray) {
+            var html;       // to be placed in the select listing
+            for (var i = 0; i < subjectsArray.length; i++)
+            {
+                    if (i == 0) {
+                        html = html + "<option selected='selected' value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
+                    }
+                    else {
+                        html = html + "<option value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
+                    }
+            }
+
+            document.getElementById('subject').innerHTML += html;
+
+        }
+        
+        function createCourses(coursesArray) {
+            var html;       // to be placed in the select listing
+            for (var i = 0; i < coursesArray.length; i++)
+            {
+                    if (i == 0) {
+                        html = html + "<option selected='selected' value='" + coursesArray[i]._id + "'>" + coursesArray[i].catalog_num + " - " + coursesArray[i].title + " - " + coursesArray[i].instructor.name + "</option>";
+                    }
+                    else {
+                        html = html + "<option value=" + coursesArray[i]._id + ">" + coursesArray[i].catalog_num + " - " + coursesArray[i].title + " - " + coursesArray[i].instructor.name + "</option>";
+                    }
+            }
+
+            document.getElementById('search').innerHTML = html;
+
+        }
+        
+        var slider = new Slider("#rating", {
+        ticks: [1, 2, 3, 4, 5],
+        ticks_labels: ['1', '2', '3', '4', '5'],
+        ticks_snap_bounds: 100,
+        tooltip: 'hide',
+        value: 3       
+    });
+    
+        var slider = new Slider("#difficulty", {
+        ticks: [1, 2, 3, 4, 5],
+        ticks_labels: ['1', '2', '3', '4', '5'],
+        ticks_snap_bounds: 100,
+        tooltip: 'hide',
+        value: 3
+    });
+	</script>
+    
+</html>

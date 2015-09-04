@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <% include ../shared/_header %>
+  </head>
+  
+  <body>
+    <div class="container-fluid">
+      <!--Navbar-->
+      <% include ../shared/_navbar %>
+     
+      <!--Body-->
+      <div class="container" style="padding-top: 100px">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+                <% if (typeof missingData != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Please fill out all fields!</div>
+                <% } %>
+                <% if (typeof invalidEmail != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Invalid email. Please use northwestern email!</div>
+                <% } %>           
+                <% if (typeof emailTaken != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Email already taken!</div>
+                <% } %>                
+                <% if (typeof passwordNotMatch != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Passwords do not match!</div>
+                <% } %>               
+                    
+                <h1>Sign Up</h1><br>
+                <form action="/register" method="post" autocomplete = "on">
+                  <p>First Name</p>
+                  <p><input type="text" class="form-control" name="firstName" value=""></p>
+                  <p>Last Name</p>
+                  <P><input type="text" class="form-control" name="lastName" value=""></p>
+                  <p>Email Address</p>
+                  <p><input type="text" class="form-control" name="email" value=""></p>
+                  <P>Choose a Password</p>
+                  <p><input type="password" class="form-control" name="password" value=""></p>
+                  <p>Confirm Password</p>
+                  <p><input type="password" class="form-control" name="passwordConfirm" value=""></p>     
+                  <!--
+                  <p class="remember_me">
+                    <div style="vertical-align: top">
+                      <input type="checkbox" name="term_Agreement" id="term_Agreement" data-mincheck="1"
+                      data-mincheck-message="You must agree to the WebSight Temrs of Use" value="1">
+                      I agree to the Brutus <a href="/terms-privacy"> Terms of Service</a>
+                    </div>
+                  </p><br>
+                  -->
+                  <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Create my account"></p>
+                </form>              
+             </div>
+           <div class="col-md-4"></div>
+      </div>
+    </div>
+  </body>
+</html>

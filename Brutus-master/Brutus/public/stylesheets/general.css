@@ -1,0 +1,160 @@
+body {
+    padding: 0;
+    width: 100%;
+}
+
+.search-body {
+    height: 1400px;
+    padding: 30px 0px 0px 0px;
+}
+
+.listing-top-row{
+	display: inline-block; 
+	width: 100%;
+}
+.course-link{
+	font-size: 20px;
+}
+.term-label{
+	float: right;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/* make nav bar bigger */
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 80px;
+    height: 80px;
+    padding-top: 0;
+    font-size: 3.5em;
+}
+
+/* search bar */
+ 
+.icon-search {
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+    border: 0;
+    background: none;
+    bottom: 50px;
+    margin-right: 10px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    color:#6f5499;  
+    z-index: 5; 
+}
+
+/* make select barss and search bars 100% width of col */ 
+.select2 {
+    width: 100% !important;
+}
+
+.typeahead tt-hint form-control tt-input {
+    width: 100%;
+}
+
+.typeahead tt-hint form-control {
+    width: 100%;
+}
+
+.twitter-typeahead {
+    width: 100%;
+}
+
+/* search button glyph on main page */
+.search-btn:hover {
+    color: #6f5499;
+}
+
+.search-btn:focus {
+    outline: none !important;
+    color:#6f5499;
+    box-shadow: none;
+}
+
+.search-btn {
+    background: none;
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+    top: 0px;
+    margin-right: 10px;
+    color:#6f5499;  
+}
+
+.search-btn .glyphicon .glyphicon-search {
+    color: #6f5499;
+}
+
+.navbar-heading {
+    font-size: 2em !important;
+    line-height: 90px !important;
+}
+
+.dropdown-heading {
+    font-size: 1em !important;
+    height: 40px !important;
+    line-height: 40px !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #6f5499;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #6f5499;
+}
+
+/* search panel on search page */
+
+.search-panel {
+    margin-bottom: 5px;
+}
+
+.search-panel-body {
+    border: 2px solid #7d65a3;
+    background-color: #634b89;
+    color: #fff;
+    font-size: 20px;
+}
+
+.search-panel-body label {
+    font-size: 20px;
+}
+
+.search-panel-body:hover{
+    cursor: pointer;
+    background-color: #8b76ad;
+}
+
+
+
+/* Navbar Brutus Brand */
+.brutus-brand {
+    font-weight: 400;
+}
+
+
+/* Brutus Logo*/
+.brutus-logo {
+    height: 60px;
+    margin-top: 15px;
+}
+/*Gold button*/
+.gold-text {
+    color: #ffdf32;
+}
+
+.btn-gold {
+    color: #fff;
+    font-weight: 500;
+    background-color: #ffdf32;
+}
+
+.btn-gold:hover {
+    background-color: #ffe766;
+}
