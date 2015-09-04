@@ -125,7 +125,7 @@
                             //On success of adding class to db, change class button
                             console.log('POST success');
                             document.getElementById("addButton").disabled = true;
-                            document.getElementById('addButton').classList.remove('btn-gold');
+                            document.getElementById('addButton').classList.remove('btn-danger');
                             document.getElementById('addButton').classList.add('btn-success');
                             document.getElementById("addButton").innerHTML = "Added"
                         }
@@ -140,38 +140,42 @@
 
 
         <% include ../shared/_navbar %>
-        <div class="container" style="padding-top: 100px">
+        <div class="container" style="padding-top: 150px">
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <%= title %>
+                            <%= courseObj.title %>
                         </div>
                         <div class="panel-body">
                             <div class="row">
                                 <!--Basic Course Information-->
                                 <div class="col-md-4">
-                                    <label>Instructor: </label><a href="#"><%= courseObj.instructor.name %></a><br>
-                                    <label>Term: </label><%= courseObj.term %><br>
-                                    <label>Class Times: </label><%= courseObj.meeting_days %> <%= courseObj.start_time %> to <%= courseObj.end_time %><br>
-                                    <% if(courseObj.room != null){ %>
-                                    <label>Room: </label><%= courseObj.room.name%> <%=courseObj.room.building_name %><br>
+                                    <label><font size="3">Instructor: &nbsp</font></label><a href="#"><%= courseObj.instructor.name %></a><br>
+                                    <label><font size="3">Term: &nbsp</label><%= courseObj.term %><br>
+                                    <% if(courseObj.start_time != null){ %>
+                                    <label><font size="3">Class Times: &nbsp</label><%= courseObj.meeting_days %> <%= courseObj.start_time %> to <%= courseObj.end_time %><br>
                                     <% }else{%>
-                                    <label>Room: </label>NA<br>
+                                    <label><font size="3">Class Times: &nbsp</label>TBA<br>
                                     <% } %>
-                                    <label>Seats: </label><%= courseObj.seats %><br>
+                                    <% if(courseObj.room != null){ %>
+                                    <label><font size="3">Room: &nbsp</label><%= courseObj.room.name%> <%=courseObj.room.building_name %><br>
+                                    <% }else{%>
+                                    <label><font size="3">Room: &nbsp</label>NA<br>
+                                    <% } %>
+                                    <label><font size="3">Seats: &nbsp</label><%= courseObj.seats %><br>
                                     <% if(courseObj.rating == ""){ %>
-                                    <label>Rating: </label>NA<br>
+                                    <label><font size="3">Rating: &nbsp</label>Not enough data<br>
                                     <% }else{ %>
-                                    <label>Rating: </label><%= courseObj.rating %>/5.0<br>    
+                                    <label><font size="3">Rating: &nbsp</label><%= courseObj.rating %>/5.0<br>    
                                     <% } %>
                                     
-                                    <div style="width: 100%; text-align: center">
+                                    <div style="width: 100%; text-align: center;padding-top: 30px; margin-bottom: 40px">
                                         <% if(enrolled == true){ %>
-                                            <button id="addButton" class="btn btn-success btn-lg">Added</button>
+                                            <button id="addButton" class="btn btn-success btn-md">Added</button>
                                         <% }else{%>
-                                            <button id="addButton" class="btn btn-gold btn-lg" onclick="addCourse()">Add Class</button>
+                                            <button id="addButton" class="btn btn-danger btn-md" onclick="addCourse()">Add Class</button>
                                         <% } %>
                                     </div>
                                 </div>
@@ -182,7 +186,7 @@
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     <% if(courseObj.grade == 0){ %>
-                                                    Grade: NA
+                                                    Grade: Not Enough Data
                                                     <% }else{ %>
                                                     Grade: <%= courseObj.grade %>    
                                                     <% } %>  
@@ -198,7 +202,7 @@
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     <% if(courseObj.difficulty == ""){ %>
-                                                    Difficulty: NA
+                                                    Difficulty: Not Enough Data
                                                     <% }else{ %>
                                                     Difficulty: <%= courseObj.difficulty %>    
                                                     <% } %>
@@ -236,7 +240,11 @@
                                                                         </div> \
                                                                         <div class="col-md-1"></div> \
                                                                     </div>'; 
-                                                    }
+                                                    }                                                    
+                                                }
+                                                if(reviews.length == 0)
+                                                {
+                                                    html += '<p>There is no review of this class yet.</p>';                                                                                                                             
                                                 }
                                                 document.getElementById('comments').innerHTML = html;
                                                 for(var i = 0; i < reviews.length; i++){
@@ -246,6 +254,7 @@
                                                         }
                                                     }
                                                 }
+                                                
                                             }
                                         </script>
                                     </div>
