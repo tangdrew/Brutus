@@ -158,7 +158,7 @@ var validatePassword = function(plainPass, combined, callback)
         if (err) {
         return callback(err, false);
         }
-
+        console.log("in pbkdf2");
         callback(null, salt + new Buffer(verify).toString('hex') === combined);
     });
 }
@@ -177,5 +177,47 @@ exports.checkEnrollment = function(userEmail, courseId, callback){
         {
             callback(false);
         }
+    });
+}
+
+exports.updateUserPassword = function(user, oldPass, newPass, confirmPass, callback) {
+    var data = {};
+    data.email = user.email;
+    data.password = oldPass;
+    exports.checkLogin(data, function(e) {
+        if (e != 'fail')
+        {
+            console.log("new: " + newPass);
+            console.log("confirm: " + confirmPass);
+            if (newPass == undefined || newPass == '') {
+                callback('missing');
+                return;
+            }
+            
+            if (newPass != confirmPass) {
+                callback('nomatch')
+                return;
+            }
+            saltAndHash(newPass, function(e, hash) {
+                accounts.update(
+                    {email: user.email},
+                    {
+                        $set: {
+                            pass: hash
+                        },
+                        $currentDate: {
+                            lastModified: true
+                        }
+                    },
+                    function(e, c, s) {
+                        callback('done');    
+                    }  
+                );
+            });
+            
+        }
+        else {
+            callback('invalid');
+        }  
     });
 }
