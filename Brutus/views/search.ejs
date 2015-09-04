@@ -11,11 +11,15 @@
         <link href='/stylesheets/fullcalendar.print.css' rel='stylesheet' media='print' />
         <link href='/stylesheets/search-calendar.css' rel = 'stylesheet' />
         <script src='/javascripts/moment.min.js'></script>
-        <script src='/javascripts/fullcalendar.min.js'></script>
-        
+        <script src='/javascripts/fullcalendar.min.js'></script>        
         <script type="text/javascript" src="/javascripts/date.js"></script>
+        
+                       
          
         <script>
+            index = 0;
+            //rendered = 0;
+            
             //Creates a delay of n milliseconds
             var delay = (function(){
                     var timer = 0;
@@ -26,31 +30,38 @@
                 })();
             
             //AJAX post request to database, returns list of all courses
-            function getCourses(){
-                var search = document.getElementById('search').value;
-                var subject = document.getElementById('subject').value;
-                var term = document.getElementById('term').value;
-                var sortBy = document.getElementById('sortBy').value;
-                if(document.getElementById('arrow-up').style.display == 'none'){
-                    var order = -1;
-                }
-                else{
-                    var order = 1;
-                }
-                $.ajax( {
-                    url: '/search',
-                    type: 'POST',
-                    data: {"search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
-                    success: function(items) {
-                        console.log("success in courses");
-                        courseArray = items;
-                        createListings(courseArray);
+            function getCourses(){                
+                
+                    var search = document.getElementById('search').value;
+                    var subject = document.getElementById('subject').value;
+                    var term = document.getElementById('term').value;
+                    var sortBy = document.getElementById('sortBy').value;
+                    if(document.getElementById('arrow-up').style.display == 'none'){
+                        var order = -1;
                     }
-                });
+                    else{
+                        var order = 1;
+                    }
+                    $.ajax( {
+                        url: '/search',
+                        type: 'POST',
+                        data: {"index" : index, "search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
+                        success: function(items) {
+                            console.log("success in courses");
+                            console.log("flag:" + items.flag);
+                            courseArray = items.courses;                                              
+                            if(items.flag != "end")
+                            {
+                                createListings(courseArray);
+                            }                            
+                        }
+                    });                    
+                        
             }
             
             //AJAX post request to database, returns list of all terms
             function getTerms(){
+                index = 0;
                 $.ajax( {
                     url: '/search',
                     type: 'POST',
@@ -66,6 +77,7 @@
             
             //AJAX post request to database, returns list of all subjects
             function getSubjects(){
+                index = 0;
                 var term = document.getElementById('term').value;
                 $.ajax( {
                     url: '/search',
@@ -94,8 +106,9 @@
                 //Calls function while user types in the search input              
                 $('#search').keyup(function() {
                     delay(function(){
+                        index = 0;
                         //matches = search(courseArray, document.getElementById('search').value);
-                        getCourses();
+                        getCourses();                        
                     }, 250 );
                 });
                 //Calls search function when filter dropdown values are changed
@@ -110,6 +123,12 @@
                 });
 			});
             
+            $(window).scroll(function(){
+                if($(window).scrollTop() + $(window).height() == $(document).height()){                    
+                    index += 10;
+                    getCourses();                                    
+                }
+            });      
             
 		</script>
   </head>
@@ -185,6 +204,11 @@
                                                 building_name = matches[i].room.building_name;
                                                 room_name = matches[i].room.name;
                                             }
+                                            classTime= matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time;
+                                            if(matches[i].meeting_days == null)
+                                            {
+                                                classTime = "TBA"
+                                            }
                                             html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
                                                                 <div class='panel-body search-panel-body'> \
                                                                     <div style='display: inline-block; width: 100%'> \
@@ -192,7 +216,7 @@
                                                                         <label style='float: right; color: #fff'> " + matches[i].term + "</label> \
                                                                     </div> \
                                                                     <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
-                                                                    <label style='color: #fff'>Class Times: </label><span>" + matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time + "</span><br> \
+                                                                    <label style='color: #fff'>Class Times: </label><span> " + classTime + "</span><br> \
                                                                     <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
                                                                     <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
                                                                     <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
@@ -203,7 +227,15 @@
             
                                             
                                         }
-                                        document.getElementById('listings').innerHTML = html;
+                                        
+                                        if(index == 0)
+                                        {
+                                            document.getElementById('listings').innerHTML = html;
+                                        }
+                                        else
+                                        {
+                                            document.getElementById('listings').innerHTML += html;
+                                        }                                        
                                         
                                         // calendar hover feature
                                         var hoveredCourseEvents = [];
@@ -305,10 +337,11 @@
         
         //Sort arrows toggle
         $(document).ready(function() {
-            $(".arrow-up").hide();
+            $(".arrow-down").hide();
             $(".option-heading").click(function(){
                     $(this).next(".option-content").slideToggle(500);
                     $(this).find(".arrow-up, .arrow-down").toggle();
+                    index = 0;
                     getCourses();
             });
             $('#calendar').fullCalendar({

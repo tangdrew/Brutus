@@ -52,7 +52,9 @@ function fuzzySearch(courses, substr){
         
 //Function that returns the courses as specified by search parameters
 
-exports.searchCourses = function(limit,searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
+exports.searchCourses = function(index,searchVal, subjectVal, termVal, orderVal, sortByVal, callback){
+    
+    index = parseInt(index);
     if(subjectVal == "ALL"){
         query = {term: termVal};
     }else{
@@ -71,11 +73,44 @@ exports.searchCourses = function(limit,searchVal, subjectVal, termVal, orderVal,
         if (err) throw err;
         console.log(result.length);
         var matches = fuzzySearch(result, searchVal);
-        if(limit != 'none'){
-            matches = matches.slice(0,limit);
+        console.log(matches.length);
+        
+        if(index + 10 < matches.length)
+        {
+            matches = matches.slice(index,index+10);        
+            console.log('return course');            
+            callback({courses: matches, flag: "success"});              
         }
-        console.log('done');
-        callback(matches);
+        else if(matches.length - index < 10)
+        {
+            matches = matches.slice(index, matches.length);
+            callback({courses: matches, flag: "success"});  
+        }
+        else
+        {
+            callback({courses: "", flag: "fail"});
+        }
+        
+        /*
+        if(matches.length <= 10)
+        {
+            callback({courses: matches, flag: "success"}); 
+        }       
+        else if(index+10 <= matches.length)
+        {        
+            matches = matches.slice(index,index+10);        
+            console.log('return course');            
+            callback({courses: matches, flag: "success"});            
+        }
+        else if(index - matches.length > 9)
+        {
+            matches=matches.slice()
+        }        
+        else
+        {
+            matches = matches.slice(index,matches.length);            
+            callback({courses: matches, flag: "success"});
+        }      */
     });
 }
 

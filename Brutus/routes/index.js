@@ -34,8 +34,8 @@ router.post('/search', function(req, res){
     
     if (req.body.search != undefined)
     {
-        courses.searchCourses(10, req.body.search, req.body.subject, req.body.term, req.body.order, req.body.sortBy, function(o){
-            res.send(o);
+        courses.searchCourses(req.body.index, req.body.search, req.body.subject, req.body.term, req.body.order, req.body.sortBy, function(o,flag){
+            res.send(o);           
         });    
     }
     else if (req.body.findTerms)
