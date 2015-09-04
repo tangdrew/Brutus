@@ -98,7 +98,7 @@
                 });
             }
             
-            //AJAX post request to database, returns course object
+            //AJAX post request to database, returns reviews object
             function getReviews(course){
                 var id = getQuerystringNameValue('course');
                 var course_id = course[0].course_id;
@@ -109,6 +109,42 @@
                     success: function(reviews) {
                         //render comments from array of reviews
                         renderReviews(reviews);
+                        //Create array of unique terms where reviews were submitted
+                        var termArray = [];
+                        for(var i = 0; i < reviews.length; i++){
+                            if(termArray.indexOf(reviews[i].term) < 0){
+                                termArray.push(reviews[i].term);
+                            }
+                        }
+                        //send unique terms array to match id's so we can order terms
+                        getTerms(termArray, reviews, course[0].instructor.name);
+                    }
+                });
+            }
+            
+            //AJAX post request to database, returns list of all terms
+            function getTerms(termNames, reviews, instructor){
+                $.ajax( {
+                    url: '/search',
+                    type: 'POST',
+                    data: {"findTerms" : true},
+                    success: function(terms) {
+                        console.log("success in terms");
+                        //creates array of term objects associated with unique term names and then orders in ascending order by _id
+                        var termArray = [];
+                        for(var i = 0; i < terms.length; i++){
+                            if(termNames.indexOf(terms[i].name) >= 0){
+                                termArray.push(terms[i]);
+                            }
+                        }
+                        termArray.sort(compare);
+                        //now create a new array of just the term names in the correct order
+                        var termNamesOrdered = [];
+                        for(var j = 0; j < termArray.length; j++){ termNamesOrdered.push(termArray[j].name); }
+                        renderGradePlot(termNamesOrdered, reviews, instructor);
+                        renderDifficultyPlot(termNamesOrdered, reviews, instructor);
+                        renderRatingPlot(termNamesOrdered, reviews, instructor);
+                        renderAvghoursPlot(termNamesOrdered, reviews, instructor);
                     }
                 });
             }
@@ -133,6 +169,145 @@
                 });
             }
             
+            //Helps sort terms in ascending order by _id
+            function compare(a,b) {
+                if (a._id < b._id)
+                    return -1;
+                if (a._id > b._id)
+                    return 1;
+                return 0;
+            }
+            //Does average value calculations for value field specified and returns data object to plot
+            function createData(valueType, terms, reviews, instructor){
+                //Calculate array of average value per term for course
+                var avgValueArray = [];
+                for(var i = 0; i < terms.length; i++){
+                    var sum = 0;
+                    var count = 0;
+                    for(var j = 0; j < reviews.length; j++){
+                        if(terms[i] == reviews[j].term){
+                            if(valueType == "grade"){
+                                sum += parseInt(reviews[j].grade);
+                            }
+                            else if(valueType == "difficulty"){
+                                sum += parseInt(reviews[j].difficulty);
+                            }
+                            else if(valueType == "rating"){
+                                sum += parseInt(reviews[j].rating);
+                            }
+                            else if(valueType == "avghours"){
+                                sum += parseInt(reviews[j].avghours);
+                            }
+                            count += 1;
+                        }
+                    }
+                    avgValueArray.push(sum/count);
+                }
+                
+                var data = {
+                    labels : terms,
+                    datasets : [
+                        {
+                            label: "Average Value for Course",
+                            fillColor : "rgba(220,220,220,0.2)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(220,220,220,1)",
+                            data : avgValueArray
+                        }]
+                }
+                //Creates array of reviews for this instructor, if not all reviews are for professor then add data for this specific professor
+                var instructorReviews = [];
+                for(var k = 0; k < reviews.length; k++){
+                    if(reviews[k].instructor == instructor){
+                        instructorReviews.push(reviews[k]);
+                    }
+                }
+                if(instructorReviews.length != reviews.length && instructorReviews.length != 0){
+                    var avgInstructorValueArray = [];
+                    for(var i = 0; i < terms.length; i++){
+                        var sum = 0;
+                        var count = 0;
+                        for(var j = 0; j < instructorReviews.length; j++){
+                            if(terms[i] == instructorReviews[j].term){
+                                if(valueType == "grade"){
+                                    sum += parseInt(instructorReviews[j].grade);
+                                }
+                                else if(valueType == "difficulty"){
+                                    sum += parseInt(instructorReviews[j].difficulty);
+                                }
+                                else if(valueType == "rating"){
+                                    sum += parseInt(instructorReviews[j].rating);
+                                }
+                                else if(valueType == "avghours"){
+                                    sum += parseInt(instructorReviews[j].avghours);
+                                }
+                                count += 1;
+                            }
+                        }
+                        if(count == 0){
+                            var value = null;
+                        }
+                        else{
+                            var value = sum/count;
+                        }
+                        
+                        avgInstructorValueArray.push(value);
+                        var instructorData = {
+                            label: "Instructor Value for Course",
+                            fillColor: "rgba(151,187,205,0.2)",
+                            strokeColor: "rgba(151,187,205,1)",
+                            pointColor: "rgba(151,187,205,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(151,187,205,1)",
+                            data: avgInstructorValueArray
+                        }
+                        data.datasets.push(instructorData);
+                    }
+                }
+                console.log(avgValueArray);
+                console.log(avgInstructorValueArray);
+                return data;
+            }
+            //Render Grade Plot
+            function renderGradePlot(terms, reviews, instructor){
+                //Calculate array of average grade per term for course
+                var gradeData = createData("grade", terms, reviews, instructor);
+                var ctx = document.getElementById("gradeCanvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(gradeData, {
+                    responsive: true
+                });     
+            }
+            //Render Difficulty Plot
+            function renderDifficultyPlot(terms, reviews, instructor){
+                //Calculate array of average difficulty per term for course
+                var difficultyData = createData("difficulty", terms, reviews, instructor);
+                var ctx = document.getElementById("difficultyCanvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(difficultyData, {
+                    responsive: true
+                });     
+            }
+            //Render Rating Plot
+            function renderRatingPlot(terms, reviews, instructor){
+                //Calculate array of average rating per term for course
+                var ratingData = createData("rating", terms, reviews, instructor);
+                var ctx = document.getElementById("ratingCanvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(ratingData, {
+                    responsive: true
+                });     
+            }
+            //Render Avghours Plot
+            function renderAvghoursPlot(terms, reviews, instructor){
+                //Calculate array of average avghours per term for course
+                var avghoursData = createData("avghours", terms, reviews, instructor);
+                var ctx = document.getElementById("avghoursCanvas").getContext("2d");
+                window.myLine = new Chart(ctx).Line(avghoursData, {
+                    responsive: true
+                });     
+            }
 		</script>
 	</head>
 	<body>
@@ -168,7 +343,7 @@
                                     <% if(courseObj.rating == ""){ %>
                                     <label><font size="3">Rating: &nbsp</label>Not enough data<br>
                                     <% }else{ %>
-                                    <label><font size="3">Rating: &nbsp</label><%= courseObj.rating %>/5.0<br>    
+                                    <label><font size="3">Rating: &nbsp</label><%= courseObj.rating.toFixed(1) %>/5.0<br>    
                                     <% } %>
                                     
                                     <div style="width: 100%; text-align: center;padding-top: 30px; margin-bottom: 40px">
@@ -182,34 +357,72 @@
                                 <!--Ratings Graphs-->
                                 <div class="col-md-8">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-sm-6">
+                                            <!--Grade Plot-->
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     <% if(courseObj.grade == 0){ %>
                                                     Grade: Not Enough Data
                                                     <% }else{ %>
-                                                    Grade: <%= courseObj.grade %>    
+                                                    Grade: <%= courseObj.grade.toFixed(2) %>    
                                                     <% } %>  
                                                 </div>
                                                 <div class="panel-body">
                                                     <div>
-                                                        <canvas id="canvas" height="250" width="auto"></canvas>
+                                                        <canvas id="gradeCanvas" height="250" width="auto"></canvas>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-sm-6">
+                                            <!--Difficulty Plog-->
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     <% if(courseObj.difficulty == ""){ %>
                                                     Difficulty: Not Enough Data
                                                     <% }else{ %>
-                                                    Difficulty: <%= courseObj.difficulty %>    
+                                                    Difficulty: <%= courseObj.difficulty.toFixed(2) %>    
                                                     <% } %>
                                                 </div>
                                                 <div class="panel-body">
                                                     <div>
-                                                        <canvas id="canvas2" height="250" width="auto"></canvas>
+                                                        <canvas id="difficultyCanvas" height="250" width="auto"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>  
+                                    </div>  
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <!--Rating Plot-->
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <% if(courseObj.rating == 0){ %>
+                                                    Rating: Not Enough Data
+                                                    <% }else{ %>
+                                                    Rating: <%= courseObj.rating.toFixed(2) %>    
+                                                    <% } %>  
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div>
+                                                        <canvas id="ratingCanvas" height="250" width="auto"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <!--Time Spent Plot-->
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <% if(courseObj.avghours == ""){ %>
+                                                    Time Spent: Not Enough Data
+                                                    <% }else{ %>
+                                                    Time Spent: <%= courseObj.avghours.toFixed(2) %>    
+                                                    <% } %>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div>
+                                                        <canvas id="avghoursCanvas" height="250" width="auto"></canvas>
                                                     </div>
                                                 </div>
                                             </div>
@@ -273,45 +486,6 @@
             $(document).ready(function() {  
                 getCourse(); 
             });
-            
-            var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-            var lineChartData = {
-                labels : ["January","February","March","April","May","June","July"],
-                datasets : [
-                    {
-                        label: "My First dataset",
-                        fillColor : "rgba(220,220,220,0.2)",
-                        strokeColor : "rgba(220,220,220,1)",
-                        pointColor : "rgba(220,220,220,1)",
-                        pointStrokeColor : "#fff",
-                        pointHighlightFill : "#fff",
-                        pointHighlightStroke : "rgba(220,220,220,1)",
-                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                    },
-                    {
-                        label: "My Second dataset",
-                        fillColor : "rgba(151,187,205,0.2)",
-                        strokeColor : "rgba(151,187,205,1)",
-                        pointColor : "rgba(151,187,205,1)",
-                        pointStrokeColor : "#fff",
-                        pointHighlightFill : "#fff",
-                        pointHighlightStroke : "rgba(151,187,205,1)",
-                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                    }
-                ]
-    
-            }
-    
-            window.onload = function(){
-                var ctx = document.getElementById("canvas").getContext("2d");
-                window.myLine = new Chart(ctx).Line(lineChartData, {
-                    responsive: true
-                });
-                var ctx2 = document.getElementById("canvas2").getContext("2d");
-                window.myLine = new Chart(ctx2).Line(lineChartData, {
-                    responsive: true
-                });
-            }
         </script>
 	</body>
 </html>
