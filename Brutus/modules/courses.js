@@ -134,6 +134,7 @@ exports.addReview = function(course, req, userEmail, callback){
         instructor: course[0].instructor.name,
         timestamp: moment().format('MMMM Do YYYY, h:mm:ss a'),
         title: course[0].title,
+        term: course[0].term,
         rating: req.body.rating,
         grade: req.body.grade,
         difficulty: req.body.difficulty,
