@@ -228,8 +228,12 @@
                                                                     <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
                                                                     <label style='color: #fff'>Class Times: </label><span> " + classTime + "</span><br> \
                                                                     <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
-                                                                    <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
-                                                                    <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
+                                                                    <div style='display: inline-block; width: 100%'> \
+                                                                        <div style='float: left;'> \
+                                                                            <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
+                                                                            <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
+                                                                        </div> \
+                                                                        <button id='addButton' class='btn btn-success btn-md' style='float: right;'>Add Class</button> \
                                                                     <span id='title' hidden='true'>" + matches[i].subject + " " + matches[i].catalog_num + "</span> \
                                                                     <span id='times' hidden='true'>" + matches[i].meeting_days + " " + matches[i].start_time + " " + matches[i].end_time + "</span> \
                                                                 </div> \
@@ -433,13 +437,19 @@
                         for (var k = 0; k < events.length; k++) {
                             $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
                             $('#calendar').fullCalendar( 'rerenderEvents' );    
-                        }
-                        
-                        //adjust calendar height based on viewport
-            
-                        $('tr').css('height', Math.floor($(window).height() / 38) + 'px');
+                        }         
                     }
-                }
+                    
+                    $('tr').css('height', Math.floor($(window).height() / 38) + 'px');
+                    
+                    $(window).resize(function() {
+                        console.log("resize");
+                        console.log($(window).height());
+                        console.log(Math.floor($(window).height() / 38));
+                        $('tr').css('height', Math.floor($(window).height() / 38) + 'px');
+                    });
+                
+                }                
             });
         }
         
