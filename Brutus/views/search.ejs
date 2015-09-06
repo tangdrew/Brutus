@@ -199,7 +199,125 @@
                         <div class="row" style="padding-top:60px">
                             <div class="col-md-12 col-xs-12">
                                 <script>
-                                    function createListings(matches){
+                                    
+                                    //AJAX post request to database, returns list of all courses
+                                    function addOrRemoveCourse(course_id) {
+                                        
+                                        var e = window.event;
+                                        
+                                        e.cancelBubble = true;
+                                        if (e.stopPropagation) e.stopPropagation();
+                                        
+                                        console.log($('#btn_id' + course_id).text());
+                                        
+                                        var query = "add-searchpage"
+                                        if (document.getElementById('btn_' + course_id).innerHTML == "Remove Class") {
+                                            query = "remove-searchpage";
+                                        }
+                                        console.log(query);
+                                        $.ajax( {
+                                            url: '/course',
+                                            type: 'POST',
+                                            data: {"query": query, "course_id" : course_id},
+                                            success: function(response) {
+                                                if(response == 'success'){
+                                                    //On success of adding class to db, change class button
+                                                    console.log('POST success class added');
+                                                    document.getElementById('btn_' + course_id).classList.remove('btn-success');
+                                                    document.getElementById('btn_' + course_id).classList.add('btn-danger');
+                                                    document.getElementById('btn_' + course_id).innerHTML = "Remove Class";
+                                                    
+                                                    addCourseToCalendar(course_id);
+                                                    console.log("finished adding course to calendar");
+                                                }
+                                                if (response == 'success-remove') {
+                                                    console.log('POST success class removed');
+                                                    document.getElementById('btn_' + course_id).classList.add('btn-success');
+                                                    document.getElementById('btn_' + course_id).classList.remove('btn-danger');
+                                                    document.getElementById('btn_' + course_id).innerHTML = "Add Class";
+                                                    
+                                                    removeCourseFromCalendar(course_id);
+                                                }
+                                            }
+                                        });
+                                        
+                                        event.stopPropagation();
+                                    }
+                                    
+                                    function addCourseToCalendar(course_id) {
+                                        $.ajax( {
+                                            url: '/course',
+                                            type: 'POST',
+                                            data: {'query': 'getOne', 'id': course_id},
+                                            success: function (response) {
+                                                
+                                                
+                                                if (response.meeting_days) {
+
+                                                    var timesStr = response.meeting_days.toLowerCase();
+
+                                                    if (timesStr.indexOf('null') == -1 && timesStr)
+                                                    {
+                                                        console.log("in if");   
+                                                        var start = response.start_time;
+                                                        var end = response.end_time;
+                                                        
+                                                        var days = [0, 0, 0, 0, 0, 0, 0];
+                                                        
+                                                        if (timesStr.indexOf("su") > -1)
+                                                            days[0] = 1;
+                                                        if (timesStr.indexOf("mo") > -1)
+                                                            days[1] = 1;
+                                                        if (timesStr.indexOf("tu") > -1)
+                                                            days[2] = 1;
+                                                        if (timesStr.indexOf("we") > -1)
+                                                            days[3] = 1;
+                                                        if (timesStr.indexOf("th") > -1)
+                                                            days[4] = 1;
+                                                        if (timesStr.indexOf("fr") > -1)
+                                                            days[5] = 1;
+                                                        if (timesStr.indexOf("sa") > -1)
+                                                            days[6] = 1;
+                                                        
+                                                        console.log(days);
+                                                        console.log(start);
+                                                        console.log(end);
+                                                        console.log(response);
+                                                        var sunday = Date.today().add( - (new Date()).getDay()).days();
+                                                        var events = [];
+                                                        for (var j = 0; j < 7; j++) {
+                                                            if (days[j] == 1) {
+                                                                var date = new Date(sunday).add(j).days();                                    
+                                                                var datestr = date.toISOString().substr(0, 11);
+                                                                events.push({
+                                                                    _id: response._id,
+                                                                    url: '/course?course' + response._id,
+                                                                    title: response.subject + " " + response.catalog_num,
+                                                                    start: datestr + start,
+                                                                    end: datestr + end 
+                                                                });
+                                                            }
+                                                        }
+                                                        console.log("starting for loop k");
+                                                        console.log(events);
+                                                        for (var k = 0; k < events.length; k++) {
+                                                            console.log(events.length);
+                                                            console.log(events[k]);
+                                                            $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                    
+                                    function removeCourseFromCalendar(course_id) {
+                                        console.log(course_id);
+                                        $('#calendar').fullCalendar('removeEvents', course_id);    
+                                    }
+                                    
+                                    
+                                    function createListings(matches) {
                                         var html = "";
                                         for(var i = 0; i < matches.length; i++){
                                             
@@ -219,6 +337,20 @@
                                             {
                                                 classTime = "TBA"
                                             }
+                                            
+                                            // check if user is already taking course
+                                            var btnStyle = 'btn-success';
+                                            var btnText = 'Add Class';
+                                            var current_courses = [ <%= [ user.current_courses ] %> ];
+                                            for (var k = 0; k < current_courses.length; k++)
+                                            {
+                                                if (current_courses[k] == matches[i]._id)
+                                                {
+                                                    btnStyle = 'btn-danger';
+                                                    btnText = 'Remove Class'    
+                                                }
+                                            }
+                                            
                                             html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
                                                                 <div class='panel-body search-panel-body'> \
                                                                     <div style='display: inline-block; width: 100%'> \
@@ -233,9 +365,10 @@
                                                                             <label style='color: #fff'>Seats: </label> " + matches[i].seats + "<br> \
                                                                             <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
                                                                         </div> \
-                                                                        <button id='addButton' class='btn btn-success btn-md' style='float: right;'>Add Class</button> \
-                                                                    <span id='title' hidden='true'>" + matches[i].subject + " " + matches[i].catalog_num + "</span> \
-                                                                    <span id='times' hidden='true'>" + matches[i].meeting_days + " " + matches[i].start_time + " " + matches[i].end_time + "</span> \
+                                                                        <button id='btn_" + matches[i]._id + "' class='btn " + btnStyle + " btn-md' onclick='addOrRemoveCourse(" + matches[i]._id +")' style='float: right;'>" + btnText + "</button> \
+                                                                        <span id='title' hidden='true'>" + matches[i].subject + " " + matches[i].catalog_num + "</span> \
+                                                                        <span id='times' hidden='true'>" + matches[i].meeting_days + " " + matches[i].start_time + " " + matches[i].end_time + "</span> \
+                                                                    </div> \
                                                                 </div> \
                                                             </div>";
             
@@ -426,6 +559,7 @@
                                 var date = new Date(sunday).add(j).days();                                    
                                 var datestr = date.toISOString().substr(0, 11);
                                 events.push({
+                                    _id: courses[i]._id,
                                     url: "/course?course=" + courses[i]._id,
                                     title: courses[i].subject + " " + courses[i].catalog_num,
                                     start: datestr + courses[i].start_time,

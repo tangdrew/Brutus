@@ -113,6 +113,7 @@ body {
 
 .search-panel {
     margin-bottom: 5px;
+    z-index: 400;
 }
 
 .search-panel-body {
@@ -157,4 +158,8 @@ body {
 
 .btn-gold:hover {
     background-color: #ffe766;
+}
+
+.btn {
+    z-index: 10000;
 }
