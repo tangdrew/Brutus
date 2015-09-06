@@ -120,6 +120,7 @@
                 });
                 $("#subject").change(function() {
                     index = 0;
+                    $('#search').val('');
                     getCourses();
                 });
 			});
@@ -224,6 +225,7 @@
                                                     console.log('POST success class added');
                                                     document.getElementById('btn_' + course_id).classList.remove('btn-success');
                                                     document.getElementById('btn_' + course_id).classList.add('btn-danger');
+                                                    document.getElementById('btn_' + course_id).classList.add('btn-md');
                                                     document.getElementById('btn_' + course_id).innerHTML = "Remove Class";
                                                     
                                                     addCourseToCalendar(course_id);

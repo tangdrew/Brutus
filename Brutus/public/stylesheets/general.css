@@ -163,3 +163,9 @@ body {
 .btn {
     z-index: 10000;
 }
+
+
+.btn-success, .btn-danger {
+    width: 120px !important;
+    
+}
