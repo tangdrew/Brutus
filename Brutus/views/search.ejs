@@ -17,8 +17,8 @@
                        
          
         <script>
-            index = 0;
-            //rendered = 0;
+            index = 0;            
+            loaded = false;
             
             //Creates a delay of n milliseconds
             var delay = (function(){
@@ -133,10 +133,18 @@
                 }
             });
             
-            $(window).scroll(function() {
-                if($(window).scrollTop() + $(window).height() == $(document).height()){                    
-                    index += 10;
-                    getCourses();                                    
+
+            $(window).scroll(function(){
+                if($(window).scrollTop() + $(window).height() > $(document).height() - 1000){
+                    if(loaded == false)
+                    {
+                        index += 10;
+                        getCourses();  
+                        loaded = true;
+                    }
+                    delay(function(){
+                        loaded = false;                          
+                    }, 1000 );                                                                      
                 }
             });     
             
