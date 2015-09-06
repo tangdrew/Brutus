@@ -25,7 +25,9 @@ router.get('/search', function(req, res, next)
     }
     else
     {
-        res.render('search', { user: req.session.user, title: 'Search' });
+
+        res.render('search', { user: req.session.user, title: 'Search'});
+
     }
 });
 
@@ -79,21 +81,44 @@ router.get('/course', function(req, res, next)
 
 //POST to course profile page when hit add class button, saves class to db
 router.post('/course', function(req, res, next) { 
-   if(req.body.query == "courses"){
-       courses.getCourseByCourseId(req.body.id, function(obj, e){
-           res.send(obj);
-       });
-   }
-   else if(req.body.query == "add"){
-        courses.addClass(req.session.user.email, req.body.course_id, function(o){
+    if(req.body.query == "courses"){
+        courses.getCourseByCourseId(req.body.id, function(obj, e){
+            res.send(obj);
+        });
+    }
+    else if(req.body.query == "add"){
+        courses.addClass(req.session.user.email, req.body.course_id, function(o, current_courses){
+            req.session.user.current_courses = current_courses;
             res.send(o);
         });
-   }
-   else if(req.body.query == "reviews"){
+    }
+    else if(req.body.query == "reviews"){
         courses.getReviews(req.body.id, req.body.course_id, function(reviews, e){
             res.send(reviews);
         });
-   }
+    }
+    else if(req.body.query == 'add-searchpage') {
+        console.log("in add search page");
+        courses.addClass(req.session.user.email, req.body.course_id, function(o, current_courses) {
+            req.session.user.current_courses = current_courses;
+            res.send(o);
+        });
+    }
+    else if (req.body.query == 'remove-searchpage') {
+        console.log("in remove search page");
+        courses.removeClass(req.session.user.email, req.body.course_id, function(o, current_courses) {
+            req.session.user.current_courses = current_courses;
+            res.send(o); 
+        });
+    }
+    else if (req.body.query == 'getOne') {
+        courses.getCourseByCourseId(req.body.id, function(obj) {
+        if (obj.length > 0)
+            res.send(obj[0]);
+        else
+            res.send('null');
+        });
+    }
 });
 
 /* GET course profile page. */

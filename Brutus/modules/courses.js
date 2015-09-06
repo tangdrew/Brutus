@@ -100,8 +100,10 @@ exports.searchCourses = function(index,searchVal, subjectVal, termVal, orderVal,
 }
 
 exports.getCourseByCourseId = function(value, callback){
+    console.log(value);
     courses.find({_id:parseInt(value)}).toArray(function(e,o) {
         if (o){
+            console.log(o);
             callback(o);
         }
         else{
@@ -180,16 +182,39 @@ exports.addReview = function(course, req, userEmail, callback){
 exports.addClass = function(userEmail, course_id, callback){
     accounts.findOne({email:userEmail}, function(e,o) {
         if (o){
+            console.log("found user: " + o.email);
             var current_courses = o.current_courses;
             current_courses.push(course_id);
             accounts.update ({email: userEmail}, {$set: {"current_courses" : current_courses} });
-            callback('success');
+            callback('success', current_courses);
         }
         else{
             callback(e);
         }
     });
 };
+
+// Remove class from user's account
+exports.removeClass = function(userEmail, course_id, callback) {
+    accounts.findOne({email:userEmail}, function(e, o) {
+        if (o) {
+            console.log("found user: " + o.email);
+            var current_courses = o.current_courses;
+            console.log("old current courses");
+            console.log(current_courses);
+            var index = current_courses.indexOf(course_id);
+            if (index > -1) {
+                console.log("splicing course");
+                current_courses.splice(index, 1);
+                console.log(current_courses);
+            }
+            console.log("new current courses");
+            console.log(current_courses);
+            accounts.update ({email: userEmail}, {$set: {"current_courses": current_courses} });
+            callback("success-remove", current_courses);
+        }
+    });
+}
 
 //Returns all reviews about course_id
 exports.getReviews = function(id, course_id, callback){

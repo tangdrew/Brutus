@@ -220,7 +220,15 @@
                         for (var i = 0; i < courses.length; i++) {
                             html += "<a href='/course?course=" + courses[i]._id + "' class='course-list-item list-group-item'>";    
                             html += courses[i].subject + " " + courses[i].catalog_num + " - " + courses[i].title;
-                            html += "<p>" + courses[i].meeting_days + courses[i].start_time + " - " + courses[i].end_time + "</p>";
+
+                            if (courses[i].meeting_days && courses[i].start_time && courses[i].end_time)
+                                html += "<p>Time: " + courses[i].meeting_days + " " + courses[i].start_time + " - " + courses[i].end_time + "</p>";
+                            else if (courses[i].meeting_days)
+                                html += "<p>Time: " + courses[i].meeting_days + " " + 'TBA</p>';
+                            else
+                                html += "<p>Time: " + 'TBA</p>';
+
+
                             html += "</a>";
                             
                             var meetingDays = [0, 0, 0, 0, 0, 0, 0];
