@@ -125,15 +125,6 @@
 			});
             
             
-            // on mobile displays scroll does not work
-            $(window).on('touchmove', function(e){
-                if($(window).scrollTop() + $(window).height() == $(document).height()){                    
-                    index += 10;
-                    getCourses();                                    
-                }
-            });
-            
-
             $(window).scroll(function(){
                 if($(window).scrollTop() + $(window).height() > $(document).height() - 1000){
                     if(loaded == false)
