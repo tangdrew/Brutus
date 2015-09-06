@@ -163,11 +163,55 @@
                             document.getElementById("addButton").disabled = true;
                             document.getElementById('addButton').classList.remove('btn-danger');
                             document.getElementById('addButton').classList.add('btn-success');
-                            document.getElementById("addButton").innerHTML = "Added"
+                            document.getElementById("addButton").innerHTML = "Remove Class"
                         }
                     }
                 });
             }
+            
+            //AJAX post request to database, returns list of all courses
+            function addOrRemoveCourse(course_id) {
+                
+                var e = window.event;
+                
+                e.cancelBubble = true;
+                if (e.stopPropagation) e.stopPropagation();
+                
+                console.log($('#btn_id' + course_id).text());
+                
+                var query = "add-searchpage"
+                if (document.getElementById('btn_' + course_id).innerHTML == "Remove Class") {
+                    query = "remove-searchpage";
+                }
+                console.log(query);
+                $.ajax( {
+                    url: '/course',
+                    type: 'POST',
+                    data: {"query": query, "course_id" : course_id},
+                    success: function(response) {
+                        if(response == 'success'){
+                            //On success of adding class to db, change class button
+                            console.log('POST success class added');
+                            document.getElementById('btn_' + course_id).classList.remove('btn-success');
+                            document.getElementById('btn_' + course_id).classList.add('btn-danger');
+                            document.getElementById('btn_' + course_id).classList.add('btn-md');
+                            document.getElementById('btn_' + course_id).innerHTML = "Remove Class";
+                            
+                            console.log("finished adding course to calendar");
+                        }
+                        if (response == 'success-remove') {
+                            console.log('POST success class removed');
+                            document.getElementById('btn_' + course_id).classList.add('btn-success');
+                            document.getElementById('btn_' + course_id).classList.remove('btn-danger');
+                            document.getElementById('btn_' + course_id).innerHTML = "Add Class";
+                            
+                        }
+                    }
+                });
+                
+                event.stopPropagation();
+            }
+            
             
             //Helps sort terms in ascending order by _id
             function compare(a,b) {
@@ -348,9 +392,9 @@
                                     
                                     <div style="width: 100%; text-align: center;padding-top: 30px; margin-bottom: 40px">
                                         <% if(enrolled == true){ %>
-                                            <button id="addButton" class="btn btn-success btn-md">Added</button>
+                                            <button id="btn_<%= courseObj._id %>" class="btn btn-danger btn-md" onclick="addOrRemoveCourse(<%= courseObj._id %>)">Remove Class</button>
                                         <% }else{%>
-                                            <button id="addButton" class="btn btn-danger btn-md" onclick="addCourse()">Add Class</button>
+                                            <button id="btn_<%= courseObj._id %>" class="btn btn-success btn-md" onclick="addOrRemoveCourse(<%= courseObj._id %>)">Add Class</button>
                                         <% } %>
                                     </div>
                                 </div>

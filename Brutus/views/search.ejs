@@ -116,6 +116,7 @@
                     $('#subject').val($('#subject').find('option:first').val());
                     $('#subject').find('option:first').prop('selected', true);
                     $('#subject').change();
+                    $('#search').val('');
                     getSubjects();
                 });
                 $("#subject").change(function() {
