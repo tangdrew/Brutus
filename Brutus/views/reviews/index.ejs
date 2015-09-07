@@ -102,8 +102,8 @@
       <!--Body-->
         <div class="container" style="padding-top: 150px">
             <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
                     <% if (typeof noCourse != 'undefined') { %>
                     <div class="alert alert-danger" role="alert">Please select a course!</div>
                     <% } %>
@@ -122,13 +122,13 @@
                     <form action="reviews" method="post" name="addReviewForm">
                         <h2>Review a Course</h2><br><br>                 
                         <!--Course Selection-->
-                        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs" style="text-align: center">
-                            <li class="active" style="width: 50%; background-color:#7a6f8c" onclick="clearValues('#search')"><a href="#myCoursesTab" data-toggle="tab">Your Courses</a></li>
-                            <li style="width: 50%; background-color:#7a6f8c"><a href="#searchTab" onclick="clearValues('#mycourses')" data-toggle="tab">Search</a></li>
+                        <ul id="tabs" class="nav nav-pills nav justified" data-tabs="tabs" style="text-align: center; margin-left: 6px">
+                            <li class="active" style="width: 49%; background-color:#7a6f8c" onclick="clearValues('#search')"><a href="#myCoursesTab" data-toggle="tab">Your Courses</a></li>
+                            <li style="width: 49%; background-color:#7a6f8c"><a href="#searchTab" onclick="clearValues('#mycourses')" data-toggle="tab">Search</a></li>
                         </ul><br><br>
                         <div id="my-tab-content" class="tab-content">
                             <div class="tab-pane active" id="myCoursesTab">
-                                <div class="row">
+                                <div class="row" style="margin-top: 15px">
                                     <span style="padding-left: 15px">Select From Your courses</span>
                                     <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                         <select id="mycourses" class="term-select" name="myCourseID" style="padding-top: 15px">       
@@ -137,7 +137,7 @@
                                     </p>
                                 </div>  
                             </div>
-                            <div class="tab-pane" id="searchTab">
+                            <div class="tab-pane" id="searchTab" style="margin-top: 15px">
                                 <div class="row">
                                     <span style="padding-left: 15px">Term</span>
                                     <p class="col-md-12 col-xs-12" style="margin-top: 10px">
@@ -145,7 +145,7 @@
                                         </select> 
                                     </p>
                                 </div>
-                                <div class="row">
+                                <div class="row" style="margin-top: 15px">
                                     <span style="padding-left: 15px">Subject</span>
                                     <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                         <select id="subject" class="subject-select" name="subject">
@@ -153,7 +153,7 @@
                                         </select> 
                                     </p>
                                 </div>
-                                <div class="row">
+                                <div class="row" style="margin-top: 15px"   >
                                     <span style="padding-left: 15px">Courses</span>
                                     <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                         <select id="search" class="search-select" name="searchCourseID">
@@ -164,7 +164,7 @@
                             </div>
                         </div>              
                                               
-                        <div class="row">
+                        <div class="row" style="margin-top: 15px">
                             <span style="padding-left: 15px">Grade</span>                       
                             <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                 <select id="grade" class="subject-select" name="grade">
@@ -184,37 +184,40 @@
                                 </select> 
                             </p>
                         </div>
-                        <p class="col-xs-12 col-md-12 " style="padding-left: 0px"> Overall Rating</p>                    
-                                              
+                        <div>
+                        <p class="col-xs-12 col-md-12 " style="padding-left: 0px; margin-top: 15px"> Overall Rating</p>                    
+                                                
 
                         <p class="col-xs-12 col-md-12 ">
-                        <input id="rating" style="width: 330px;" name="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
+                        <input class="col-xs-12 col-md-12 " id="rating" style="width: 330px;" name="rating" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
 
                         </p>
+                        </div>
                         
                         
-                        <p class="col-md-12 col-xs-12" style="padding-left: 0px"> Class Difficulty</p>                       
+                        <p class="col-xs-12 col-md-12" style="padding-left: 0px; margin-top: 15px"> Class Difficulty</p>                       
                                               
                         <p class="col-xs-12 col-md-12 ">
 
-                        <input id="difficulty" style="width: 330px;" name="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
+                        <input class="col-xs-12 col-md-12" id="difficulty" style="width: 330px;" name="difficulty" type="text" data-slider-ticks="[1, 2, 3, 4, 5]" data-slider-ticks-snap-bounds="100" data-slider-ticks-labels='["1", "2", "3", "4", "5"]'/>
                         </p>
                         <div class="row">
-                            <span style="padding-left: 15px">Average Time Spent Outside Class Per Week</span>     
+                            <span style="padding-left: 15px; padding-top: 15px">Average Time Spent Outside Class Per Week</span>     
                             <p class="col-md-12 col-xs-12" style="margin-top: 10px">
                                 <input type="text" class="form-control" name="avghours">
                             </p>    
                         </div>
-                        <div class="row">
-                            <span style="padding-left: 15px">Comments  (optional)</span>      
+                        <div class="row" style="margin-top: 15px">
+                            <span style="padding-left: 15px">Comments  (optional)</span>
+                              
                             <p class="col-md-12 col-xs-12" style="margin-top: 10px">
-                            <input type="text" class="form-control" name="comments">
+                                <textarea name="comments" rows="4" cols="76"></textarea>                                
                             </p>                            
                         </div> <br>                       
                         <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Submit!"></p><br><br><br>
                     </form>
                 </div>
-                <div class="col-md-4"></div>
+                <div class="col-md-3"></div>
             </div>
         </div>
   </body>
