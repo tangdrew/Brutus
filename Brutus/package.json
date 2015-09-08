@@ -11,9 +11,10 @@
     "debug": "~2.2.0",
     "ejs": "~2.3.3",
     "express": "~4.13.1",
-    "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0",
     "mongodb": "~2.0.33",
-    "monk": "~1.0.1"
+    "monk": "~1.0.1",
+    "morgan": "~1.6.1",
+    "sendgrid": "^1.9.2",
+    "serve-favicon": "~2.3.0"
   }
 }

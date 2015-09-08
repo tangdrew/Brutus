@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+		<% include ../shared/_header %>
+  </head>
+  <body>
+      <!--Navbar-->
+      <% include ../shared/_navbar %>
+      
+      <!--Body-->
+      <div class="container" style="padding-top: 100px">
+        <div class="row">   
+          <div class="col-xs-12 col-sm-12 col-md-3"></div>
+          <div class="col-xs-12 col-sm-12 col-md-6">                 
+                <% if (typeof submitted != 'undefined') { %>
+                    <div class="alert alert-success" role="alert">Feedback submitted! Thank you for your valuable opinion!</div>
+                <% } %>
+                <% if (typeof notSubmitted != 'undefined') { %>
+                    <div class="alert alert-danger" role="alert">Submission failed. Please try again!</div>
+                <% } %>                                  
+                <h1 style="margin-top: 20px">Submit a Feedback</h1><br><br>
+                <form action ="feedback" autofocus="autofocus" method = "post">                 
+                  <div class="row" style="margin-top: 5x">
+                    <p style="padding-left: 15px">Have question? &nbsp Want to see any particular changes in our next update? <br>Please let us know! &nbsp Any feed back is much appreciated!</p>                            
+                        <p class="col-md-12 col-xs-12" style="margin-top: 30px">
+                            <textarea name="feedbacks" rows="6" cols="76"></textarea>                                
+                        </p>                            
+                    </div><br>
+                    <p class="submit"><input type="submit" class="btn btn-default" style="float: right;" name="commit" value="Submit!"></p>                   
+                </form>                
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-3" style="padding-top: 0px"></div>
+        </div>
+      </div>
+  </body>
+</html>

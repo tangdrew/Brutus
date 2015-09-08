@@ -3,6 +3,7 @@ var router = express.Router();
 var accounts = require('../modules/accounts');
 var courses = require('../modules/courses');
 var terms = require('../modules/terms');
+var sendgrid = require('sendgrid')('cellist1993','aeypst949394');
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
@@ -238,6 +239,36 @@ router.post('/register', function(req, res)
         }
 	});
 });
+
+/* GET feedback page. */
+router.get('/feedback', function(req, res, next) 
+{
+    if(req.session.user == undefined)
+    {
+        res.redirect('/login');
+    }
+    else
+    {
+        res.render('feedback', { user: req.session.user, title: 'Submit a Feedback'});
+    }
+});
+
+router.post('/feedback', function(req, res)
+{
+    sendgrid.send({
+        to: 'nubrutus@gmail.com',
+        from: 'feedback@brutus.com',
+        subject: 'User Feedback',
+        text: 'feedbacks'   
+    }, function(err,json){
+        if(err){ return res.render('feedback', { title: 'Submit a Feedback', notSubmitted : "yes" , user: req.session.user  });}
+        res.render('feedback', { title: 'Submit a Feedback', submitted : "yes" , user: req.session.user  });
+    
+    });
+});
+    
+    
+    
 
 // GET logout page
 router.get('/logout', function(req, res, next)
