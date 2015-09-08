@@ -3,7 +3,7 @@ var router = express.Router();
 var accounts = require('../modules/accounts');
 var courses = require('../modules/courses');
 var terms = require('../modules/terms');
-var sendgrid = require('sendgrid')('cellist1993','aeypst949394');
+
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
@@ -255,19 +255,18 @@ router.get('/feedback', function(req, res, next)
 
 router.post('/feedback', function(req, res)
 {
+    var sendgrid = require('sendgrid')('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');
     sendgrid.send({
-        to: 'nubrutus@gmail.com',
-        from: 'feedback@brutus.com',
-        subject: 'User Feedback',
-        text: 'feedbacks'   
+        to      : 'yongpark2016@u.northwestern.edu',
+        from    : 'feedback@brutus.com',
+        subject : 'User Feedback',
+        text    :  req.body['feedbacks']   
     }, function(err,json){
         if(err){ return res.render('feedback', { title: 'Submit a Feedback', notSubmitted : "yes" , user: req.session.user  });}
         res.render('feedback', { title: 'Submit a Feedback', submitted : "yes" , user: req.session.user  });
     
     });
-});
-    
-    
+});    
     
 
 // GET logout page
