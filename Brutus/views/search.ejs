@@ -109,7 +109,7 @@
                         index = 0;
                         //matches = search(courseArray, document.getElementById('search').value);
                         getCourses();                        
-                    }, 250 );
+                    }, 100 );
                 });
                 //Calls search function when filter dropdown values are changed
                 $("#term").change(function() {
@@ -120,6 +120,11 @@
                     getSubjects();
                 });
                 $("#subject").change(function() {
+                    index = 0;
+                    $('#search').val('');
+                    getCourses();
+                });
+                $("#sortBy").change(function() {
                     index = 0;
                     $('#search').val('');
                     getCourses();
