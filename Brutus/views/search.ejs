@@ -233,8 +233,7 @@
                                                     document.getElementById('btn_' + course_id).classList.add('btn-danger');
                                                     document.getElementById('btn_' + course_id).classList.add('btn-md');
                                                     document.getElementById('btn_' + course_id).innerHTML = "Remove Class";
-                                                    document.getElementById('btn_' + course_id).disabled = false;
-                                                    
+                                                                                                      
                                                     addCourseToCalendar(course_id);
                                                     console.log("finished adding course to calendar");
                                                 }
@@ -243,7 +242,11 @@
                                                     document.getElementById('btn_' + course_id).classList.add('btn-success');
                                                     document.getElementById('btn_' + course_id).classList.remove('btn-danger');
                                                     document.getElementById('btn_' + course_id).innerHTML = "Add Class";
-                                                    document.getElementById('btn_' + course_id).disabled = true;
+                                                    
+                                                    
+                                                    if ($('#disabled').text() == 'true') {
+                                                        document.getElementById('btn_' + course_id).disabled = true;
+                                                    }     
                                                     
                                                     removeCourseFromCalendar(course_id);
                                                 }
@@ -364,16 +367,17 @@
                                             var componentsText = "No";
                                             var requiredText = "Enrollment Requirements: None";
                                             var disabled = '';
+                                            var hasComponent = "false";
                                             
                                             if (matches[i].course_components && matches[i].course_components.length > 0)
                                                 componentsText = "Yes, click to add components";
                                             if (matches[i].requirements)
                                                 requiredText = matches[i].requirements;
                                                 
-                                            if (matches[i].course_components && matches[i].course_components.length > 0 && btnStyle == 'btn-success') {
+                                            if (matches[i].course_components && matches[i].course_components.length > 0 && btnStyle == 'btn-success')
                                                 disabled = 'disabled';
-                                            }
-
+                                            if (matches[i].course_components && matches[i].course_components.length > 0)
+                                                hasComponent = "true";
                                             
                                             
                                             html = html + "<div id='" + matches[i]._id + "' class='panel panel-default listing' " + "onclick=goToCourse(" + matches[i]._id + ")" + " style='margin: 0; color: #fff'> \
@@ -385,7 +389,7 @@
                                                                     <label style='color: #fff'>Instructor: </label><a href='#' style='color: #FFD700'> " + matches[i].instructor.name + "</a><br> \
                                                                     <label style='color: #fff'>Class Times: </label><span> " + classTime + "</span><br> \
                                                                     <label style='color: #fff'>Room: </label> " + building_name + " " + room_name + "<br> \
-                                                                    <label style='color: #fff'>Rating: </label>" + ratingStr + "<br> \
+                                                                    <label style='color: #fff'>Rating: </label> " + ratingStr + "<br> \
                                                                     <div style='display: inline-block; width: 100%'> \
                                                                         <div style='float: left;'> \
                                                                             <label style='color: #fff'>Additional Required Components: </label> " + componentsText + "<br> \
@@ -394,6 +398,7 @@
                                                                         <button " + disabled + " id='btn_" + matches[i]._id + "' class='btn " + btnStyle + " btn-md' onclick='addOrRemoveCourse(" + matches[i]._id +")' style='float: right;'>" + btnText + "</button> \
                                                                         <span id='title' hidden='true'>" + matches[i].subject + " " + matches[i].catalog_num + "</span> \
                                                                         <span id='times' hidden='true'>" + matches[i].meeting_days + " " + matches[i].start_time + " " + matches[i].end_time + "</span> \
+                                                                        <span id='disabled' hidden='true'>" + hasComponent + "</span> \
                                                                     </div> \
                                                                 </div> \
                                                             </div>";
@@ -656,6 +661,7 @@
                                     var date = new Date(sunday).add(j).days();                                    
                                     var datestr = date.toISOString().substr(0, 11);
                                     events.push({
+                                        _id: obj.courses[i]._id,
                                         url: "/course?course=" + obj.courses[i]._id,
                                         title: obj.courses[i].subject + " " + obj.courses[i].catalog_num + " " + obj.courses[i].course_components[componentIndex].component,
                                         start: datestr + obj.courses[i].course_components[componentIndex].start_time,

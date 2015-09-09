@@ -104,6 +104,13 @@ router.post('/course', function(req, res, next) {
     }
     else if(req.body.query == 'add-searchpage') {
         console.log("in add search page");
+        
+        // check for component, add if there is one
+        if (req.body.component)
+            courses.addComponent(req.session.user.email, req.body.component, function(o, current_components) {
+                req.session.user.current_components = current_components;
+            });
+            
         courses.addClass(req.session.user.email, req.body.course_id, function(o, current_courses) {
             req.session.user.current_courses = current_courses;
             res.send(o);
@@ -111,6 +118,12 @@ router.post('/course', function(req, res, next) {
     }
     else if (req.body.query == 'remove-searchpage') {
         console.log("in remove search page");
+        
+        // check for component, remove if there is one
+
+        courses.removeComponent(req.session.user.email, req.body.course_id, function(o, current_components) {
+            req.session.user.current_components = current_components;
+        })
         courses.removeClass(req.session.user.email, req.body.course_id, function(o, current_courses) {
             req.session.user.current_courses = current_courses;
             res.send(o); 
@@ -123,19 +136,7 @@ router.post('/course', function(req, res, next) {
         else
             res.send('null');
         });
-    }
-    else if (req.body.query == 'add-component') {
-        courses.addComponent(req.session.user.email, req.body.component_id, function(o, current_components) {
-            req.session.user.current_components = current_components;
-            res.send(o);
-        })    
-    }
-    else if (req.body.query == 'remove-component') {
-        courses.removeComponent(req.session.user.email, req.body.component_id, function(o, current_components) {
-            req.session.user.current_components = current_components;
-            res.send(o);
-        })
-    }    
+    } 
 });
 
 /* GET course profile page. */

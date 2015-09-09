@@ -152,26 +152,6 @@
             }
             
             //AJAX post request to database, returns list of all courses
-            function addCourse(){
-                var course_id = getQuerystringNameValue('course');
-                $.ajax( {
-                    url: '/course',
-                    type: 'POST',
-                    data: {"query": "add", "course_id" : course_id},
-                    success: function(response) {
-                        if(response == 'success'){
-                            //On success of adding class to db, change class button
-                            console.log('POST success');
-                            document.getElementById("addButton").disabled = true;
-                            document.getElementById('addButton').classList.remove('btn-danger');
-                            document.getElementById('addButton').classList.add('btn-success');
-                            document.getElementById("addButton").innerHTML = "Remove Class"
-                        }
-                    }
-                });
-            }
-            
-            //AJAX post request to database, returns list of all courses
             function addOrRemoveCourse(course_id) {
                 
                 var e = window.event;
@@ -186,10 +166,18 @@
                     query = "remove-searchpage";
                 }
                 console.log(query);
+                
+                var selectedComponent = null;
+                // check for selected component
+                if (document.getElementById("component-list").innerHTML != 'None') {
+                    selectedComponent = $("input:radio[name=component]:checked").val();
+                    console.log(selectedComponent);
+                }
+                
                 $.ajax( {
                     url: '/course',
                     type: 'POST',
-                    data: {"query": query, "course_id" : course_id},
+                    data: {"query": query, "course_id" : course_id, "component": selectedComponent},
                     success: function(response) {
                         if(response == 'success'){
                             //On success of adding class to db, change class button
@@ -198,7 +186,7 @@
                             document.getElementById('btn_' + course_id).classList.add('btn-danger');
                             document.getElementById('btn_' + course_id).classList.add('btn-md');
                             document.getElementById('btn_' + course_id).innerHTML = "Remove Class";
-                            
+                            $("input:radio[name=component]").attr("disabled", true);
                             console.log("finished adding course to calendar");
                         }
                         if (response == 'success-remove') {
@@ -206,48 +194,13 @@
                             document.getElementById('btn_' + course_id).classList.add('btn-success');
                             document.getElementById('btn_' + course_id).classList.remove('btn-danger');
                             document.getElementById('btn_' + course_id).innerHTML = "Add Class";
-                            
+                            $("input:radio[name=component]").attr("disabled", false);
                         }
                     }
                 });
                 
                 event.stopPropagation();
             }
-            
-            // AJAX post request to database, adds component to db
-            function addOrRemoveComponent(componentId) {
-                console.log("lol");
-                var query = "add-component";
-                if (document.getElementById('btn_' + componentId).innerHTML == "Remove Component") {
-                    query = "remove-component";
-                }
-                console.log(query);
-                $.ajax( {
-                    url: '/course',
-                    type: 'POST',
-                    data: {"query": query, "component_id": componentId},
-                    success: function(response) {
-                        if (response == 'success') {
-                            //On success of adding component to db, change component button
-                            console.log('POST success component added');
-                            document.getElementById('btn_' + componentId).classList.remove('btn-success');
-                            document.getElementById('btn_' + componentId).classList.add('btn-danger');
-                            document.getElementById('btn_' + componentId).classList.add('btn-md');
-                            document.getElementById('btn_' + componentId).innerHTML = "Remove Component";
-                            
-                            console.log("finished adding course to calendar");
-                        }
-                        if (response == 'success-remove') {
-                            console.log('POST success component removed');
-                            document.getElementById('btn_' + componentId).classList.add('btn-success');
-                            document.getElementById('btn_' + componentId).classList.remove('btn-danger');
-                            document.getElementById('btn_' + componentId).innerHTML = "Add Component";
-                            
-                        }
-                    }
-                });
-            }
-            
             
             //Helps sort terms in ascending order by _id
             function compare(a,b) {
@@ -574,19 +527,11 @@
                                                                 var component = course.course_components[i].component;
                                                                 var componentId = course._id + ":" + section;
                                                                 
-                                                                var btnText = 'Add Component';
-                                                                var btnStyle = 'btn-success';
-                                                                // check if component is already selected
-                                                                if (current_components.hasOwnProperty(course._id) && current_components[course._id] == section) {
-                                                                    btnStyle = 'btn-danger';
-                                                                    btnText = 'Remove Component';
-                                                                }
-                                                                
                                                                 html += "<li class='list-group-item' style='display: inline-block; width: 100%;'>";
                                                                 html += "<p style='float: left;'>Section: " + section + " - " + component + "<br>";
                                                                 html += "Time: " + meeting_days + " " + start + " - " + end + "<br>";
                                                                 html += "Location: " + room + "</p>";
-                                                                html += "<button id='btn_" + componentId + "' class='btn btn-component " + btnStyle + " btn-md' onclick=\"addOrRemoveComponent(\'" + componentId + "\')\" style='float: right;'>" + btnText + "</button></li>";
+                                                                html += "<div id='radio-div'><br><input id='btn_" + componentId + "' style='float: right;' type='radio' name='component' value='" + componentId +"'></div></li>";
                                                                 
                                                             }
                                                         }
@@ -596,6 +541,16 @@
                                                     }
                                                     
                                                     document.getElementById("component-list").innerHTML = html;
+                                                    
+                                                    if (course.course_components && course.course_components.length > 0) {
+                                                        $("input:radio[name=component]:first").attr('checked', true);
+                                                    }
+                                                    
+                                                    // check if component is already selected
+                                                    if (current_components.hasOwnProperty(course._id) && current_components[course._id] == section) {
+                                                        btnStyle = 'btn-danger';
+                                                        btnText = 'Remove Component';
+                                                    }
                                                 }
                                                 
                                             </script>

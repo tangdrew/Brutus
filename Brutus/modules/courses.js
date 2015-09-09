@@ -229,17 +229,23 @@ exports.addComponent = function(userEmail, component_id, callback) {
 }
 
 // Remove a componeont from a user's account
-exports.removeComponent = function(userEmail, component_id, callback) {
+exports.removeComponent = function(userEmail, course_id, callback) {
     accounts.findOne({email:userEmail}, function(e, o) {
         if (o) {
             var current_components = o.current_components;
             if (current_components == undefined) {
                 current_components = [];
             }
-            var index = current_components.indexOf(component_id);
-            if (index > -1) {
-                current_components.splice(index, 1);
+            
+            for (var i = 0; i < current_components.length; i++) {
+                var split = current_components[i].split(":");
+                if (split.length > 0 && split[0] == course_id)
+                {
+                    current_components.splice(i, 1);
+                    break;
+                }
             }
+            
             accounts.update ({email: userEmail}, {$set: {"current_components": current_components} });
             callback("success-remove", current_components);
         }
