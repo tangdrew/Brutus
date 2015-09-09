@@ -196,7 +196,6 @@
                     type: 'POST',
                     data: {getCurrentEvents: true},
                     success: function(obj) {
-                        console.log(obj);
                         var html = '';
                         
                         for (var i = 0; i < obj.courses.length; i++) {
@@ -217,18 +216,13 @@
                             var componentSection;
                             // check current components for a component that matches
                             for (var j = 0; j < obj.components.length; j++) {
-                                console.log("in for loop");
-                                console.log(obj.components[j]);
                                 var split = obj.components[j].split(":");
-                                console.log(split);
                                 if (split[0] == obj.courses[i]._id) {
                                     componentSection = split[1];
-                                    console.log("found" + componentSection);
                                 }
                             }
                             
                             var componentIndex = -1;
-                            console.log(componentSection);
                             
                             if (componentSection && obj.courses[i].course_components) {
                                 for (var j = 0; j < obj.courses[i].course_components.length; j++) {   // find course component by id
@@ -331,7 +325,7 @@
                                         var datestr = date.toISOString().substr(0, 11);
                                         events.push({
                                             url: "/course?course=" + obj.courses[i]._id,
-                                            title: obj.courses[i].subject + " " + obj.courses[i].catalog_num + obj.courses[i].course_components[componentIndex].component,
+                                            title: obj.courses[i].subject + " " + obj.courses[i].catalog_num + " " + obj.courses[i].course_components[componentIndex].component,
                                             start: datestr + obj.courses[i].course_components[componentIndex].start_time,
                                             end: datestr + obj.courses[i].course_components[componentIndex].end_time 
                                         });
