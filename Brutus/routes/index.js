@@ -257,9 +257,9 @@ router.post('/feedback', function(req, res)
 {
     var sendgrid = require('sendgrid')('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');
     sendgrid.send({
-        to      : 'nubrutus@gmail.com',
+        to      : 'yongpark2016@u.northwestern.edu',
         from    : 'feedback@brutus.com',
-        subject : 'User Feedback',
+        subject : 'User Feedback from: ' + req.session.user.firstName + ' ' + req.session.user.lastName,
         text    :  req.body['feedbacks']   
     }, function(err,json){
         if(err){ return res.render('feedback', { title: 'Submit a Feedback', notSubmitted : "yes" , user: req.session.user  });}
