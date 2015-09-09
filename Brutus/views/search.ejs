@@ -298,7 +298,7 @@
                                                                 var datestr = date.toISOString().substr(0, 11);
                                                                 events.push({
                                                                     _id: response._id,
-                                                                    url: '/course?course' + response._id,
+                                                                    url: '/course?course=' + response._id,
                                                                     title: response.subject + " " + response.catalog_num,
                                                                     start: datestr + start,
                                                                     end: datestr + end 
@@ -532,15 +532,15 @@
                 url: '/dashboard',
                 type: 'POST',
                 data: {getCurrentEvents: true},
-                success: function(courses) {
-                    
-                    for (var i = 0; i < courses.length; i++) {
+                success: function(obj) {
+
+                    for (var i = 0; i < obj.courses.length; i++) {
                         
                         var meetingDays = [0, 0, 0, 0, 0, 0, 0];
-                        if (courses[i].meeting_days == undefined || courses[i].start_time == undefined || courses[i].end_time == undefined)
+                        if (obj.courses[i].meeting_days == undefined || obj.courses[i].start_time == undefined || obj.courses[i].end_time == undefined)
                             continue;
                             
-                        var meetingDaysStr = courses[i].meeting_days.toLowerCase();
+                        var meetingDaysStr = obj.courses[i].meeting_days.toLowerCase();
                         if (meetingDaysStr.indexOf("su") > -1)
                             meetingDays[0] = 1;
                         if (meetingDaysStr.indexOf("mo") > -1)
@@ -566,11 +566,11 @@
                                 var date = new Date(sunday).add(j).days();                                    
                                 var datestr = date.toISOString().substr(0, 11);
                                 events.push({
-                                    _id: courses[i]._id,
-                                    url: "/course?course=" + courses[i]._id,
-                                    title: courses[i].subject + " " + courses[i].catalog_num,
-                                    start: datestr + courses[i].start_time,
-                                    end: datestr + courses[i].end_time 
+                                    _id: obj.courses[i]._id,
+                                    url: "/course?course=" + obj.courses[i]._id,
+                                    title: obj.courses[i].subject + " " + obj.courses[i].catalog_num,
+                                    start: datestr + obj.courses[i].start_time,
+                                    end: datestr + obj.courses[i].end_time 
                                 });
                             }
                         }
@@ -578,7 +578,74 @@
                         for (var k = 0; k < events.length; k++) {
                             $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
                             $('#calendar').fullCalendar( 'rerenderEvents' );    
-                        }         
+                        }   
+                        
+                        // get the course component data
+                        
+                        var componentSection;
+                        // check current components for a component that matches
+                        for (var j = 0; j < obj.components.length; j++) {
+                            var split = obj.components[j].split(":");
+                            if (split[0] == obj.courses[i]._id) {
+                                componentSection = split[1];
+                            }
+                        }
+                        
+                        var componentIndex = -1;
+                        if (componentSection && obj.courses[i].course_components) {
+                            for (var j = 0; j < obj.courses[i].course_components.length; j++) {   // find course component by id
+                                if (obj.courses[i].course_components[j].section == componentSection) {
+                                    componentIndex = j;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (componentSection && componentIndex > -1) {
+                            
+                            // get component meeting days
+                            var meetingDays = [0, 0, 0, 0, 0, 0, 0];
+                            if (obj.courses[i].course_components[componentIndex].meeting_days == undefined || obj.courses[i].course_components[componentIndex].start_time == undefined || obj.courses[i].course_components[componentIndex].end_time == undefined)
+                                continue;
+                                
+                            var meetingDaysStr = obj.courses[i].course_components[componentIndex].meeting_days.toLowerCase();
+                            
+                            if (meetingDaysStr.indexOf("su") > -1)
+                                meetingDays[0] = 1;
+                            if (meetingDaysStr.indexOf("mo") > -1)
+                                meetingDays[1] = 1;
+                            if (meetingDaysStr.indexOf("tu") > -1)
+                                meetingDays[2] = 1;
+                            if (meetingDaysStr.indexOf("we") > -1)
+                                meetingDays[3] = 1;
+                            if (meetingDaysStr.indexOf("th") > -1)
+                                meetingDays[4] = 1;
+                            if (meetingDaysStr.indexOf("fr") > -1)
+                                meetingDays[5] = 1;
+                            if (meetingDaysStr.indexOf("sa") > -1)
+                                meetingDays[6] = 1;
+                            
+                            var sunday = Date.today().add( - (new Date()).getDay()).days();
+                            
+                            var events = [];
+                            for (var j = 0; j < 7; j++) {
+                                if (meetingDays[j] == 1) {
+                                    var date = new Date(sunday).add(j).days();                                    
+                                    var datestr = date.toISOString().substr(0, 11);
+                                    events.push({
+                                        url: "/course?course=" + obj.courses[i]._id,
+                                        title: obj.courses[i].subject + " " + obj.courses[i].catalog_num + " " + obj.courses[i].course_components[componentIndex].component,
+                                        start: datestr + obj.courses[i].course_components[componentIndex].start_time,
+                                        end: datestr + obj.courses[i].course_components[componentIndex].end_time 
+                                    });
+                                }
+                            }
+
+                            for (var k = 0; k < events.length; k++) {
+                                $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
+                                $('#calendar').fullCalendar( 'rerenderEvents' );    
+                            }
+                        }                                      
                     }
                     
                     $('tr').css('height', Math.floor($(window).height() / 38) + 'px');
