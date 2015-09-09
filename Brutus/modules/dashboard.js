@@ -29,9 +29,13 @@ exports.getCurrentCourses = function(user, callback) {
             for (var i = 0; i < currentCourses.length; i++) {
                 currentCourses[i] = parseInt(currentCourses[i]);
             }
+            
+            // get current courses and components 
+            var currentComponents = o.current_components;
             courses.find({_id: {$in: currentCourses}}).toArray(function(e, o) {
                 if (o) {
-                    callback(o);
+                    var obj = {components: currentComponents, courses: o};
+                    callback(obj);
                 }
             });
         }

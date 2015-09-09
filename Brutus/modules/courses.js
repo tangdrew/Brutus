@@ -182,7 +182,6 @@ exports.addReview = function(course, req, userEmail, callback){
 exports.addClass = function(userEmail, course_id, callback){
     accounts.findOne({email:userEmail}, function(e,o) {
         if (o){
-            console.log("found user: " + o.email);
             var current_courses = o.current_courses;
             current_courses.push(course_id);
             accounts.update ({email: userEmail}, {$set: {"current_courses" : current_courses} });
@@ -198,23 +197,58 @@ exports.addClass = function(userEmail, course_id, callback){
 exports.removeClass = function(userEmail, course_id, callback) {
     accounts.findOne({email:userEmail}, function(e, o) {
         if (o) {
-            console.log("found user: " + o.email);
             var current_courses = o.current_courses;
-            console.log("old current courses");
-            console.log(current_courses);
             var index = current_courses.indexOf(course_id);
             if (index > -1) {
                 console.log("splicing course");
                 current_courses.splice(index, 1);
                 console.log(current_courses);
             }
-            console.log("new current courses");
-            console.log(current_courses);
             accounts.update ({email: userEmail}, {$set: {"current_courses": current_courses} });
             callback("success-remove", current_courses);
         }
     });
 }
+
+// Add a component to a user's account
+exports.addComponent = function(userEmail, component_id, callback) {
+    accounts.findOne({email:userEmail}, function(e, o) {
+        if (o) {
+            var current_components = o.current_components;
+            if (current_components == undefined) {
+                current_components = [];
+            }
+            current_components.push(component_id);
+            accounts.update ({email: userEmail}, {$set: {"current_components" : current_components} });
+            callback('success', current_components);
+        }
+        else{
+            callback(e);
+        }
+    });
+}
+
+// Remove a componeont from a user's account
+exports.removeComponent = function(userEmail, component_id, callback) {
+    accounts.findOne({email:userEmail}, function(e, o) {
+        if (o) {
+            var current_components = o.current_components;
+            if (current_components == undefined) {
+                current_components = [];
+            }
+            var index = current_components.indexOf(component_id);
+            if (index > -1) {
+                current_components.splice(index, 1);
+            }
+            accounts.update ({email: userEmail}, {$set: {"current_components": current_components} });
+            callback("success-remove", current_components);
+        }
+        else {
+            callback(e);
+        }        
+    });
+}
+
 
 //Returns all reviews about course_id
 exports.getReviews = function(id, course_id, callback){

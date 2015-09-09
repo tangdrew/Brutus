@@ -66,10 +66,14 @@ router.get('/course', function(req, res, next)
     else
     {
         var courseId = req.query.course;
+        console.log("course id " + courseId);
         courses.getCourseByCourseId(courseId, function(obj, e){
+            console.log(obj);
             if(obj){
+                console.log(obj);
                 //Send Course data and whether user is already enrolled
                 accounts.checkEnrollment(req.session.user.email, courseId, function(enrolled){
+                    console.log(enrolled);
                     res.render('course', {title: 'Review Class', enrolled: enrolled, user: req.session.user, courseObj: obj[0]});
                 });
             }
@@ -120,6 +124,18 @@ router.post('/course', function(req, res, next) {
             res.send('null');
         });
     }
+    else if (req.body.query == 'add-component') {
+        courses.addComponent(req.session.user.email, req.body.component_id, function(o, current_components) {
+            req.session.user.current_components = current_components;
+            res.send(o);
+        })    
+    }
+    else if (req.body.query == 'remove-component') {
+        courses.removeComponent(req.session.user.email, req.body.component_id, function(o, current_components) {
+            req.session.user.current_components = current_components;
+            res.send(o);
+        })
+    }    
 });
 
 /* GET course profile page. */
