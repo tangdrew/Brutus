@@ -195,29 +195,68 @@
                     url: '/dashboard',
                     type: 'POST',
                     data: {getCurrentEvents: true},
-                    success: function(courses) {
-                        
+                    success: function(obj) {
+                        console.log(obj);
                         var html = '';
                         
-                        for (var i = 0; i < courses.length; i++) {
-                            html += "<a href='/course?course=" + courses[i]._id + "' class='course-list-item list-group-item'>";    
-                            html += courses[i].subject + " " + courses[i].catalog_num + " - " + courses[i].title;
-
-                            if (courses[i].meeting_days && courses[i].start_time && courses[i].end_time)
-                                html += "<p>Time: " + courses[i].meeting_days + " " + courses[i].start_time + " - " + courses[i].end_time + "</p>";
-                            else if (courses[i].meeting_days)
-                                html += "<p>Time: " + courses[i].meeting_days + " " + 'TBA</p>';
+                        for (var i = 0; i < obj.courses.length; i++) {
+                            html += "<a href='/course?course=" + obj.courses[i]._id + "' class='course-list-item list-group-item'>";    
+                            html += obj.courses[i].subject + " " + obj.courses[i].catalog_num + " - " + obj.courses[i].title;
+                            html += "<p>Section: " + (obj.courses[i].section ? obj.courses[i].section : '') + "<br>";
+                            if (obj.courses[i].meeting_days && obj.courses[i].start_time && obj.courses[i].end_time)
+                                html += "Time: " + obj.courses[i].meeting_days + " " + obj.courses[i].start_time + " - " + obj.courses[i].end_time + "</p>";
+                            else if (obj.courses[i].meeting_days)
+                                html += "Time: " + obj.courses[i].meeting_days + " " + 'TBA</p>';
                             else
-                                html += "<p>Time: " + 'TBA</p>';
+                                html += "Time: " + 'TBA</p>';
 
 
                             html += "</a>";
                             
+                            
+                            var componentSection;
+                            // check current components for a component that matches
+                            for (var j = 0; j < obj.components.length; j++) {
+                                console.log("in for loop");
+                                console.log(obj.components[j]);
+                                var split = obj.components[j].split(":");
+                                console.log(split);
+                                if (split[0] == obj.courses[i]._id) {
+                                    componentSection = split[1];
+                                    console.log("found" + componentSection);
+                                }
+                            }
+                            
+                            var componentIndex = -1;
+                            console.log(componentSection);
+                            
+                            if (componentSection && obj.courses[i].course_components) {
+                                for (var j = 0; j < obj.courses[i].course_components.length; j++) {   // find course component by id
+                                    if (obj.courses[i].course_components[j].section == componentSection) {
+                                        componentIndex = j;
+                                        break;
+                                    }
+                                }
+                                
+                                if (componentIndex != -1) {
+                                    html += "<a href='/course?course=" + obj.courses[i]._id + "' class='course-list-item list-group-item'>";    
+                                    html += obj.courses[i].subject + " " + obj.courses[i].catalog_num + " - " + obj.courses[i].course_components[componentIndex].component;
+                                    html += "<p>Section: " + (obj.courses[i].course_components[componentIndex].section ? obj.courses[i].course_components[componentIndex].section : '') + "<br>";
+                                    if (obj.courses[i].course_components[componentIndex].meeting_days && obj.courses[i].course_components[componentIndex].start_time && obj.courses[i].course_components[componentIndex].end_time)
+                                        html += "Time: " + obj.courses[i].course_components[componentIndex].meeting_days + " " + obj.courses[i].course_components[componentIndex].start_time + " - " + obj.courses[i].course_components[componentIndex].end_time + "</p>";
+                                    else if (obj.courses[i].course_components[componentIndex].meeting_days)
+                                        html += "Time: " + obj.courses[i].course_components[componentIndex].meeting_days + " " + 'TBA</p>';
+                                    else
+                                        html += "Time: " + 'TBA</p>';    
+                                }  
+                            }
+                            
+                            // get course meeting days
                             var meetingDays = [0, 0, 0, 0, 0, 0, 0];
-                            if (courses[i].meeting_days == undefined || courses[i].start_time == undefined || courses[i].end_time == undefined)
+                            if (obj.courses[i].meeting_days == undefined || obj.courses[i].start_time == undefined || obj.courses[i].end_time == undefined)
                                 continue;
                                 
-                            var meetingDaysStr = courses[i].meeting_days.toLowerCase();
+                            var meetingDaysStr = obj.courses[i].meeting_days.toLowerCase();
                             if (meetingDaysStr.indexOf("su") > -1)
                                 meetingDays[0] = 1;
                             if (meetingDaysStr.indexOf("mo") > -1)
@@ -243,10 +282,10 @@
                                     var date = new Date(sunday).add(j).days();                                    
                                     var datestr = date.toISOString().substr(0, 11);
                                     events.push({
-                                        url: "/course?course=" + courses[i]._id,
-                                        title: courses[i].subject + " " + courses[i].catalog_num,
-                                        start: datestr + courses[i].start_time,
-                                        end: datestr + courses[i].end_time 
+                                        url: "/course?course=" + obj.courses[i]._id,
+                                        title: obj.courses[i].subject + " " + obj.courses[i].catalog_num,
+                                        start: datestr + obj.courses[i].start_time,
+                                        end: datestr + obj.courses[i].end_time 
                                     });
                                 }
                             }
@@ -255,6 +294,56 @@
                                 $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
                                 $('#calendar').fullCalendar( 'rerenderEvents' );    
                             }
+                            
+                            if (componentSection && componentIndex > -1) {
+                                
+                                
+                                // get component meeting days
+                                var meetingDays = [0, 0, 0, 0, 0, 0, 0];
+                                if (obj.courses[i].course_components[componentIndex].meeting_days == undefined || obj.courses[i].course_components[componentIndex].start_time == undefined || obj.courses[i].course_components[componentIndex].end_time == undefined)
+                                    continue;
+                                    
+                                var meetingDaysStr = obj.courses[i].course_components[componentIndex].meeting_days.toLowerCase();
+                                
+                                if (meetingDaysStr.indexOf("su") > -1)
+                                    meetingDays[0] = 1;
+                                if (meetingDaysStr.indexOf("mo") > -1)
+                                    meetingDays[1] = 1;
+                                if (meetingDaysStr.indexOf("tu") > -1)
+                                    meetingDays[2] = 1;
+                                if (meetingDaysStr.indexOf("we") > -1)
+                                    meetingDays[3] = 1;
+                                if (meetingDaysStr.indexOf("th") > -1)
+                                    meetingDays[4] = 1;
+                                if (meetingDaysStr.indexOf("fr") > -1)
+                                    meetingDays[5] = 1;
+                                if (meetingDaysStr.indexOf("sa") > -1)
+                                    meetingDays[6] = 1;
+                                
+    
+                                
+                                var sunday = Date.today().add( - (new Date()).getDay()).days();
+                                
+                                var events = [];
+                                for (var j = 0; j < 7; j++) {
+                                    if (meetingDays[j] == 1) {
+                                        var date = new Date(sunday).add(j).days();                                    
+                                        var datestr = date.toISOString().substr(0, 11);
+                                        events.push({
+                                            url: "/course?course=" + obj.courses[i]._id,
+                                            title: obj.courses[i].subject + " " + obj.courses[i].catalog_num + obj.courses[i].course_components[componentIndex].component,
+                                            start: datestr + obj.courses[i].course_components[componentIndex].start_time,
+                                            end: datestr + obj.courses[i].course_components[componentIndex].end_time 
+                                        });
+                                    }
+                                }
+    
+                                for (var k = 0; k < events.length; k++) {
+                                    $('#calendar').fullCalendar('renderEvent', events[k], stick=true);
+                                    $('#calendar').fullCalendar( 'rerenderEvents' );    
+                                }
+                            }                            
+                            
                         }
                         
                         document.getElementById('course-list').innerHTML = html;
