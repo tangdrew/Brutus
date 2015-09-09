@@ -204,12 +204,14 @@
                             html += courses[i].subject + " " + courses[i].catalog_num + " - " + courses[i].title;
 
                             if (courses[i].meeting_days && courses[i].start_time && courses[i].end_time)
-                                html += "<p>Time: " + courses[i].meeting_days + " " + courses[i].start_time + " - " + courses[i].end_time + "</p>";
+                                html += "<p style='margin-bottom: 0px'>Time: " + courses[i].meeting_days + " " + courses[i].start_time + " - " + courses[i].end_time + "</p>";
                             else if (courses[i].meeting_days)
-                                html += "<p>Time: " + courses[i].meeting_days + " " + 'TBA</p>';
+                                html += "<p style='margin-bottom: 0px'>Time: " + courses[i].meeting_days + " " + 'TBA</p>';
                             else
-                                html += "<p>Time: " + 'TBA</p>';
-
+                                html += "<p style='margin-bottom: 0px'>Time: " + 'TBA</p>';
+                            
+                            //Class Number to enter into CAESAR to add course to shopping cart
+                            html += "<p>Course Number: " + courses[i].class_num + "</p>";
 
                             html += "</a>";
                             
