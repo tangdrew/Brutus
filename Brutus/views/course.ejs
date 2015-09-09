@@ -93,6 +93,8 @@
                     type: 'POST',
                     data: {"query": "courses", "id" : id},
                     success: function(course) {
+                        renderInfo(course);
+                        renderCourseComponents(course);
                         getReviews(course);
                     }
                 });
@@ -210,6 +212,40 @@
                 });
                 
                 event.stopPropagation();
+            }
+            
+            // AJAX post request to database, adds component to db
+            function addOrRemoveComponent(componentId) {
+                console.log("lol");
+                var query = "add-component";
+                if (document.getElementById('btn_' + componentId).innerHTML == "Remove Component") {
+                    query = "remove-component";
+                }
+                console.log(query);
+                $.ajax( {
+                    url: '/course',
+                    type: 'POST',
+                    data: {"query": query, "component_id": componentId},
+                    success: function(response) {
+                        if (response == 'success') {
+                            //On success of adding component to db, change component button
+                            console.log('POST success component added');
+                            document.getElementById('btn_' + componentId).classList.remove('btn-success');
+                            document.getElementById('btn_' + componentId).classList.add('btn-danger');
+                            document.getElementById('btn_' + componentId).classList.add('btn-md');
+                            document.getElementById('btn_' + componentId).innerHTML = "Remove Component";
+                            
+                            console.log("finished adding course to calendar");
+                        }
+                        if (response == 'success-remove') {
+                            console.log('POST success component removed');
+                            document.getElementById('btn_' + componentId).classList.add('btn-success');
+                            document.getElementById('btn_' + componentId).classList.remove('btn-danger');
+                            document.getElementById('btn_' + componentId).innerHTML = "Add Component";
+                            
+                        }
+                    }
+                });
             }
             
             
@@ -371,6 +407,7 @@
                             <div class="row">
                                 <!--Basic Course Information-->
                                 <div class="col-md-4">
+                                    <label><font size="3">Section: &nbsp</font></label><a href="#"><%= courseObj.section %></a><br>
                                     <label><font size="3">Instructor: &nbsp</font></label><a href="#"><%= courseObj.instructor.name %></a><br>
                                     <label><font size="3">Term: &nbsp</label><%= courseObj.term %><br>
                                     <% if(courseObj.start_time != null){ %>
@@ -474,6 +511,99 @@
                                     </div>  
                                 </div>
                             </div>
+                            
+                            <div class="row">
+                                <div class="panel panel-default col-md-12">
+                                    <div class="panel-heading">
+                                        Course Information
+                                    </div>
+                                    <div class="panel-body" id="info">
+                                        <script>
+                                            function renderInfo(courseArr) {
+                                                var html = "";    
+                                                var course = courseArr[0];
+                                                
+                                                var overview = course.overview;
+                                                var attributes = course.attributes;
+                                                var requirements = course.requirements;
+                                                
+                                                // replace all escaped characters because ball is life
+                                                overview = (overview) ? overview.replace(/\./i, "") : "";
+                                                attributes = (attributes) ? attributes.replace(/\./i, "") : "";
+                                                requirements = (requirements) ? requirements.replace(/\./i, "") : "";
+                                                
+                                                html += "<p><b>Overview:</b> " + overview + "</p>";
+                                                html += "<p><b>Attributes:</b> " + attributes + "</p>";
+                                                html += "<p><b>Requirements:</b> " + requirements + "</p>";
+                                                
+                                                document.getElementById('info').innerHTML = html;
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Course Components -->
+                            <div class="row">
+                                <div class="panel panel-default col-md-12">
+                                    <div class="panel-heading">
+                                        Course Components
+                                    </div>
+                                    <div class="panel-body" id="components">
+                                        <ul class="list-group" id="component-list">
+                                            <script>
+                                                function renderCourseComponents(courseArr) {
+                                                    var html = "";
+                                                    var course = courseArr[0];
+                                                    
+                                                    // get current_components
+                                                    var current_components = { <%= user.current_components %> };
+                                                    
+                                                    if (course.course_components) {
+                                                        if (course.course_components.length == 0) {
+                                                            html = "None";
+                                                        }
+                                                        else {
+                                                            for (var i = 0; i < course.course_components.length; i++) {
+                                                                
+                                                                var section = course.course_components[i].section;
+                                                                var meeting_days = course.course_components[i].meeting_days;
+                                                                var start = course.course_components[i].start_time;
+                                                                var end = course.course_components[i].end_time;
+                                                                var room = course.course_components[i].room;
+                                                                var component = course.course_components[i].component;
+                                                                var componentId = course._id + ":" + section;
+                                                                
+                                                                var btnText = 'Add Component';
+                                                                var btnStyle = 'btn-success';
+                                                                // check if component is already selected
+                                                                if (current_components.hasOwnProperty(course._id) && current_components[course._id] == section) {
+                                                                    btnStyle = 'btn-danger';
+                                                                    btnText = 'Remove Component';
+                                                                }
+                                                                
+                                                                html += "<li class='list-group-item' style='display: inline-block; width: 100%;'>";
+                                                                html += "<p style='float: left;'>Section: " + section + " - " + component + "<br>";
+                                                                html += "Time: " + meeting_days + " " + start + " - " + end + "<br>";
+                                                                html += "Location: " + room + "</p>";
+                                                                html += "<button id='btn_" + componentId + "' class='btn btn-component " + btnStyle + " btn-md' onclick=\"addOrRemoveComponent(\'" + componentId + "\')\" style='float: right;'>" + btnText + "</button></li>";
+                                                                
+                                                            }
+                                                        }
+                                                    }
+                                                    else {
+                                                        html = "None";
+                                                    }
+                                                    
+                                                    document.getElementById("component-list").innerHTML = html;
+                                                }
+                                                
+                                            </script>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <!-- Maps Section -->
                             <div class="row">
                                 
@@ -483,8 +613,7 @@
                             
                             <!--Reviews Section-->
                             <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="panel panel-default col-md-10">
+                                <div class="panel panel-default col-md-12">
                                     <div class="panel-heading">
                                         Comments
                                     </div>
@@ -523,7 +652,6 @@
                                         </script>
                                     </div>
                                 </div>
-                                <div class="col-md-1"></div>
                             </div>
                         </div>
                     </div>			
