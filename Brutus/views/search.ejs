@@ -583,6 +583,10 @@
                         // get the course component data
                         
                         var componentSection;
+                        
+                        if (obj.components == undefined)
+                                obj.components = [];
+                        
                         // check current components for a component that matches
                         for (var j = 0; j < obj.components.length; j++) {
                             var split = obj.components[j].split(":");
