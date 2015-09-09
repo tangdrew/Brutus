@@ -93,6 +93,7 @@
                     type: 'POST',
                     data: {"query": "courses", "id" : id},
                     success: function(course) {
+                        renderInfo(course);
                         renderCourseComponents(course);
                         getReviews(course);
                     }
@@ -510,6 +511,37 @@
                                 </div>
                             </div>
                             
+                            <div class="row">
+                                <div class="panel panel-default col-md-12">
+                                    <div class="panel-heading">
+                                        Course Information
+                                    </div>
+                                    <div class="panel-body" id="info">
+                                        <script>
+                                            function renderInfo(courseArr) {
+                                                var html = "";    
+                                                var course = courseArr[0];
+                                                
+                                                var overview = course.overview;
+                                                var attributes = course.attributes;
+                                                var requirements = course.requirements;
+                                                
+                                                // replace all escaped characters because ball is life
+                                                overview = (overview) ? overview.replace(/\./i, "") : "";
+                                                attributes = (attributes) ? attributes.replace(/\./i, "") : "";
+                                                requirements = (requirements) ? requirements.replace(/\./i, "") : "";
+                                                
+                                                html += "<p><b>Overview:</b> " + overview + "</p>";
+                                                html += "<p><b>Attributes:</b> " + attributes + "</p>";
+                                                html += "<p><b>Requirements:</b> " + requirements + "</p>";
+                                                
+                                                document.getElementById('info').innerHTML = html;
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <!-- Course Components -->
                             <div class="row">
                                 <div class="panel panel-default col-md-12">
@@ -519,7 +551,7 @@
                                     <div class="panel-body" id="components">
                                         <ul class="list-group" id="component-list">
                                             <script>
-                                                function renderCourseComponents(courseArr, current_components) {
+                                                function renderCourseComponents(courseArr) {
                                                     var html = "";
                                                     var course = courseArr[0];
                                                     
