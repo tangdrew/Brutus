@@ -204,7 +204,7 @@
                             html += "<p>Section: " + (obj.courses[i].section ? obj.courses[i].section : '') + "<br>";
                             
                             //Class Number to enter into CAESAR to add course to shopping cart
-                            html += "Course Number: " + courses[i].class_num + "<br>";
+                            html += "Course Number: " + obj.courses[i].class_num + "<br>";
                             
                             if (obj.courses[i].meeting_days && obj.courses[i].start_time && obj.courses[i].end_time)
                                 html += "Time: " + obj.courses[i].meeting_days + " " + obj.courses[i].start_time + " - " + obj.courses[i].end_time + "</p>";
