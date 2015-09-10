@@ -208,7 +208,27 @@
                             html += "Course Number: " + obj.courses[i].class_num + "<br>";
                             
                             if (obj.courses[i].meeting_days && obj.courses[i].start_time && obj.courses[i].end_time)
-                                html += "Time: " + obj.courses[i].meeting_days + " " + obj.courses[i].start_time + " - " + obj.courses[i].end_time + "</p>";
+                            {
+                                morningStart = "AM"; 
+                                morningEnd = "AM";
+                                startHour = parseInt(obj.courses[i].start_time.substring(0,2));
+                                if(startHour > 12)
+                                {
+                                    startHour -= 12;
+                                    morningStart = "PM"; 
+                                }
+                                startTime = startHour + obj.courses[i].start_time.substring(2,5);
+                                
+                                endHour = parseInt(obj.courses[i].end_time.substring(0,2));
+                                
+                                if(endHour > 12)
+                                {
+                                    endHour -= 12;
+                                    morningEnd = "PM"; 
+                                }
+                                endTime = endHour + obj.courses[i].end_time.substring(2,5);
+                                html += "Time: " + obj.courses[i].meeting_days + " " + startTime +  morningStart + " - " + endTime + morningEnd + "</p>";
+                            }
                             else if (obj.courses[i].meeting_days)
                                 html += "Time: " + obj.courses[i].meeting_days + " " + 'TBA</p>';
                             else

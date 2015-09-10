@@ -344,7 +344,10 @@
                                                 building_name = matches[i].room.building_name;
                                                 room_name = matches[i].room.name;
                                             }
-                                            classTime = "";                                            
+                                            classTime = "";
+                                            morningStart = "AM"; 
+                                            morningEnd = "AM";
+                                                                                                                      
                                             if(matches[i].meeting_days == null)
                                             {
                                                 classTime = "TBA"
@@ -355,6 +358,7 @@
                                                 if(startHour > 12)
                                                 {
                                                     startHour -= 12;
+                                                    morningStart = "PM";                                                     
                                                 }
                                                 startTime = startHour + matches[i].start_time.substring(2,5);
                                                 
@@ -362,11 +366,12 @@
                                                 if(endHour > 12)
                                                 {
                                                     endHour -= 12;
+                                                    morningEnd = "PM";
                                                 }
                                                 endTime = endHour + matches[i].end_time.substring(2,5);
                                                 
                                                                                                 
-                                                classTime= matches[i].meeting_days + " " + startTime + " to " + endTime;
+                                                classTime= matches[i].meeting_days + " " + startTime + morningStart + " to " + endTime + morningEnd;
                                             }
                                             
                                             // check if user is already taking course
