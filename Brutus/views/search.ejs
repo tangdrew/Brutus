@@ -348,7 +348,7 @@
                                             var room_name = "";
                                             var ratingStr = "NA";
                                             if(matches[i].rating != ""){
-                                                ratingStr = matches[i].rating + "/5.0";
+                                                ratingStr = matches[i].rating.toFixed(2) + "/5.00";
                                             }
                                             if (matches[i].room)
                                             {
