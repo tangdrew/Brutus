@@ -98,7 +98,7 @@ router.post('/course', function(req, res, next) {
         });
     }
     else if(req.body.query == "reviews"){
-        courses.getReviews(req.body.id, req.body.course_id, function(reviews, e){
+        courses.getReviews(req.body.id, req.body.course_id, req.body.instructor, function(reviews, e){
             res.send(reviews);
         });
     }

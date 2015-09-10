@@ -104,10 +104,11 @@
             function getReviews(course){
                 var id = getQuerystringNameValue('course');
                 var course_id = course[0].course_id;
+                var instructor = course[0].instructor.name;
                 $.ajax( {
                     url: '/course',
                     type: 'POST',
-                    data: {"query": "reviews", "id" : id, "course_id": course_id},
+                    data: {"query": "reviews", "id" : id, "course_id": course_id, "instructor": instructor},
                     success: function(reviews) {
                         //render comments from array of reviews
                         renderReviews(reviews);

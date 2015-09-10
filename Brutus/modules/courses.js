@@ -72,8 +72,6 @@ exports.searchCourses = function(index,searchVal, subjectVal, termVal, orderVal,
         if (err) throw err;
         
         var matches = fuzzySearch(result, searchVal);
-        console.log(index);
-        console.log(matches.length);
         if (index != 'none')
         {
             index = parseInt(index);
@@ -257,8 +255,11 @@ exports.removeComponent = function(userEmail, course_id, callback) {
 
 
 //Returns all reviews about course_id
-exports.getReviews = function(id, course_id, callback){
-    reviews.find({"course_id": parseInt(course_id)}).sort({_id: -1}).toArray(function(err, reviews) { 
-        callback(reviews, err);
-    });
+exports.getReviews = function(id, course_id, instructor, callback){
+    if(instructor){
+        console.log(instructor);
+        reviews.find({"course_id": parseInt(course_id), "instructor": instructor}).sort({_id: -1}).toArray(function(err, reviews) { 
+            callback(reviews, err);
+        });
+    }
 }
