@@ -137,9 +137,7 @@
                     getCourses();
                 });
                 $("#sortBy").change(function() {
-                    index = 0;
-                    if (Cookies.get("initialRefresh") == "yes")
-                        $('#search').val('');
+                    index = 0
                     getCourses();
                 });
 			});
