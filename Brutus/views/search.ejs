@@ -50,11 +50,13 @@
                             console.log("success in courses");
                             console.log("flag:" + items.flag);
                             courseArray = items.courses;
-                            initialRefresh = false;                                              
+
                             if(items.flag != "end")
                             {
                                 createListings(courseArray);
-                            }                            
+                            }     
+                            
+                            Cookies.set("initialRefresh", "yes", {"expires" : 1})                       
                         }
                     });                    
                         
@@ -103,6 +105,7 @@
             $(window).unload(function() {
                 //Destroy cookies here
                 Cookies.remove("initialRefresh", { path: '/' });
+                
             });
             
             var initialRefresh = true;
@@ -111,9 +114,6 @@
                 console.log(Cookies.get("initialRefresh"));
                 if (!Cookies.get("initialRefresh")){
                     getTerms();
-
-                    // set cookie
-                    Cookies.set("initialRefresh", "yes", {"expires" : 1})
                 }
 
                 //Calls function while user types in the search input              
@@ -127,22 +127,22 @@
                 //Calls search function when filter dropdown values are changed
                 
                 $("#term").change(function() {
-                    $('#subject').val($('#subject').find('option:first').val());
-                    $('#subject').find('option:first').prop('selected', true);
-                    $('#subject').change();
-                    if (!Cookies.get("initialRefresh"))
+                    Cookies.set("term", $(this).find("option:selected").attr("id"));
+                    if (Cookies.get("initialRefresh") == "yes")
                         $('#search').val('');
                     getSubjects();
                 });
                 $("#subject").change(function() {
                     index = 0;
-                    if (!Cookies.get("initialRefresh"))
+                    Cookies.set("subject", $(this).find("option:selected").attr("id"));
+                    console.log("set cookie subject to: " + $(this).find("option:selected").attr("id"));
+                    if (Cookies.get("initialRefresh") == "yes")
                         $('#search').val('');
                     getCourses();
                 });
                 $("#sortBy").change(function() {
                     index = 0;
-                    if (!Cookies.get("initialRefresh"))
+                    if (Cookies.get("initialRefresh") == "yes")
                         $('#search').val('');
                     getCourses();
                 });
@@ -731,29 +731,52 @@
             
             for (var i = 0; i < termsArray.length; i++) {
                 if (i == 0) {
-                    html = html + "<option selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                    html = html + "<option id='" + i + "' selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
                 }
                 else {
-                    html = html + "<option value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
+                    html = html + "<option id='" + i + "' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";
                 }
                 
             }
             
             document.getElementById('term').innerHTML += html;
-            $('#term').val($('#term').find('option:first').val());
-            $('#term').find('option:first').prop('selected', true);
-            $('#term').change();
+            
+            if (Cookies.get("term") == undefined) {
+                console.log("cookie not set");
+                $('#term').val($('#term').find('option:first').val());
+                $('#term').find('option:first').prop('selected', true);
+                $('#term').change();
+            }
+            else {              
+                var id = Cookies.get("term");
+                $('#term #' + id).prop('selected', true);
+                $('#term').change();
+            }
+            
         }
         
         function createSubjects(subjectsArray) {
             var html;       // to be placed in the select listing
             for (var i = 0; i < subjectsArray.length; i++)
             {
-                    html = html + "<option value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
+                    html = html + "<option id='" + i + "' value='" + subjectsArray[i].symbol + "'>" + subjectsArray[i].symbol + " - " + subjectsArray[i].name + "</option>";
             }
 
             document.getElementById('subject').innerHTML += html;
-
+            
+            if (Cookies.get("term") == undefined) {
+                $('#subject').val($('#subject').find('option:first').val());
+                $('#subject').find('option:first').prop('selected', true);
+                $('#subject').change();    
+            }
+            else {
+                console.log("cookie set " + Cookies.get("subject"));
+                var id = Cookies.get("subject");
+                console.log(Cookies.get("subject"));
+                $("#subject #" + id).prop('selected', true);
+                $('#subject').change();
+            }
+        
         }
         
 	</script>
