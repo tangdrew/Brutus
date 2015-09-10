@@ -101,15 +101,21 @@
             }
 
             $(window).unload(function() {
-                //Destroy cookies here
+                //Destroy cookies every time the page is navigated away from
                 Cookies.remove("initialRefresh", { path: '/' });
-                
             });
             
             var initialRefresh = true;
             
 			$(document).ready(function(){
-                if (Cookies.get("initialRefresh") == undefined){
+                
+                // if page has been refreshed clear the subject and term cookies
+                if ($("#visit").val() == "") {
+                    Cookies.remove("term", { path: '/' });
+                    Cookies.remove("subject", { path: '/' });
+                }
+                
+                if (!Cookies.get("initialRefresh")){
                     getTerms();
                 }
 
@@ -140,6 +146,8 @@
                     index = 0
                     getCourses();
                 });
+                
+
 			});
             
             
@@ -157,9 +165,17 @@
                 }
             });     
             
+            function checkPageLoad() {
+                if (document.getElementById("visit").value == "") {
+                    document.getElementById("visit").value = "1";
+                }
+            }
+            
 		</script>
   </head>
-  <body class="search-body">
+  <body class="search-body" onload="checkPageLoad()">
+        
+        <input type="hidden" name="visit" id="visit" value="" />
         
         <!-- navbar -->
         <% include ../shared/_navbar %>
@@ -770,7 +786,7 @@
                 $("#subject #" + id).prop('selected', true);
                 $('#subject').change();
             }
-        
+            
         }
         
 	</script>
