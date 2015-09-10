@@ -37,10 +37,10 @@
                     var term = document.getElementById('term').value;
                     var sortBy = document.getElementById('sortBy').value;
                     if(document.getElementById('arrow-up').style.display == 'none'){
-                        var order = -1;
+                        var order = 1;
                     }
                     else{
-                        var order = 1;
+                        var order = -1;
                     }
                     $.ajax( {
                         url: '/search',
