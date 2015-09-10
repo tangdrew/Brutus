@@ -170,6 +170,7 @@ exports.checkEnrollment = function(userEmail, courseId, callback){
         {
             if(o.current_courses.indexOf(courseId) >= 0){
                 callback(true);
+                return;
             }
             callback(false);
         }	
