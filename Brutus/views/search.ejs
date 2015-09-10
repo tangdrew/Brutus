@@ -47,8 +47,6 @@
                         type: 'POST',
                         data: {"index" : index, "search" : search, "subject" : subject, "term" : term, "order": order, "sortBy": sortBy},
                         success: function(items) {
-                            console.log("success in courses");
-                            console.log("flag:" + items.flag);
                             courseArray = items.courses;
 
                             if(items.flag != "end")
@@ -111,7 +109,6 @@
             var initialRefresh = true;
             
 			$(document).ready(function(){
-                console.log(Cookies.get("initialRefresh"));
                 if (Cookies.get("initialRefresh") == undefined){
                     getTerms();
                 }
@@ -135,7 +132,6 @@
                 $("#subject").change(function() {
                     index = 0;
                     Cookies.set("subject", $(this).find("option:selected").attr("id"));
-                    console.log("set cookie subject to: " + $(this).find("option:selected").attr("id"));
                     if (Cookies.get("initialRefresh") == "yes")
                         $('#search').val('');
                     getCourses();
@@ -230,8 +226,6 @@
                                         
                                         e.cancelBubble = true;
                                         if (e.stopPropagation) e.stopPropagation();
-                                        
-                                        console.log($('#btn_id' + course_id).text());
                                         
                                         var query = "add-searchpage"
                                         if (document.getElementById('btn_' + course_id).innerHTML == "Remove Class") {
@@ -747,7 +741,6 @@
             document.getElementById('term').innerHTML += html;
             
             if (Cookies.get("term") == undefined) {
-                console.log("cookie not set");
                 $('#term').val($('#term').find('option:first').val());
                 $('#term').find('option:first').prop('selected', true);
                 $('#term').change();
@@ -775,9 +768,7 @@
                 $('#subject').change();    
             }
             else {
-                console.log("cookie set " + Cookies.get("subject"));
                 var id = Cookies.get("subject");
-                console.log(Cookies.get("subject"));
                 $("#subject #" + id).prop('selected', true);
                 $('#subject').change();
             }

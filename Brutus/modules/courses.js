@@ -169,7 +169,7 @@ exports.addReview = function(course, req, userEmail, callback){
                         }   
                     });
                 });
-                callback(e, o);
+                callback(e, o, current_courses);
             }
             else{
                 callback(e, o);

@@ -98,11 +98,12 @@ router.route('/')
                 console.log("all passed");
                 courses.getCourseByCourseId(course_id_unique, function(obj, e){
                     if(obj){
-                        courses.addReview(obj, req, req.session.user.email, function(e){
+                        courses.addReview(obj, req, req.session.user.email, function(e, o, current_courses){
                             if (e){
                                 console.log('Error');
                                 res.status(400).send(e);
                             }	else{
+                                req.session.user.current_courses = current_courses;
                                 res.render('reviews/index', { title: 'Review Classes', submitted: 'yes', user: req.session.user });
                             }
                         });
