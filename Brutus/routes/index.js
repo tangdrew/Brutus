@@ -274,7 +274,7 @@ router.post('/feedback', function(req, res)
 {
     var sendgrid = require('sendgrid')('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');
     sendgrid.send({
-        to      : 'yongpark2016@u.northwestern.edu',
+        to      : 'nubrutus@gmail.com',
         from    : 'feedback@brutus.com',
         subject : 'User Feedback from: ' + req.session.user.firstName + ' ' + req.session.user.lastName,
         text    :  req.body['feedbacks']   
