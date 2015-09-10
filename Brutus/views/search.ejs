@@ -49,7 +49,8 @@
                         success: function(items) {
                             console.log("success in courses");
                             console.log("flag:" + items.flag);
-                            courseArray = items.courses;                                              
+                            courseArray = items.courses;
+                            initialRefresh = false;                                              
                             if(items.flag != "end")
                             {
                                 createListings(courseArray);
@@ -99,9 +100,21 @@
                 window.location = link;
             }
 
+            $(window).unload(function() {
+                //Destroy cookies here
+                Cookies.remove("initialRefresh", { path: '/' });
+            });
+            
+            var initialRefresh = true;
+            
 			$(document).ready(function(){
-                console.log("calling get terms");
-                getTerms();
+                console.log(Cookies.get("initialRefresh"));
+                if (!Cookies.get("initialRefresh")){
+                    getTerms();
+
+                    // set cookie
+                    Cookies.set("initialRefresh", "yes", {"expires" : 1})
+                }
 
                 //Calls function while user types in the search input              
                 $('#search').keyup(function() {
@@ -112,21 +125,25 @@
                     }, 100 );
                 });
                 //Calls search function when filter dropdown values are changed
+                
                 $("#term").change(function() {
                     $('#subject').val($('#subject').find('option:first').val());
                     $('#subject').find('option:first').prop('selected', true);
                     $('#subject').change();
-                    $('#search').val('');
+                    if (!Cookies.get("initialRefresh"))
+                        $('#search').val('');
                     getSubjects();
                 });
                 $("#subject").change(function() {
                     index = 0;
-                    $('#search').val('');
+                    if (!Cookies.get("initialRefresh"))
+                        $('#search').val('');
                     getCourses();
                 });
                 $("#sortBy").change(function() {
                     index = 0;
-                    $('#search').val('');
+                    if (!Cookies.get("initialRefresh"))
+                        $('#search').val('');
                     getCourses();
                 });
 			});
@@ -527,15 +544,14 @@
         </div>
 	</body>
     
-    <script type="text/javascript">
-		$(document).ready(function() {
-            // add the select complete component
-            $(".subject-select").select2();
-            $(".term-select").select2(); 
-        });      
+    <script type="text/javascript">      
         
         //Sort arrows toggle
         $(document).ready(function() {
+            // add the select complete component
+            $(".subject-select").select2();
+            $(".term-select").select2(); 
+            
             $(".arrow-down").hide();
             $(".option-heading").click(function(){
                     $(this).next(".option-content").slideToggle(500);
