@@ -112,7 +112,7 @@
             
 			$(document).ready(function(){
                 console.log(Cookies.get("initialRefresh"));
-                if (!Cookies.get("initialRefresh")){
+                if (Cookies.get("initialRefresh") == undefined){
                     getTerms();
                 }
 
