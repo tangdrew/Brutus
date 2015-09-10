@@ -344,10 +344,29 @@
                                                 building_name = matches[i].room.building_name;
                                                 room_name = matches[i].room.name;
                                             }
-                                            classTime= matches[i].meeting_days + " " + matches[i].start_time + " to " + matches[i].end_time;
+                                            classTime = "";                                            
                                             if(matches[i].meeting_days == null)
                                             {
                                                 classTime = "TBA"
+                                            }
+                                            else
+                                            {
+                                                startHour = parseInt(matches[i].start_time.substring(0,2));
+                                                if(startHour > 12)
+                                                {
+                                                    startHour -= 12;
+                                                }
+                                                startTime = startHour + matches[i].start_time.substring(2,5);
+                                                
+                                                endHour = parseInt(matches[i].end_time.substring(0,2));
+                                                if(endHour > 12)
+                                                {
+                                                    endHour -= 12;
+                                                }
+                                                endTime = endHour + matches[i].end_time.substring(2,5);
+                                                
+                                                                                                
+                                                classTime= matches[i].meeting_days + " " + startTime + " to " + endTime;
                                             }
                                             
                                             // check if user is already taking course
