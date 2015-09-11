@@ -115,9 +115,9 @@
                     Cookies.remove("subject", { path: '/' });
                 }
                 
-                if (!Cookies.get("initialRefresh")){
-                    getTerms();
-                }
+
+                getTerms();
+
 
                 //Calls function while user types in the search input              
                 $('#search').keyup(function() {
