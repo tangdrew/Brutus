@@ -159,20 +159,24 @@
                 
                 e.cancelBubble = true;
                 if (e.stopPropagation) e.stopPropagation();
-                
-                console.log($('#btn_id' + course_id).text());
-                
+                                
                 var query = "add-searchpage"
                 if (document.getElementById('btn_' + course_id).innerHTML == "Remove Class") {
                     query = "remove-searchpage";
                 }
-                console.log(query);
                 
                 var selectedComponent = null;
                 // check for selected component
                 if (document.getElementById("component-list").innerHTML != 'None') {
-                    selectedComponent = $("input:radio[name=component]:checked").val();
-                    console.log(selectedComponent);
+                    
+                    if ($("input:radio[name=component]:checked").val() == undefined || $("input:radio[name=component]:checked").val() == "") {
+                        
+                        $('#error-msg').attr("hidden", false);
+                        return;
+                    }
+                    else {
+                        selectedComponent = $("input:radio[name=component]:checked").val();
+                    }
                 }
                 
                 $.ajax( {
@@ -188,14 +192,16 @@
                             document.getElementById('btn_' + course_id).classList.add('btn-md');
                             document.getElementById('btn_' + course_id).innerHTML = "Remove Class";
                             $("input:radio[name=component]").attr("disabled", true);
-                            console.log("finished adding course to calendar");
+                            $('#error-msg').attr("hidden", true);
                         }
                         if (response == 'success-remove') {
                             console.log('POST success class removed');
                             document.getElementById('btn_' + course_id).classList.add('btn-success');
                             document.getElementById('btn_' + course_id).classList.remove('btn-danger');
                             document.getElementById('btn_' + course_id).innerHTML = "Add Class";
+                            $('#error-msg').attr("hidden", true);
                             $("input:radio[name=component]").attr("disabled", false);
+                            
                         }
                     }
                 });
@@ -383,6 +389,7 @@
                                     <% } %>
                                     
                                     <div style="width: 100%; text-align: center;padding-top: 30px; margin-bottom: 40px">
+                                        <div id="error-msg" hidden="true" style="color: #ff4500">Please select a component!</div>
                                         <% if(enrolled == true){ %>
                                             <button id="btn_<%= courseObj._id %>" class="btn btn-danger btn-md" onclick="addOrRemoveCourse(<%= courseObj._id %>)">Remove Class</button>
                                         <% }else{%>
@@ -529,7 +536,7 @@
                                                                 var component = course.course_components[i].component;
                                                                 var componentId = course._id + ":" + section;
                                                                 
-                                                                html += "<li class='list-group-item' style='display: inline-block; width: 100%;'>";
+                                                                html += "<li class='list-group-item li-component' onclick='selectRadio(\"btn_" + componentId + "\")' style='display: inline-block; width: 100%;'>";
                                                                 html += "<p style='float: left;'>Section: " + section + " - " + component + "<br>";
                                                                 html += "Time: " + meeting_days + " " + start + " - " + end + "<br>";
                                                                 html += "Location: " + room + "</p>";
@@ -543,18 +550,19 @@
                                                     }
                                                     
                                                     document.getElementById("component-list").innerHTML = html;
-                                                    
-                                                    if (course.course_components && course.course_components.length > 0) {
-                                                        $("input:radio[name=component]:first").attr('checked', true);
-                                                    }
-                                                    
-                                                    // check if component is already selected
-                                                    if (current_components.hasOwnProperty(course._id) && current_components[course._id] == section) {
-                                                        btnStyle = 'btn-danger';
-                                                        btnText = 'Remove Component';
+
+                                                    if (current_components.hasOwnProperty(course._id)) {
+                                                        $("input:radio[name=component]").attr("disabled", true);
+                                                        
+                                                        radioId = "btn_" + course._id + ":" + current_components[course._id];
+                                                        document.getElementById(radioId).checked = true;
                                                     }
                                                 }
                                                 
+                                                function selectRadio(btnId) {
+                                                    if (document.getElementById(btnId).disabled == false)
+                                                        document.getElementById(btnId).checked = true;
+                                                }
                                             </script>
                                         </ul>
                                     </div>
@@ -605,7 +613,7 @@
                                                     }
                                                 }
                                                 
-                                            }
+                                            } 
                                         </script>
                                     </div>
                                 </div>
