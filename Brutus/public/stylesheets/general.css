@@ -237,3 +237,8 @@ body {
         background-image: none;
     }
 }
+
+.li-component:hover {
+    cursor: pointer;
+    background-color: #8b76ad;
+}

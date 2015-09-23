@@ -101,17 +101,23 @@
             }
 
             $(window).unload(function() {
-                //Destroy cookies here
+                //Destroy cookies every time the page is navigated away from
                 Cookies.remove("initialRefresh", { path: '/' });
-                
             });
             
             var initialRefresh = true;
             
 			$(document).ready(function(){
-                if (Cookies.get("initialRefresh") == undefined){
-                    getTerms();
+                
+                // if page has been refreshed clear the subject and term cookies
+                if ($("#visit").val() == "") {
+                    Cookies.remove("term", { path: '/' });
+                    Cookies.remove("subject", { path: '/' });
                 }
+                
+
+                getTerms();
+
 
                 //Calls function while user types in the search input              
                 $('#search').keyup(function() {
@@ -137,11 +143,11 @@
                     getCourses();
                 });
                 $("#sortBy").change(function() {
-                    index = 0;
-                    if (Cookies.get("initialRefresh") == "yes")
-                        $('#search').val('');
+                    index = 0
                     getCourses();
                 });
+                
+
 			});
             
             
@@ -159,9 +165,17 @@
                 }
             });     
             
+            function checkPageLoad() {
+                if (document.getElementById("visit").value == "") {
+                    document.getElementById("visit").value = "1";
+                }
+            }
+            
 		</script>
   </head>
-  <body class="search-body">
+  <body class="search-body" onload="checkPageLoad()">
+        
+        <input type="hidden" name="visit" id="visit" value="" />
         
         <!-- navbar -->
         <% include ../shared/_navbar %>
@@ -348,7 +362,7 @@
                                             var room_name = "";
                                             var ratingStr = "NA";
                                             if(matches[i].rating != ""){
-                                                ratingStr = matches[i].rating + "/5.0";
+                                                ratingStr = matches[i].rating.toFixed(2) + "/5.00";
                                             }
                                             if (matches[i].room)
                                             {
@@ -405,7 +419,7 @@
                                             var hasComponent = "false";
                                             
                                             if (matches[i].course_components && matches[i].course_components.length > 0)
-                                                componentsText = "Yes, click to add components";
+                                                componentsText = "<span style='color: #FF4500'>Yes, click to add components</span>";
                                             if (matches[i].requirements)
                                                 requiredText = matches[i].requirements;
                                                 
@@ -772,7 +786,7 @@
                 $("#subject #" + id).prop('selected', true);
                 $('#subject').change();
             }
-        
+            
         }
         
 	</script>
