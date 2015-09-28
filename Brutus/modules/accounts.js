@@ -79,7 +79,8 @@ exports.createAccount = function(data, callback)
                         "school": null,
                         "credits": 0,
                         "courses_taken": [],
-                        "current_courses": []
+                        "current_courses": [],
+                        "current_components": []
                     };
                     
                     accounts.insert(data, {safe: true}, callback);

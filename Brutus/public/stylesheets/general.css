@@ -23,6 +23,10 @@ body {
 
 /* make nav bar bigger */
 
+.navbar-nav {
+    z-index: 10000;
+}
+
 .navbar-brand,
 .navbar-nav li a {
     line-height: 80px;
