@@ -136,6 +136,10 @@ router.post('/course', function(req, res, next) {
         else
             res.send('null');
         });
+    }
+    else if (req.body.query = 'findComponents')
+    {
+        res.send(req.session.user.current_components);
     } 
 });
 

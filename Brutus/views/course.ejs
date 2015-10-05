@@ -515,48 +515,60 @@
                                         <ul class="list-group" id="component-list">
                                             <script>
                                                 function renderCourseComponents(courseArr) {
-                                                    var html = "";
-                                                    var course = courseArr[0];
                                                     
-                                                    // get current_components
-                                                    var current_components = { <%= user.current_components %> };
-                                                    
-                                                    if (course.course_components) {
-                                                        if (course.course_components.length == 0) {
-                                                            html = "None";
-                                                        }
-                                                        else {
-                                                            for (var i = 0; i < course.course_components.length; i++) {
-                                                                
-                                                                var section = course.course_components[i].section;
-                                                                var meeting_days = course.course_components[i].meeting_days;
-                                                                var start = course.course_components[i].start_time;
-                                                                var end = course.course_components[i].end_time;
-                                                                var room = course.course_components[i].room;
-                                                                var component = course.course_components[i].component;
-                                                                var componentId = course._id + ":" + section;
-                                                                
-                                                                html += "<li class='list-group-item li-component' onclick='selectRadio(\"btn_" + componentId + "\")' style='display: inline-block; width: 100%;'>";
-                                                                html += "<p style='float: left;'>Section: " + section + " - " + component + "<br>";
-                                                                html += "Time: " + meeting_days + " " + start + " - " + end + "<br>";
-                                                                html += "Location: " + room + "</p>";
-                                                                html += "<div id='radio-div'><br><input id='btn_" + componentId + "' style='float: right;' type='radio' name='component' value='" + componentId +"'></div></li>";
-                                                                
+                                                    $.ajax( {
+                                                        url: '/course',
+                                                        type: 'POST',
+                                                        data: {query: "findComponents"},
+                                                        success: function(current_components) {
+                                                            var html = "";
+                                                            var course = courseArr[0];
+                                                            
+                                                            // get current_components
+                                                            
+                                                            if (course.course_components) {
+                                                                if (course.course_components.length == 0) {
+                                                                    html = "None";
+                                                                }
+                                                                else {
+                                                                    for (var i = 0; i < course.course_components.length; i++) {
+                                                                        
+                                                                        var section = course.course_components[i].section;
+                                                                        var meeting_days = course.course_components[i].meeting_days;
+                                                                        var start = course.course_components[i].start_time;
+                                                                        var end = course.course_components[i].end_time;
+                                                                        var room = course.course_components[i].room;
+                                                                        var component = course.course_components[i].component;
+                                                                        var componentId = course._id + ":" + section;
+                                                                        
+                                                                        html += "<li class='list-group-item li-component' onclick='selectRadio(\"btn_" + componentId + "\")' style='display: inline-block; width: 100%;'>";
+                                                                        html += "<p style='float: left;'>Section: " + section + " - " + component + "<br>";
+                                                                        html += "Time: " + meeting_days + " " + start + " - " + end + "<br>";
+                                                                        html += "Location: " + room + "</p>";
+                                                                        html += "<div id='radio-div'><br><input id='btn_" + componentId + "' style='float: right;' type='radio' name='component' value='" + componentId +"'></div></li>";
+                                                                        
+                                                                    }
+                                                                }
                                                             }
+                                                            else {
+                                                                html = "None";
+                                                            }
+                                                            
+                                                            document.getElementById("component-list").innerHTML = html;
+                                                            
+                                                            // check if component is in current_component list
+                                                            for (var i = 0; i < current_components.length; i++)
+                                                            {
+                                                                if (current_components[i].split(":")[0] == course._id)
+                                                                {
+                                                                    $("input:radio[name=component]").attr("disabled", true);
+                                                                    
+                                                                    radioId = "btn_" + current_components[i];
+                                                                    document.getElementById(radioId).checked = true;
+                                                                }
+                                                            }      
                                                         }
-                                                    }
-                                                    else {
-                                                        html = "None";
-                                                    }
-                                                    
-                                                    document.getElementById("component-list").innerHTML = html;
-
-                                                    if (current_components.hasOwnProperty(course._id)) {
-                                                        $("input:radio[name=component]").attr("disabled", true);
-                                                        
-                                                        radioId = "btn_" + course._id + ":" + current_components[course._id];
-                                                        document.getElementById(radioId).checked = true;
-                                                    }
+                                                    });
                                                 }
                                                 
                                                 function selectRadio(btnId) {
