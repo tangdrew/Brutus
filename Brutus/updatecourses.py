@@ -106,7 +106,7 @@ for term_obj in terms_obj:
                     course['_id'] = course['id']
                     courses.append(course)
                     print "adding course " + course['title']
-                    #db.courses.save(course)
+                    db.courses.save(course)
                 else:
                     #If doesn't exist store new course term with null ratings
                     course['rating'] = ''
@@ -117,7 +117,7 @@ for term_obj in terms_obj:
                     course['_id'] = course['id']
                     courses.append(course)
                     print "adding course " + course['title']
-                    #db.courses.save(course)
+                    db.courses.save(course)
         
         #Write the subject_array to term collection
         #Save new term to term collection
