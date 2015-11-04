@@ -361,7 +361,8 @@
                                             var building_name = "";
                                             var room_name = "";
                                             var ratingStr = "NA";
-                                            if(matches[i].rating != ""){
+                                            if(matches[i].rating != "" & matches[i].rating != null){
+                                                console.log(matches[i]);
                                                 ratingStr = matches[i].rating.toFixed(2) + "/5.00";
                                             }
                                             if (matches[i].room)
@@ -741,7 +742,10 @@
         function createTerms(termsArray) {
             
             var html;       // to be placed in the select listing
-            
+            termsArray.sort(function(a, b) {
+                return parseFloat(b._id) - parseFloat(a._id);
+            });
+            console.log(termsArray);
             for (var i = 0; i < termsArray.length; i++) {
                 if (i == 0) {
                     html = html + "<option id='" + i + "' selected='selected' value='" + termsArray[i].name + "'>" + termsArray[i].name + "</option>";

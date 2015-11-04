@@ -17,7 +17,9 @@ router.route('/')
             res.redirect("/login");
         }
         else {
-            res.render('dashboard/index', {title: 'Dashboard', user: req.session.user})
+            dashboard.getUserGPA(req.session.user, function(gpa){
+                res.render('dashboard/index', {title: 'Dashboard', user: req.session.user, gpa: gpa});
+            });
         }
     })
     .post(function(req, res, next) {

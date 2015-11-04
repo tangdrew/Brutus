@@ -19,7 +19,7 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
     
 var accounts = db.collection('accounts');
 var courses = db.collection('courses');
-
+var reviews = db.collection('reviews');
 
 // return array of all the user's current courses  
 exports.getCurrentCourses = function(user, callback) {
@@ -41,4 +41,25 @@ exports.getCurrentCourses = function(user, callback) {
         }
     })
        
+}
+
+// return array of all reviews the user has submitted 
+exports.getUserGPA = function(user, callback) {
+    reviews.find({user_id: user.id}).toArray(function(e, o){
+        if(o){
+            var gpa = calcuateGPA(o);
+            callback(gpa);
+        }
+    });     
+}
+
+function calcuateGPA(reviews){
+    var sum = 0;
+    for(var i = 0; i < reviews.length; i++){
+        sum = sum + parseInt(reviews[i].grade);
+    }    
+    console.log(sum);
+    console.log(reviews.length);
+    var gpa = sum/reviews.length;
+    return gpa;
 }
