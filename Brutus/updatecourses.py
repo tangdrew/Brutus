@@ -12,7 +12,7 @@ term_ids = []
 courses = []
 new_term = []
 params = {
-    'key': '2IlpNqx4bxh6HfJn'
+    'key': '5rj9BxgGtNUslkbL'
 }
 
 # get all these terms
