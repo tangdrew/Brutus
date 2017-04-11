@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row input-row">
+        <div class="col-md-6 col-xs-12">
+            <input class="form-control" [formControl]="searchTerm" type="text" />
+        </div>
+        <div class="col-md-2 col-xs-12 select-container" style="height: 100px">
+            <select2 class="select2" style="height: 50px" [data]="termNames" (valueChanged)="changed($event, 'term')"></select2>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <select2 class="select2" [data]="subjectSymbols" (valueChanged)="changed($event, 'subject')"></select2>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <select2 class="select2" [data]="factors" (valueChanged)="changed($event, 'factor')"></select2>
+        </div>
+    </div>
+
+    <div *ngIf="courses.length == 0" style="text-align: center">
+      <h3>No courses fit search parameters.</h3>
+    </div>
+    <div *ngIf="courses.length > 0" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300"
+    (scrolled)="scrolledBottom()" style="height: 100%">
+      <course-listing  *ngFor="let course of courses" [course]="course"></course-listing>
+   </div>
+</div>

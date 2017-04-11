@@ -1,0 +1,32 @@
+a {
+    color: #FFD700;
+}
+
+label {
+    margin-right: 5px;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+div:hover {
+  cursor: pointer;
+  background-color: #8b76ad;
+}
+
+.align-right {
+    float: right;
+}
+
+.panel {
+    border: 2px solid #7d65a3;
+    border-radius: 0;
+    background-color: #634b89;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0px;
+}
+
+.red-font {
+    color: #FF4500;
+}

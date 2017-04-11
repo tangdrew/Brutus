@@ -1,3 +1,0 @@
-var majors_undergrad = [
-    
-]

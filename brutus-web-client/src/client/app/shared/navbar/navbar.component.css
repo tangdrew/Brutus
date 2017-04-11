@@ -1,0 +1,117 @@
+nav {
+    background-color: #6f5499;
+    border: none;
+    min-height: 40px;
+}
+
+/* make nav bar bigger */
+.navbar-nav {
+    z-index: 10000;
+}
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 80px;
+    height: 80px;
+    padding-top: 0;
+    font-size: 2.0em;
+    color: #ebebeb;
+}
+
+/* Navbar Brutus Brand */
+.brutus-brand {
+    font-size: 3.5em !important;
+    font-weight: 400;
+}
+
+/* Brutus Logo*/
+.brutus-logo {
+    height: 60px;
+    margin-top: 15px;
+}
+
+.navbar-heading {
+    font-size: 2em !important;
+    line-height: 90px !important;
+}
+
+.dropdown-heading {
+    font-size: 1em !important;
+    height: 40px !important;
+    line-height: 40px !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #6f5499;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #6f5499;
+}
+
+/* make navbar collapse sooner */
+@media (max-width: 991px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin: 7.5px -15px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .navbar-text {
+        float: none;
+        margin: 15px 0;
+    }
+    /* since 3.1.0 */
+    .navbar-collapse.collapse.in {
+        display: block!important;
+    }
+    .collapsing {
+        overflow: hidden!important;
+    }
+    .navbar-collapse.collapse.in { display: block!important; }
+
+    .navbar-nav .open .dropdown-menu {
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        -webkit-box-shadow: none;
+                box-shadow: none;
+    }
+    .navbar-nav .open .dropdown-menu > li > a,
+    .navbar-nav .open .dropdown-menu .dropdown-header {
+        padding: 5px 15px 5px 25px;
+    }
+    .navbar-nav .open .dropdown-menu > li > a {
+        line-height: 20px;
+    }
+    .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-nav .open .dropdown-menu > li > a:focus {
+        background-image: none;
+    }
+}
+
+.li-component:hover {
+    cursor: pointer;
+    background-color: #8b76ad;
+}

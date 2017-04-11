@@ -1,0 +1,38 @@
+<div class="panel panel-default" (click)="goToCourse(course)">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-8">
+                <a>{{course.subject + ' ' + course.catalog_num + ': ' + course.title}}</a>
+            </div>
+            <div class="col-xs-4">
+                <label class="align-right">{{course.term}}</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Instructor: </label><span>{{course.instructor.name}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Class Times: </label><span>{{course.meeting_days}} {{course.start_time}} to {{course.end_time}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Room: </label><span>{{course.room ? course.room.building_name + ' ' + course.room.name : 'NA'}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Additional Required Components: </label>
+                <span [ngClass]="{'red-font': (course.course_components.length > 0)}">{{course.course_components.length > 0 ? 'Yes, click to add component' : 'No'}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>Enrollment Requirements: </label><span>{{course.requirements ? course.requirements : 'None'}}</span>
+            </div>
+        </div>
+    </div>
+</div>

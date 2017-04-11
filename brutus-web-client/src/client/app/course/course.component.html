@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="hidden-sm col-md-2"></div>
+  <div class="panel panel-default col-sm-12 col-md-8">
+    <div class="panel-heading">
+      <h3>{{course.subject + ' ' + course.catalog_num + ': ' + course.title}}</h3>
+    </div>
+    <div class="panel-body" style="padding: 15px">
+      <div style="line-height: 20px">
+        <strong>Course:</strong> {{course.course_id}}<br>
+        <strong>Section:</strong> {{course.section}}<br>
+        <strong>Insructor:</strong> {{course.instructor ? course.instructor.name : 'NA'}}<br>
+        <strong>Term:</strong> {{course.term}}<br>
+        <strong>Class T</strong>imes: {{course.meeting_days + ' ' + course.start_time + ' to ' + course.end_time}}<br>
+        <strong>Room:</strong> {{course.room ? course.room.building_name + ' ' + course.room.name : 'NA'}}<br>
+        <strong>Seats:</strong> {{course.seats}}<br><br>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Course Information
+        </div>
+        <div class="panel-body">
+          <strong>Overview:</strong> {{course.overview}}<br><br>
+          <strong>Attributes:</strong> {{course.attributes}}<br><br>
+          <strong>Requirements:</strong> {{course.requirements}}<br><br>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Course Components
+        </div>
+        <div class="panel-body">
+          <div *ngIf="course.course_components">
+            None
+          </div>
+          <div *ngFor="let component of course.course_components">
+            {{component.meeting_days}}
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Comments
+        </div>
+        <div class="panel-body">
+          <div *ngIf="reviews.length === 0">
+            No comments yet
+          </div>
+          <div *ngFor="let review of reviews">
+            {{review.comment}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden-sm col-md-2"></div>
+</div>
