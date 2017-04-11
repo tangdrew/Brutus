@@ -7,7 +7,18 @@ declare var Auth0Lock: any;
 @Injectable()
 export class AuthService {
   // Configure Auth0
-  lock = new Auth0Lock('TqJtsgudxBIWinhXv6Sjf0Rz0jPrYIvn', 'popup.auth0.com', {});
+  lock = new Auth0Lock('TqJtsgudxBIWinhXv6Sjf0Rz0jPrYIvn', 'popup.auth0.com', {
+    theme: {
+      logo: '../../../assets/images/logo.gif',
+      foregroundColor: '#634b89',
+      primaryColor: '#634b89',
+    },
+    languageDictionary: {
+      title: "Brutus"
+    },
+    responseType: 'token',
+    redirectUrl: window.location.origin
+  });
 
   constructor() {
     // Add callback for lock `authenticated` event

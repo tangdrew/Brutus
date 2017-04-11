@@ -15,7 +15,7 @@ import { SearchModule } from './search/search.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, HttpModule, AppRoutingModule, 
+  imports: [BrowserModule, BrowserAnimationsModule, HttpModule, AppRoutingModule,
             AboutModule, CourseModule, DashboardModule,
             HomeModule, SearchModule, SharedModule.forRoot()],
   declarations: [AppComponent],
