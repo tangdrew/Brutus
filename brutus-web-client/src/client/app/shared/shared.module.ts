@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { AUTH_PROVIDERS }      from 'angular2-jwt';
+
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { NameListService } from './name-list/name-list.service';
+import { AuthService } from './auth/auth.service';
 import { CoursesService } from './courses/courses.service';
 import { ReviewsService } from './reviews/reviews.service';
 import { TermsService } from './terms/terms.service';
@@ -25,7 +28,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [NameListService, CoursesService, ReviewsService, TermsService]
+      providers: [NameListService, CoursesService, ReviewsService, TermsService, AuthService, AUTH_PROVIDERS]
     };
   }
 }
