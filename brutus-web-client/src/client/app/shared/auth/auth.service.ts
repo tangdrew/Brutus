@@ -1,6 +1,9 @@
 import { Injectable }      from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
 
+import { UsersService } from '../users/users.service';
+import { User } from '../users/user';
+
 // Avoid name not found warnings
 declare var Auth0Lock: any;
 
@@ -17,14 +20,34 @@ export class AuthService {
       title: "Brutus"
     },
     responseType: 'token',
-    redirectUrl: window.location.origin
+    redirectUrl: window.location.origin,
+    auth: {
+      params: {
+        scope: 'openid email user_metadata app_metadata picture'
+      }
+    }
   });
 
-  constructor() {
+  constructor(private usersService: UsersService) {
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult: any) => {
       localStorage.setItem('id_token', authResult.idToken);
       console.log(authResult);
+      this.usersService.getUser(authResult.idTokenPayload.sub)
+        .subscribe(
+          user => {
+            console.log('Welcome back ', user);
+          },
+          err => {
+            if(err.status == 404) {
+              console.log('sign up');
+              this.register(authResult.idTokenPayload);
+            }
+            else {
+              console.error(err);
+            }
+          }
+      )
     });
   }
 
@@ -42,5 +65,13 @@ export class AuthService {
   public logout() {
     // Remove token from localStorage
     localStorage.removeItem('id_token');
+  }
+
+  public register(idTokenPayload: any) {
+    this.usersService.createUser({
+      email: idTokenPayload.email,
+      auth0Id: idTokenPayload.sub,
+      courses: []
+    }).subscribe(user => console.log(user));
   }
 }

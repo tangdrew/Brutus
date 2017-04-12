@@ -5,32 +5,49 @@ import APIError from '../helpers/APIError';
 import Joi from 'joi';
 
 const UserSchema = new mongoose.Schema({
+  // email: {
+  //   type: String,
+  //   required: true,
+  //   lowercase: true,
+  //   match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+  // },
+  // gradYear: {
+  //   type: Number
+  // },
+  // majors: [String],
+  // minors: [String],
+  // coursesTaken: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Course'
+  // }],
+  // currentCourses: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Course'
+  // }],
+  // createdAt: {
+  //   type: Date,
+  //   default: Date.now
+  // },
+  // auth0Id: {
+  //   type: String,
+  // }
   email: {
     type: String,
     required: true,
     lowercase: true,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
-  gradYear: {
-    type: Number
+  auth0Id: {
+    type: String,
+    required: true
   },
-  majors: [String],
-  minors: [String],
-  coursesTaken: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
-  }],
-  currentCourses: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
-  }],
   createdAt: {
     type: Date,
     default: Date.now
   },
-  auth0Id: {
-    type: String,
-  }
+  courses: [{
+    type: mongoose.Schema.Types.Mixed
+  }]
 });
 
 /**
@@ -56,7 +73,8 @@ UserSchema.statics = {
    * @returns {Promise<User, APIError>}
    */
   get(id) {
-    return this.findById(id)
+    // return this.findById(id)
+    return this.findOne({'auth0Id': id})
       .exec()
       .then((user) => {
         if (user) {
@@ -112,25 +130,31 @@ export const UserValidation = {
   // POST /api/users
   createUser: {
     body: {
+      // email: Joi.string().required(),
+      // gradYear: Joi.number(),
+      // majors: Joi.any(),
+      // minors: Joi.any(),
+      // coursesTaken: Joi.any(),
+      // currentCourses: Joi.any(),
+      // auth0Id: Joi.string()
       email: Joi.string().required(),
-      gradYear: Joi.number(),
-      majors: Joi.any(),
-      minors: Joi.any(),
-      coursesTaken: Joi.any(),
-      currentCourses: Joi.any(),
-      auth0Id: Joi.string()
+      auth0Id: Joi.string().required(),
+      courses: Joi.any()
     }
   },
   // UPDATE /api/users/:userId
   updateUser: {
     body: {
+      // email: Joi.string().required(),
+      // gradYear: Joi.number(),
+      // majors: Joi.any(),
+      // minors: Joi.any(),
+      // coursesTaken: Joi.any(),
+      // currentCourses: Joi.any(),
+      // auth0Id: Joi.string()
       email: Joi.string().required(),
-      gradYear: Joi.number(),
-      majors: Joi.any(),
-      minors: Joi.any(),
-      coursesTaken: Joi.any(),
-      currentCourses: Joi.any(),
-      auth0Id: Joi.string()
+      auth0Id: Joi.string().required(),
+      courses: Joi.any()
     },
     params: {
       userId: Joi.string().hex().required()

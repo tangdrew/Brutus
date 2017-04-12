@@ -40,13 +40,16 @@ function get(req, res) {
  */
 function create(req, res, next) {
   const user = new User({
+    // email: req.body.email,
+    // gradYear: req.body.gradYear,
+    // majors: req.body.majors,
+    // minors: req.body.minors,
+    // coursesTaken: req.body.coursesTaken,
+    // currentCourses: req.body.currentCourses,
+    // auth0Id: req.body.auth0Id
     email: req.body.email,
-    gradYear: req.body.gradYear,
-    majors: req.body.majors,
-    minors: req.body.minors,
-    coursesTaken: req.body.coursesTaken,
-    currentCourses: req.body.currentCourses,
-    auth0Id: req.body.auth0Id
+    auth0Id: req.body.auth0Id,
+    courses: req.body.courses
   });
 
   user.save()
@@ -62,13 +65,16 @@ function create(req, res, next) {
  */
 function update(req, res, next) {
   const user = req.user;
-  user.email = req.body.email;
-  user.gradYear = req.body.gradYear;
-  user.majors = req.body.majors;
-  user.minors = req.body.minors;
-  user.coursesTaken = req.body.coursesTaken;
-  user.currentCourses = req.body.currentCourse;
-  user.auth0Id = req.body.auth0Id;
+  // user.email = req.body.email;
+  // user.gradYear = req.body.gradYear;
+  // user.majors = req.body.majors;
+  // user.minors = req.body.minors;
+  // user.coursesTaken = req.body.coursesTaken;
+  // user.currentCourses = req.body.currentCourse;
+  // user.auth0Id = req.body.auth0Id;
+  email: req.body.email;
+  auth0Id: req.body.auth0Id;
+  courses: req.body.courses;
 
   user.save()
     .then(savedUser => res.json(savedUser))
