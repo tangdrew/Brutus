@@ -5,14 +5,23 @@
       <h3>{{course.subject + ' ' + course.catalog_num + ': ' + course.title}}</h3>
     </div>
     <div class="panel-body" style="padding: 15px">
-      <div style="line-height: 20px">
-        <strong>Course:</strong> {{course.course_id}}<br>
-        <strong>Section:</strong> {{course.section}}<br>
-        <strong>Insructor:</strong> {{course.instructor ? course.instructor.name : 'NA'}}<br>
-        <strong>Term:</strong> {{course.term}}<br>
-        <strong>Class T</strong>imes: {{course.meeting_days + ' ' + course.start_time + ' to ' + course.end_time}}<br>
-        <strong>Room:</strong> {{course.room ? course.room.building_name + ' ' + course.room.name : 'NA'}}<br>
-        <strong>Seats:</strong> {{course.seats}}<br><br>
+      <div class="row">
+        <div class="col-xs-8" style="line-height: 20px">
+          <strong>Course:</strong> {{course.course_id}}<br>
+          <strong>Section:</strong> {{course.section}}<br>
+          <strong>Insructor:</strong> {{course.instructor ? course.instructor.name : 'NA'}}<br>
+          <strong>Term:</strong> {{course.term}}<br>
+          <strong>Class Times:</strong> {{course.meeting_days + ' ' + course.start_time + ' to ' + course.end_time}}<br>
+          <strong>Room:</strong> {{course.room ? course.room.building_name + ' ' + course.room.name : 'NA'}}<br>
+          <strong>Seats:</strong> {{course.seats}}<br><br>
+        </div>
+        <div class="col-xs-4">
+          <br><br>
+          <div *ngIf="auth.authenticated()">
+            <button *ngIf="!this.enrolled()" class="btn btn-success btn-md" (click)="addCourse()">Add Class</button>
+            <button *ngIf="this.enrolled()" class="btn btn-danger btn-md" (click)="removeCourse()">Remove Class</button>
+          </div>
+        </div>
       </div>
 
       <div class="panel panel-default">

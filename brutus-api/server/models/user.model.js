@@ -94,7 +94,6 @@ UserSchema.statics = {
     return this.findOne({'email': email})
       .exec()
       .then((user) => {
-        console.log(user);
         if (user) {
           return user;
         }
@@ -157,7 +156,7 @@ export const UserValidation = {
       courses: Joi.any()
     },
     params: {
-      userId: Joi.string().hex().required()
+      userId: Joi.string().required()
     }
   }
 };

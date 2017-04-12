@@ -72,10 +72,9 @@ function update(req, res, next) {
   // user.coursesTaken = req.body.coursesTaken;
   // user.currentCourses = req.body.currentCourse;
   // user.auth0Id = req.body.auth0Id;
-  email: req.body.email;
-  auth0Id: req.body.auth0Id;
-  courses: req.body.courses;
-
+  user.email = req.body.email;
+  user.auth0Id = req.body.auth0Id;
+  user.courses = req.body.courses;
   user.save()
     .then(savedUser => res.json(savedUser))
     .catch(e => next(e));

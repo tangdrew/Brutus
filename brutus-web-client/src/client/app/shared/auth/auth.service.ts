@@ -9,26 +9,28 @@ declare var Auth0Lock: any;
 
 @Injectable()
 export class AuthService {
-  // Configure Auth0
-  lock = new Auth0Lock('TqJtsgudxBIWinhXv6Sjf0Rz0jPrYIvn', 'popup.auth0.com', {
-    theme: {
-      logo: '../../../assets/images/logo.gif',
-      foregroundColor: '#634b89',
-      primaryColor: '#634b89',
-    },
-    languageDictionary: {
-      title: "Brutus"
-    },
-    responseType: 'token',
-    redirectUrl: window.location.origin,
-    auth: {
-      params: {
-        scope: 'openid email user_metadata app_metadata picture'
-      }
-    }
-  });
+  lock: any;
 
   constructor(private usersService: UsersService) {
+    // Configure Auth0
+    this.lock = new Auth0Lock('TqJtsgudxBIWinhXv6Sjf0Rz0jPrYIvn', 'popup.auth0.com', {
+      theme: {
+        logo: '../../../assets/images/logo.gif',
+        foregroundColor: '#634b89',
+        primaryColor: '#634b89',
+      },
+      languageDictionary: {
+        title: "Brutus"
+      },
+      responseType: 'token',
+      redirectUrl: window.location.origin,
+      auth: {
+        params: {
+          scope: 'openid email user_metadata app_metadata picture'
+        }
+      }
+    });
+
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult: any) => {
       localStorage.setItem('id_token', authResult.idToken);
@@ -37,11 +39,13 @@ export class AuthService {
         .subscribe(
           user => {
             console.log('Welcome back ', user);
+            localStorage.setItem('user', JSON.stringify(user));
           },
           err => {
             if(err.status == 404) {
               console.log('sign up');
-              this.register(authResult.idTokenPayload);
+              let user = this.register(authResult.idTokenPayload);
+              localStorage.setItem('user', JSON.stringify(user));
             }
             else {
               console.error(err);
@@ -65,6 +69,7 @@ export class AuthService {
   public logout() {
     // Remove token from localStorage
     localStorage.removeItem('id_token');
+    localStorage.removeItem('user');
   }
 
   public register(idTokenPayload: any) {
@@ -72,6 +77,12 @@ export class AuthService {
       email: idTokenPayload.email,
       auth0Id: idTokenPayload.sub,
       courses: []
-    }).subscribe(user => console.log(user));
+    }).subscribe(user => {
+      return user;
+    });
+  }
+
+  public getCurrentUser(): User {
+    return JSON.parse(localStorage.getItem('user'));
   }
 }

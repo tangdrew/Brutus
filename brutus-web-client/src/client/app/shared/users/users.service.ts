@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-// import 'rxjs/Rx';
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/throw';
 import * as Rx from "rxjs/Rx";
 
 
@@ -25,6 +22,12 @@ export class UsersService {
 
   createUser (data: any): Observable<User> {
     return this.http.post(this.usersUrl, data)
+                    .map(this.extractData)
+                    .catch(this.handleError);
+  }
+
+  updateUser (user: User): Observable<User> {
+    return this.http.put(this.usersUrl + '/' + user.auth0Id, user)
                     .map(this.extractData)
                     .catch(this.handleError);
   }
