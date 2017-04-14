@@ -2,3 +2,20 @@
   padding: 0px;
   line-height: 100%;
 }
+
+.panel-body {
+  background-color: white !important;
+}
+
+.course-list-item {
+    border: 1px solid #634b89 !important;
+    background-color: #fff;
+}
+
+a.list-group-item, button.list-group-item {
+    color: #634b89;
+}
+
+a:hover {
+  color: white;
+}
