@@ -1,3 +1,6 @@
+.select2 {
+  width: 100% !important; /* Changed */
+}
 .select2-container {
   border-radius: 0px !important;
   box-sizing: border-box;
@@ -11,7 +14,7 @@
     cursor: pointer;
     display: block;
     /*height: 28px;*/
-    height: 100% !important;
+    height: 100% !important; /* Changed */
     user-select: none;
     -webkit-user-select: none; }
     .select2-container .select2-selection--single .select2-selection__rendered {
