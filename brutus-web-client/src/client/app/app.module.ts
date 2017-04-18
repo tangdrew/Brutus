@@ -11,13 +11,14 @@ import { AboutModule } from './about/about.module';
 import { CourseModule } from './course/course.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { HomeModule } from './home/home.module';
+import { LoginModule } from './login/login.module';
 import { SearchModule } from './search/search.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   imports: [BrowserModule, BrowserAnimationsModule, HttpModule, AppRoutingModule,
             AboutModule, CourseModule, DashboardModule,
-            HomeModule, SearchModule, SharedModule.forRoot()],
+            HomeModule, LoginModule, SearchModule, SharedModule.forRoot()],
   declarations: [AppComponent],
   providers: [{
     provide: APP_BASE_HREF,

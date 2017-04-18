@@ -8,6 +8,7 @@ import { AUTH_PROVIDERS }      from 'angular2-jwt';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth-guard.service';
 import { CoursesService } from './courses/courses.service';
 import { ReviewsService } from './reviews/reviews.service';
 import { TermsService } from './terms/terms.service';
@@ -28,7 +29,7 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [CoursesService, ReviewsService, TermsService, UsersService,
-        AuthService, AUTH_PROVIDERS]
+        AuthService, AuthGuard, AUTH_PROVIDERS]
     };
   }
 }
