@@ -51,7 +51,14 @@ a.list-group-item, button.list-group-item {
     border: 1px solid #634b89 !important;
     /*border-left: 1px solid #634b89 !important;
     border-right: 1px solid #634b89 !important;*/
-    color: #634b89;
+}
+
+.white-text {
+  color: white !important;
+}
+
+.purple-text {
+  color: #634b89 !important;
 }
 
 /* remove border shadow on calendar panel */

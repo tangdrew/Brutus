@@ -14,11 +14,19 @@
         </div>
     </div>
 
-    <div *ngIf="courses.length == 0" style="text-align: center">
-      <h3>No courses fit search parameters.</h3>
-    </div>
-    <div *ngIf="courses.length > 0" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300"
-    (scrolled)="scrolledBottom()" style="height: 100%">
-      <course-listing  *ngFor="let course of courses" [course]="course"></course-listing>
+    <div class="col-md-8">
+      <div *ngIf="courses.length == 0" style="text-align: center">
+        <h3>No courses fit search parameters.</h3>
+      </div>
+      <div *ngIf="courses.length > 0" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300"
+      (scrolled)="scrolledBottom()" style="height: 100%">
+        <course-listing  *ngFor="let course of courses" [course]="course"
+        (courseEnter)="addToCalendar($event)" (courseLeave)="removeFromCalendar($event)">
+      </course-listing>
+     </div>
+   </div>
+
+   <div class="col-md-4 hidden-sm" style="position: fixed; top: 200px; right: 25px">
+     <calendar [courses]="currentUser.courses" [term]="term" [colorClass]="'white-text'"></calendar>
    </div>
 </div>

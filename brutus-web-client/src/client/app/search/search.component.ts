@@ -7,6 +7,8 @@ import { CoursesService } from '../shared/courses/courses.service';
 import { TermsService } from '../shared/terms/terms.service';
 import { Course } from '../shared/courses/course';
 import { Term } from '../shared/terms/term';
+import { AuthService } from '../shared/auth/auth.service';
+import { User } from '../shared/users/user';
 
 @Component({
   moduleId: module.id,
@@ -30,12 +32,14 @@ export class SearchComponent {
     selectedSubject: string;
     selectedFactor: string;
     skip: number;
+    currentUser: User;
 
-    constructor(private coursesService: CoursesService, private termsService: TermsService) {
+    constructor(private coursesService: CoursesService, private termsService: TermsService, private auth: AuthService) {
         this.selectedTermIndex = 0;
         this.factors = ['Sort By...', 'Grade', 'Rating', 'Time'];
         this.skip = 0;
         this.courses = [];
+        this.currentUser = new User();
     }
 
     ngOnInit() {
@@ -45,6 +49,11 @@ export class SearchComponent {
             this.termNames = this.terms.map(function(item) {
                 return item['name'];
             });
+
+            //Term for the calendar
+            this.term = terms[this.selectedTermIndex];
+            this.currentUser = this.auth.getCurrentUser();
+
             this.selectedTerm = terms[this.selectedTermIndex].name;
             this.subjects = terms[this.selectedTermIndex].subjects;
             this.subjectSymbols = this.subjects.map(function(item) {
@@ -107,9 +116,7 @@ export class SearchComponent {
     }
 
     private scrolledBottom(): void {
-      console.log('bottom');
       this.skip = this.skip + 10;
-      console.log(this.skip);
       if(this.searchTerm.value) {
         this.search(this.searchTerm.value)
           .subscribe(courses => {
@@ -128,10 +135,16 @@ export class SearchComponent {
         });
       }
     }
-    private onScroll(event: any): void {
-      // console.log(event);
-      // console.log(window.screenY);
-      // console.log(document);
-      // console.log(window.screenTop);
+
+    private addToCalendar(hoverCourse: Course) {
+      // Hack to get Angular change detection on array
+      this.currentUser.courses.push(hoverCourse);
+      this.currentUser.courses = this.currentUser.courses.slice();
+    }
+
+    private removeFromCalendar(hoverCourse: Course) {
+      // Hack to get Angular change detection on array
+      this.currentUser.courses.pop();
+      this.currentUser.courses = this.currentUser.courses.slice();
     }
 }

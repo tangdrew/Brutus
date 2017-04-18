@@ -5,7 +5,7 @@ export class User {
     email: string;
     auth0Id: string;
     createdAt: string;
-    courses: [Course];
+    courses: Course[];
 
     constructor(){}
 }
