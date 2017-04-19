@@ -1,5 +1,6 @@
 input {
     border-radius: 0px;
+    width: 100% !important;
 }
 
 div {
@@ -47,4 +48,12 @@ span {
 
 .input-row {
   height: 100%;
+}
+
+.input-group {
+  width: 100% !important;
+}
+
+.input-group-btn {
+  width: 10px !important;
 }
