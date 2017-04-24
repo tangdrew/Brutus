@@ -1,0 +1,13 @@
+<div>
+  <div class="scroller scroller-left"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+  <div class="scroller scroller-right"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+  <div class="wrapper">
+    <ul class="nav nav-pills list" id="myTab">
+        <li *ngFor="let t of terms" [class.active]="t == term">
+          <a onclick="return false" (click)="this.activeTerm.emit(t)">
+            {{t.name}}
+          </a>
+        </li>
+    </ul>
+  </div>
+</div>

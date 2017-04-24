@@ -7,6 +7,7 @@ import { AUTH_PROVIDERS }      from 'angular2-jwt';
 
 import { NavbarComponent } from './navbar/navbar.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { TermTabsComponent } from './terms/term-tabs.component';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth-guard.service';
 import { CoursesService } from './courses/courses.service';
@@ -20,8 +21,8 @@ import { UsersService } from './users/users.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [NavbarComponent, CalendarComponent],
-  exports: [NavbarComponent, CalendarComponent,
+  declarations: [NavbarComponent, CalendarComponent, TermTabsComponent],
+  exports: [NavbarComponent, CalendarComponent, TermTabsComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {

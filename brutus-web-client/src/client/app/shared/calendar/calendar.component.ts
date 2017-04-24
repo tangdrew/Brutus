@@ -20,45 +20,49 @@ export class CalendarComponent {
     startDate: any
     events: any
 
-    constructor() {}
+    constructor() {
+      this.term = new Term();
+    }
 
     ngOnChanges(changes: SimpleChanges) {
-      //Once the data is loaded the first time, initialize the calendar
-      if(this.courses && !changes.courses.previousValue) {
-        this.startDate = moment(this.term.start_date).startOf('week');
-        this.events = this.mapCoursesToCalEvents(this.courses);
-        this.initializeCalendar(this.courses);
-      }
+      if(changes.courses) {
+        //Once the data is loaded the first time, initialize the calendar
+        if(this.courses && !changes.courses.previousValue) {
+          this.startDate = moment(this.term.start_date).startOf('week');
+          this.events = this.mapCoursesToCalEvents(this.courses);
+          this.initializeCalendar(this.courses);
+        }
 
-      //When courses list changes after first load, add or remove course from calendar
-      if(changes.courses.previousValue) {
-        //Remove any old events
-        let newEvents = this.mapCoursesToCalEvents(changes.courses.currentValue);
-        this.events.forEach((event: any) => {
-          let flag = true;
-          newEvents.forEach((newEvent) => {
-            if(event.id == newEvent.id) {
-              flag = false;
-            }
-          });
-          if(flag) {
-            $('#calendar').fullCalendar('removeEvents', event.id);
-          }
-        })
-        //Add any new events
-        newEvents.forEach((newEvent) => {
-          let flag = true;
+        //When courses list changes after first load, add or remove course from calendar
+        if(changes.courses.previousValue) {
+          //Remove any old events
+          let newEvents = this.mapCoursesToCalEvents(changes.courses.currentValue);
           this.events.forEach((event: any) => {
-            if(newEvent.id == event.id) {
-              flag = false;
+            let flag = true;
+            newEvents.forEach((newEvent) => {
+              if(event.id == newEvent.id) {
+                flag = false;
+              }
+            });
+            if(flag) {
+              $('#calendar').fullCalendar('removeEvents', event.id);
             }
-          });
-          if(flag) {
-            $('#calendar').fullCalendar('renderEvent', newEvent);
-          }
-        })
+          })
+          //Add any new events
+          newEvents.forEach((newEvent) => {
+            let flag = true;
+            this.events.forEach((event: any) => {
+              if(newEvent.id == event.id) {
+                flag = false;
+              }
+            });
+            if(flag) {
+              $('#calendar').fullCalendar('renderEvent', newEvent);
+            }
+          })
 
-        this.events = newEvents;
+          this.events = newEvents;
+        }
       }
     }
 

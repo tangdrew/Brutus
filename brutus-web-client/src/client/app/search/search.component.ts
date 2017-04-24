@@ -33,6 +33,7 @@ export class SearchComponent {
     selectedFactor: string;
     skip: number;
     currentUser: User;
+    calendarCourses: Course[];
 
     constructor(private coursesService: CoursesService, private termsService: TermsService, private auth: AuthService) {
         this.selectedTermIndex = 0;
@@ -53,6 +54,7 @@ export class SearchComponent {
             //Term for the calendar
             this.term = terms[this.selectedTermIndex];
             this.currentUser = this.auth.getCurrentUser();
+            this.calendarCourses = this.currentUser.courses.filter(course => course.term == this.term.name);
 
             this.selectedTerm = terms[this.selectedTermIndex].name;
             this.subjects = terms[this.selectedTermIndex].subjects;
@@ -96,6 +98,8 @@ export class SearchComponent {
                 break;
             case "term":
                 this.selectedTerm = e.value;
+                this.term = this.terms.find(term => term.name == this.selectedTerm);
+                this.calendarCourses = this.currentUser.courses.filter(course => course.term == this.term.name);
                 break;
             default:
                 console.error("Invalid filter")
@@ -138,13 +142,13 @@ export class SearchComponent {
 
     private addToCalendar(hoverCourse: Course) {
       // Hack to get Angular change detection on array
-      this.currentUser.courses.push(hoverCourse);
-      this.currentUser.courses = this.currentUser.courses.slice();
+      this.calendarCourses.push(hoverCourse);
+      this.calendarCourses = this.calendarCourses.slice();
     }
 
     private removeFromCalendar(hoverCourse: Course) {
       // Hack to get Angular change detection on array
-      this.currentUser.courses.pop();
-      this.currentUser.courses = this.currentUser.courses.slice();
+      this.calendarCourses.pop();
+      this.calendarCourses = this.calendarCourses.slice();
     }
 }

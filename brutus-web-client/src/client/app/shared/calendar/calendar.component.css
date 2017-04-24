@@ -72,3 +72,14 @@ a.list-group-item, button.list-group-item {
     padding-left: 0px;
     padding-right: 0px;
 }
+
+.term-header {
+  padding: 5px;
+  background-color: #634b89;
+  text-align: center;
+}
+
+.term-header-text {
+  font-size: 20px;
+  color: white;
+}

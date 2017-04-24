@@ -5,32 +5,40 @@
       <h3>Dashboard</h3>
     </div>
     <div class="panel-body">
-      <!-- <div class="row"> -->
-        <div class="col-sm-8">
+      <div class="col-sm-8">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+            My Weekly Schedule
+          </div>
+
+          <!-- <ul class="nav nav-pills">
+            <li [class.active]="t == term" *ngFor="let t of terms">
+              <a onclick="return false" (click)="activeTerm(t)">
+                {{t.name}}
+              </a>
+            </li>
+          </ul> -->
+          <term-tabs [terms]="terms" [term]="term" (activeTerm)="activateTerm($event)"></term-tabs>
+
+          <div class="panel-body" style="padding: 0px">
+            <calendar [courses]="courses" [term]="term" [colorClass]="'purple-text'"></calendar>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
         <div class="panel panel-default">
-            <div class="panel-heading">
-              My Weekly Schedule
-            </div>
-            <div class="panel-body" style="padding: 0px">
-              <calendar [courses]="courses" [term]="term" [colorClass]="'purple-text'"></calendar>
+          <div class="panel-heading">
+            Current Courses
+          </div>
+          <div class="panel-body" style="padding: 0px">
+            <div *ngFor="let course of courses">
+              <a class="course-list-item list-group-item" [routerLink]="'/course/' + course._id">
+                {{course.subject + ' ' + course.catalog_num + ' ' + course.title}}
+              </a>
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Current Courses
-            </div>
-            <div class="panel-body" style="padding: 0px">
-              <div *ngFor="let course of courses">
-                <a class="course-list-item list-group-item" [routerLink]="'/course/' + course._id">
-                  {{course.subject + ' ' + course.catalog_num + ' ' + course.title}}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      <!-- </div> -->
+      </div>
     </div>
   </div>
   <div class="hidden-sm col-md-1"></div>
