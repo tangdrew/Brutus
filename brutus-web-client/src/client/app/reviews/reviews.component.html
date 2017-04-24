@@ -1,0 +1,22 @@
+<div class="container">
+  <div *ngIf="showTextarea">
+    <textarea [(ngModel)]="text" class="form-control" style="height: 500px"></textarea>
+    <button class="btn btn-default" (click)="parse()">Print</button>
+  </div>
+  <div *ngIf="!showTextarea">
+    <h2>Confirm Reviews</h2>
+    <div *ngFor="let key of keys">
+      <b>{{key}}</b>
+      <div *ngIf="transcriptReviews[key].length == 1">
+        {{transcriptReviews[key][0].title}}
+      </div>
+      <div *ngIf="transcriptReviews[key].length > 1">
+        <ul>
+          <li *ngFor="let course of transcriptReviews[key]">
+            {{course.title}} with {{course.instructor.name}} at {{course.start_time}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
