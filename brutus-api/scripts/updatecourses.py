@@ -37,12 +37,12 @@ if response == '':
 #Get list of terms in the db
 terms = db.terms.find()
 term_array = []
-# for i in terms:
-#     term_array.append(i['_id'])
-#     print i['_id']
+for i in terms:
+    term_array.append(i['_id'])
+    print i['_id']
 
-#Just get last 2 terms
-term_array = [4630]
+#Get terms since Fall 2013
+# term_array = [4470]
 
 max_term = max(term_array)
 
@@ -52,12 +52,12 @@ print terms_obj
 
 # look through terms to get the course data for each term
 for term_obj in terms_obj:
-    #Only add data for terms not in db
-    if term_obj['id'] > max_term:
-        
+    #Only add data for terms not in db except try to update most recent term
+    if term_obj['id'] >= max_term:
+
         # get all the subjects for the term
         params['term'] = term_obj['id']
-    
+
         response = ''
         count = 0
         while response == '' and count < 20:
@@ -66,24 +66,24 @@ for term_obj in terms_obj:
             except:
                 print "REQUEST TO SUBJECTS TIMED OUT"
             count += 1
-    
+
         if response == '':
             print "HTTP REQUEST FAILED"
             raise SystemExit
-    
+
         termsubjects_obj = response.json()
         print "TERM ID " + str(term_obj['id'])
-    
+
         # grab the classes
         subject_array = []
         for termsubject in termsubjects_obj:
             # time.sleep(5)
-            #Add subject to subject_array to save to term collection at end 
+            #Add subject to subject_array to save to term collection at end
             subject_array.append(termsubject)
             print "IN SUBJECT " + termsubject['symbol']
-    
+
             params['subject'] = termsubject['symbol']
-    
+
             response = ''
             count = 0
             while response == '' and count < 20:
@@ -92,18 +92,19 @@ for term_obj in terms_obj:
                 except:
                     print "REQUEST TO COURSES FAILED"
                 count += 1
-    
+
             if response == '':
                 print "HTTP REQUEST FAILED"
                 raise SystemExit
-    
-    
-            
+
+
+
             courses_obj = response.json()
             for course in courses_obj:
-               
+
                 # results = db.courses.find_one({'title': course['title'], 'instructor.name': course['instructor']['name']})
-                # #Checks if course exists
+                result = db.courses.find_one({'id': course['id']})
+                #Checks if course exists
                 # if results != None:
                 #     #If already exists store new course term with same ratings
                 #     course['rating'] = results['rating']
@@ -127,12 +128,21 @@ for term_obj in terms_obj:
                 #     print "adding course " + course['title']
                 #     db.courses.save(course)
 
-                print "adding course " + course['title']
-                db.courses.save(course)
-        
+                if result == None: #If doesn't exist, add it
+                    print "adding course " + course['title']
+                    db.courses.save(course)
+                else: #If course exists, update the course with api data
+                    print "updating course " + course['title']
+                    for key, value in course.items():
+                        result[key] = value
+                    db.courses.save(result)
+
+                # print "adding course " + course['title']
+                # db.courses.save(course)
+
         #Write the subject_array to term collection
         #Save new term to term collection
         term_obj['subjects'] = subject_array
         term_obj['_id'] = term_obj['id']
         db.terms.save(term_obj)
-print "done" 
+print "done"
