@@ -3,7 +3,7 @@ export class Course {
     title: string;
     term: string;
     school: string;
-    intstructor: Object;
+    instructor: Object;
     subject: string;
     catalog_num: string;
     section: string;

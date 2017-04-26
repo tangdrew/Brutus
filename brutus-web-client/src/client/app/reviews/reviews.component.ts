@@ -9,6 +9,7 @@ import { Term } from '../shared/terms/term';
 import { UsersService } from '../shared/users/users.service';
 import { User } from '../shared/users/user';
 import { AuthService } from '../shared/auth/auth.service';
+import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
 @Component({
     moduleId: module.id,
@@ -18,70 +19,97 @@ import { AuthService } from '../shared/auth/auth.service';
 })
 
 export class ReviewsComponent {
-  text: string
-  terms: Term[]
-  termNames: string[]
-  subjects: string[]
-  currentUser: User
-  transcriptReviews: any = {}
-  showTextarea: boolean = true
-  keys: string[] = []
+  term: Term
+  courses: Course[];
+  terms: Term[];
+  termNames: string[];
+  subjects: any[];
+  subjectSymbols: string[];
+  selectedTermIndex: number;
+  selectedTerm: string;
+  selectedSubject: string;
+  skip: number;
+  currentUser: User;
+  review: Review
+  course: Course
+  courseNames: string[]
+  number: number
 
-  constructor(private coursesService: CoursesService, private termsService: TermsService, private auth: AuthService) {}
+  constructor(private coursesService: CoursesService, private termsService: TermsService,
+      private reviewsService: ReviewsService, private auth: AuthService) {
+      this.selectedTermIndex = 0;
+      this.skip = 0;
+      this.courses = [];
+      this.currentUser = new User();
+      this.review = new Review();
+      this.number = 0;
+  }
 
   ngOnInit() {
-    this.currentUser = this.auth.getCurrentUser();
-    this.termsService.getTerms()
-      .subscribe(terms => {
-        this.terms = terms;
-        this.termNames = terms.map(term => {
-          return term.name;
-        });
-        this.subjects = this.terms[0].subjects.map((subject: any) => {
-          return subject.symbol;
-        });
-      })
+      //Admin stuff
+      this.termsService.getTerms().subscribe((terms) => {
+          this.terms = terms;
+          this.termNames = this.terms.map(function(item) {
+              return item['name'];
+          });
+
+          //Term for the calendar
+          this.term = terms[this.selectedTermIndex];
+          this.currentUser = this.auth.getCurrentUser();
+
+          this.selectedTerm = terms[this.selectedTermIndex].name;
+          this.subjects = terms[this.selectedTermIndex].subjects;
+          this.subjectSymbols = this.subjects.map(function(item) {
+              return item['symbol'];
+          });
+          this.selectedSubject = this.subjects[0].symbol;
+      });
   }
 
-  parse(): void {
-    let startFlag = false;
-    let textArray = this.text.split("\n");
-    let term = '';
-    textArray.forEach((line: string) => {
-      //Ignore everything until "Beginning of Undergraduate Record"
-      if(line.includes("Beginning of Undergraduate Record")) {
-        startFlag = true;
+  private changed(e: any, filter: string): void {
+      switch (filter) {
+          case "subject":
+              this.selectedSubject = e.value;
+              break;
+          case "term":
+              this.selectedTerm = e.value;
+              this.term = this.terms.find(term => term.name == this.selectedTerm);
+              break;
+          case "course":
+              let n = e.value.lastIndexOf(':');
+              let result = e.value.substring(n + 1);
+              this.course = this.courses.find(course => course.course_id == result);
+              console.log(this.course);
+              break;
+          default:
+              console.error("Invalid filter")
+              return
       }
 
-      if(startFlag) {
-        let lineArray: string[] = line.replace(/\s+/g, ' ').split(" ");
-        //Parse out term
-        if(this.termNames.includes(lineArray[1]+" "+lineArray[2])){
-          // console.log(line);
-          term = lineArray[1]+" "+lineArray[2];
-        }
-        //Parse courses
-        if(this.subjects.includes(lineArray[0])) {
-          // console.log(line);
-          let subject = lineArray[0];
-          let courseName = lineArray[0] + " " + lineArray[1];
-          this.coursesService.getCourses({
-            term: term,
-            subject: subject,
-            searchTerm: courseName
-          }).subscribe(courses => {
-            if(courses.length > 0) {
-              this.transcriptReviews[courseName] = courses;
-              this.keys.push(courseName);
-            }
-            else {
-              console.error("Could not find course.");
-            }
-          })
-        }
-      }
-    });
-    console.log("Transcript Reviews: ", this.transcriptReviews);
-    this.showTextarea = false;
+      this.skip = 0;
+
+      this.coursesService.getCourses({
+          skip: this.skip,
+          limit: 100,
+          term: this.selectedTerm,
+          subject: this.selectedSubject
+      }).subscribe(courses => {
+        this.courses = courses;
+        this.courseNames = this.courses.map((course: Course) => course.catalog_num + ": " + course.title + " with "
+          + course.instructor.name + " ID:" + course.course_id)
+      });
   }
+
+  submitReview() {
+    this.review.course = this.course._id;
+    this.review.course_id = this.course.course_id;
+    this.review.instructor = this.course.instructor.name;
+    this.review.user = this.currentUser._id;
+    for(let i = 0; i < this.number; i++) {
+      this.reviewsService.createReview(this.review).subscribe(res => {
+        console.log(res);
+      });
+    }
+  }
+
 }

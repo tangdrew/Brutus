@@ -9,6 +9,12 @@ const ReviewSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course'
   },
+  course_id: {
+    type: Number
+  },
+  instructor: {
+    type: String
+  },
   user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
@@ -80,10 +86,16 @@ ReviewSchema.statics = {
   },
 
   getCourseScore(course, factor) {
+    //match by id
     return this.aggregate()
       .match({course: course._id})
       .group({_id: "$course", avgScore: {$avg: `$${factor}`}})
       .exec();
+    //match by course_id and instructor
+    // return this.aggregate()
+    //   .match({course_id: course.course_id, instructor: course.instructor.name})
+    //   .group({_id: "$course", avgScore: {$avg: `$${factor}`}})
+    //   .exec();
   }
 };
 
@@ -101,6 +113,8 @@ export const ReviewValidation = {
     body: {
       course: Joi.string().required(),
       user: Joi.string().required(),
+      course_id: Joi.number(),
+      instructor: Joi.string(),
       rating: Joi.number(),
       grade: Joi.number(),
       time: Joi.number(),
@@ -111,6 +125,8 @@ export const ReviewValidation = {
   updateReview: {
     body: {
       course: Joi.string().required(),
+      course_id: Joi.number(),
+      instructor: Joi.string(),
       user: Joi.string().required(),
       rating: Joi.number(),
       grade: Joi.number(),

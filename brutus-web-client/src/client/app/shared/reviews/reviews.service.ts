@@ -26,26 +26,13 @@ export class ReviewsService {
                     .map(this.extractData)
                     .catch(this.handleError);
   }
-  // getCourses(params: any): Observable<Course[]> {
-  //   let options = new URLSearchParams();
-  //   console.log("Params: ", params);
-  //   options.set('term', params.term);
-  //   if(params.factor != 'Sort By...') {
-  //     options.set('factor', params.factor);
-  //   }
-  //   options.set('subject', params.subject);
-  //   options.set('searchTerm', params.searchTerm);
-  //   options.set('skip', params.skip);
-  //   return this.http.get(this.coursesUrl, {search: options})
-  //                   .map(this.extractData)
-  //                   .catch(this.handleError);
-  // }
-  //
-  // createCourse (data: any): Observable<Course> {
-  //   return this.http.post(this.coursesUrl, data)
-  //                   .map((course) => console.log(course))
-  //                   .catch(this.handleError);
-  // }
+
+  createReview (data: any): Observable<Review> {
+    console.log('REVIEW: ', data);
+    return this.http.post(this.reviewsUrl, data)
+                    .map((course) => console.log(course))
+                    .catch(this.handleError);
+  }
 
   private extractData(res: Response) {
     let body = res.json();
