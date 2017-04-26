@@ -8,6 +8,11 @@
                 <label class="align-right">{{course.term}}</label>
             </div>
         </div>
+        <div *ngIf="course.score" class="row">
+          <div class="col-xs-12">
+              <label>Score: </label><span>{{course.score}}</span>
+          </div>
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <label>Instructor: </label><span>{{course.instructor.name}}</span>

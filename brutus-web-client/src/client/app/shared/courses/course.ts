@@ -21,6 +21,7 @@ export class Course {
     component: string;
     class_num: number;
     course_id: number;
+    score: number;
     course_descriptions: [Object];
     course_component: [Object];
 

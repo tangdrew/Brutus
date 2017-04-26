@@ -115,6 +115,7 @@ export class SearchComponent {
             subject: this.selectedSubject,
             factor: this.selectedFactor
         }).subscribe(courses => {
+          courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
           this.courses = courses;
         });
     }

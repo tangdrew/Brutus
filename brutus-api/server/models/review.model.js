@@ -87,15 +87,15 @@ ReviewSchema.statics = {
 
   getCourseScore(course, factor) {
     //match by id
-    return this.aggregate()
-      .match({course: course._id})
-      .group({_id: "$course", avgScore: {$avg: `$${factor}`}})
-      .exec();
-    //match by course_id and instructor
     // return this.aggregate()
-    //   .match({course_id: course.course_id, instructor: course.instructor.name})
+    //   .match({course: course._id})
     //   .group({_id: "$course", avgScore: {$avg: `$${factor}`}})
     //   .exec();
+    //match by course_id and instructor
+    return this.aggregate()
+      .match({course_id: course.course_id, instructor: course.instructor.name})
+      .group({_id: "$course_id", avgScore: {$avg: `$${factor}`}})
+      .exec();
   }
 };
 
