@@ -41,14 +41,11 @@ for i in terms:
     term_array.append(i['_id'])
     print i['_id']
 
-#Get terms since Fall 2013
-# term_array = [4470]
-
+#Get terms since Fall 2013 or since most recent term in db
+term_array.append(4470)
 max_term = max(term_array)
 
 terms_obj = response.json()
-print "term obj"
-print terms_obj
 
 # look through terms to get the course data for each term
 for term_obj in terms_obj:
