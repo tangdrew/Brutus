@@ -17,13 +17,16 @@ export class CourseListingComponent {
     @Output() courseLeave = new EventEmitter<Course>()
     currentUser: User
 
-    constructor(private router: Router, private el: ElementRef) { }
+    constructor(private auth: AuthService, private router: Router, private el: ElementRef) { }
 
-    enrolled(): boolean {
-      let courseIds = this.currentUser.courses.map(course => {
-        return course._id;
-      });
-      return courseIds.includes(this.course._id);
+    addCourse(e: Event) {
+      this.auth.addCourse(this.course);
+      e.stopPropagation();
+    }
+
+    removeCourse(e: Event) {
+      this.auth.removeCourse(this.course);
+      e.stopPropagation();
     }
 
     goToCourse(course: Course) {

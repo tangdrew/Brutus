@@ -99,10 +99,7 @@ export class SearchComponent {
             case "term":
                 this.selectedTerm = e.value;
                 this.term = this.terms.find(term => term.name == this.selectedTerm);
-                this.calendarCourses = this.currentUser.courses.filter(course => {
-                  console.log('hi');
-                  course.term == this.term.name
-                });
+                this.calendarCourses = this.currentUser.courses.filter(course => course.term == this.term.name);
                 break;
             default:
                 console.error("Invalid filter")
@@ -118,11 +115,10 @@ export class SearchComponent {
             subject: this.selectedSubject,
             factor: this.selectedFactor
         }).subscribe(courses => {
-          courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
-          // if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
-          //   courses = courses.filter(course => course.score); //Removes courses without factor rating
-          //   courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
-          // }
+          if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
+            courses = courses.filter(course => course.score); //Removes courses without factor rating
+            courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
+          }
           this.courses = courses;
         });
     }
@@ -143,7 +139,6 @@ export class SearchComponent {
             factor: this.selectedFactor
         }).subscribe(courses => {
           this.courses = this.courses.concat(courses);
-          console.log('courses', this.courses);
         });
       }
     }

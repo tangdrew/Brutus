@@ -39,11 +39,10 @@
                 <label>Enrollment Requirements: </label><span>{{course.requirements ? course.requirements : 'None'}}</span>
             </div>
             <div class="col-xs-4">
-              button
-              <!-- <div *ngIf="auth.authenticated()">
-                <button *ngIf="!this.enrolled()" class="btn btn-success btn-md" (click)="addCourse()">Add Class</button>
-                <button *ngIf="this.enrolled()" class="btn btn-danger btn-md" (click)="removeCourse()">Remove Class</button>
-              </div> -->
+              <div *ngIf="auth.authenticated()" style="float: right">
+                <button *ngIf="!auth.enrolled(course)" class="btn btn-success btn-md" (click)="addCourse($event)" onclick="return false;">Add Class</button>
+                <button *ngIf="auth.enrolled(course)" class="btn btn-danger btn-md" (click)="removeCourse($event)" onclick="return false;">Remove Class</button>
+              </div>
             </div>
         </div>
     </div>
