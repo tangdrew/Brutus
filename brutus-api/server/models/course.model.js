@@ -186,7 +186,7 @@ CourseSchema.index({
 CourseSchema.statics = {
   /**
    * Get course
-   * @param {ObjectId} id - The objectId of course.
+   * @param {ObjectId} id - The API id of the course
    * @returns {Promise<Course, APIError>}
    */
   get(id) {

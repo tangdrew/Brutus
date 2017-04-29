@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   public enrolled(course: Course): boolean {
-    let courseIds = this.user.courses.map(course => {
+    let courseIds = this.getCurrentUser().courses.map(course => {
       return course._id;
     });
     return courseIds.includes(course._id);

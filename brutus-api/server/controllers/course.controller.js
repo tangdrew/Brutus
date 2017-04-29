@@ -116,7 +116,7 @@ function list(req, res, next) {
           .then((courseScores) => {
             let scoredCourses = [];
             courseScores.forEach((courseScore) => {
-              let temp = courses.find(course => String(course._id) === String(courseScore.id));
+              let temp = courses.find(course => String(course.id) === String(courseScore.id));
               temp.score = courseScore.avgScore;
               scoredCourses.push(temp);
             });
@@ -135,7 +135,7 @@ function list(req, res, next) {
           .then((courseScores) => {
             let scoredCourses = [];
             courseScores.forEach((courseScore) => {
-              let temp = courses.find(course => String(course._id) === String(courseScore.id));
+              let temp = courses.find(course => String(course.id) === String(courseScore.id));
               temp.score = courseScore.avgScore;
               scoredCourses.push(temp);
             });
@@ -187,7 +187,7 @@ function courseScores(courses, factor) {
           return Review.getCourseScore(course, factor.toLowerCase())
               .then((courseScore) => {
                 if(courseScore.length > 0) {
-                  courseScore[0].id = course._id;
+                  courseScore[0].id = course.id;
                   courseScores = courseScores.concat(courseScore[0]);
                 }
               });
