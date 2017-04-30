@@ -1,0 +1,61 @@
+<!-- <div class="container">
+  <div *ngIf="showTextarea">
+    <textarea [(ngModel)]="text" class="form-control" style="height: 500px"></textarea>
+    <button class="btn btn-default" (click)="parse()">Print</button>
+  </div>
+  <div *ngIf="!showTextarea">
+    <h2>Confirm Reviews</h2>
+    <div *ngFor="let key of keys">
+      <b>{{key}}</b>
+      <div *ngIf="transcriptReviews[key].length == 1">
+        {{transcriptReviews[key][0].title}}
+      </div>
+      <div *ngIf="transcriptReviews[key].length > 1">
+        <ul>
+          <li *ngFor="let course of transcriptReviews[key]">
+            {{course.title}} with {{course.instructor.name}} at {{course.start_time}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container">
+  <h1>Admin Reviews</h1>
+  <div class="row" style="margin-top: 15px; margin-bottom: 15px">
+      <div class="col-md-6 col-xs-6 select-container">
+          <select2 class="select2" style="height: 50px" [data]="termNames" (valueChanged)="changed($event, 'term')"></select2>
+      </div>
+      <div class="col-md-6 col-xs-6">
+          <select2 class="select2" [data]="subjectSymbols" (valueChanged)="changed($event, 'subject')"></select2>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <select2 class="select2" [data]="courseNames" (valueChanged)="changed($event, 'course')"></select2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4">
+      <label>Rating</label>
+      <input class="form-control" [(ngModel)]="review.rating" />
+    </div>
+    <div class="col-xs-4">
+      <label>Time</label>
+      <input class="form-control" [(ngModel)]="review.time" />
+    </div>
+    <div class="col-xs-4">
+      <label>Number</label>
+      <input class="form-control" [(ngModel)]="number" />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-success" style="width: 100%; margin-top: 25px" (click)="submitReview()">Submit</button>
+    </div>
+  </div>
+</div>

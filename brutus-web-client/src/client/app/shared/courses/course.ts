@@ -1,9 +1,10 @@
 export class Course {
-    _id: number;
+    _id: number; //unique to each machine
+    id: number; //id assigned by course api, use this one to be consistent across machines
     title: string;
     term: string;
     school: string;
-    intstructor: Object;
+    instructor: Object;
     subject: string;
     catalog_num: string;
     section: string;
@@ -21,6 +22,7 @@ export class Course {
     component: string;
     class_num: number;
     course_id: number;
+    score: number;
     course_descriptions: [Object];
     course_component: [Object];
 

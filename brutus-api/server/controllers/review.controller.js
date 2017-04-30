@@ -29,6 +29,8 @@ function get(req, res) {
 function create(req, res, next) {
   const review = new Review({
     course: req.body.course,
+    course_id: req.body.course_id,
+    instructor: req.body.instructor,
     user: req.body.user,
     rating: req.body.rating,
     grade: req.body.grade,
@@ -50,6 +52,8 @@ function create(req, res, next) {
 function update(req, res, next) {
   const review = req.review;
   review.course = req.body.course;
+  review.course_id = req.body.course_id;
+  review.instructor = req.body.instructor;
   review.user = req.body.user;
   review.rating = req.body.rating;
   review.grade = req.body.grade;

@@ -106,7 +106,7 @@ function update(req, res, next) {
  * @returns {Course[]}
  */
 function list(req, res, next) {
-  req.query.limit = req.query.limit === undefined ? 10 : Number(req.query.limit);
+  req.query.limit = req.query.limit === undefined ? 50 : Number(req.query.limit);
   req.query.skip = req.query.skip === undefined ? 0 :  Number(req.query.skip);
   const { skip, limit, searchTerm, subject, term } = req.query;
   if(searchTerm) {
@@ -116,7 +116,7 @@ function list(req, res, next) {
           .then((courseScores) => {
             let scoredCourses = [];
             courseScores.forEach((courseScore) => {
-              let temp = courses.find(course => String(course._id) === String(courseScore._id));
+              let temp = courses.find(course => String(course.id) === String(courseScore.id));
               temp.score = courseScore.avgScore;
               scoredCourses.push(temp);
             });
@@ -131,11 +131,13 @@ function list(req, res, next) {
   else {
     Course.list({ skip, limit, subject, term }).then(courses => {
       if(req.query.factor) {
+        console.log('========');
+        console.log(req.query.factor);
         courseScores(courses, req.query.factor)
           .then((courseScores) => {
             let scoredCourses = [];
             courseScores.forEach((courseScore) => {
-              let temp = courses.find(course => String(course._id) === String(courseScore._id));
+              let temp = courses.find(course => String(course.id) === String(courseScore.id));
               temp.score = courseScore.avgScore;
               scoredCourses.push(temp);
             });
@@ -186,8 +188,11 @@ function courseScores(courses, factor) {
         if(course) {
           return Review.getCourseScore(course, factor.toLowerCase())
               .then((courseScore) => {
-                if(courseScore) {
-                  courseScores = courseScores.concat(courseScore);
+                if(courseScore.length > 0) {
+                  courseScore[0].id = course.id;
+                  console.log("==========");
+                  console.log(courseScore[0]);
+                  courseScores = courseScores.concat(courseScore[0]);
                 }
               });
         }

@@ -115,6 +115,10 @@ export class SearchComponent {
             subject: this.selectedSubject,
             factor: this.selectedFactor
         }).subscribe(courses => {
+          if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
+            courses = courses.filter(course => course.score != null); //Removes courses without factor rating
+            courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
+          }
           this.courses = courses;
         });
     }
@@ -135,7 +139,6 @@ export class SearchComponent {
             factor: this.selectedFactor
         }).subscribe(courses => {
           this.courses = this.courses.concat(courses);
-          console.log('courses', this.courses);
         });
       }
     }

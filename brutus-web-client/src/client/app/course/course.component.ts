@@ -37,36 +37,11 @@ export class CourseComponent {
                 this.components = course.course_component;
                 console.log(course);
 
-                this.reviewsService.getReviews({course: this.course._id}).subscribe(reviews => {
+                this.reviewsService.getReviews({course: this.course.id}).subscribe(reviews => {
                   console.log(reviews);
                   this.reviews = reviews;
                 });
             });
     }
 
-    enrolled(): boolean {
-      let courseIds = this.currentUser.courses.map(course => {
-        return course._id;
-      });
-      return courseIds.includes(this.course._id);
-    }
-
-    addCourse() {
-      // let currentUser = this.auth.getCurrentUser();
-      this.currentUser.courses.push(this.course);
-      this.usersService.updateUser(this.currentUser)
-        .subscribe(user => {
-          console.log('updated user: ', user);
-          localStorage.setItem('user', JSON.stringify(this.currentUser));
-        });
-    }
-
-    removeCourse() {
-      this.currentUser.courses = this.currentUser.courses.filter(course => course._id != this.course._id);
-      this.usersService.updateUser(this.currentUser)
-        .subscribe(user => {
-          console.log('updated user: ', user);
-          localStorage.setItem('user', JSON.stringify(this.currentUser));
-        });
-    }
 }

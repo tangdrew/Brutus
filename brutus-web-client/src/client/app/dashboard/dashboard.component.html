@@ -10,16 +10,7 @@
           <div class="panel-heading">
             My Weekly Schedule
           </div>
-
-          <!-- <ul class="nav nav-pills">
-            <li [class.active]="t == term" *ngFor="let t of terms">
-              <a onclick="return false" (click)="activeTerm(t)">
-                {{t.name}}
-              </a>
-            </li>
-          </ul> -->
           <term-tabs [terms]="terms" [term]="term" (activeTerm)="activateTerm($event)"></term-tabs>
-
           <div class="panel-body" style="padding: 0px">
             <calendar [courses]="courses" [term]="term" [colorClass]="'purple-text'"></calendar>
           </div>
@@ -32,7 +23,7 @@
           </div>
           <div class="panel-body" style="padding: 0px">
             <div *ngFor="let course of courses">
-              <a class="course-list-item list-group-item" [routerLink]="'/course/' + course._id">
+              <a class="course-list-item list-group-item" [routerLink]="'/course/' + course.id">
                 {{course.subject + ' ' + course.catalog_num + ' ' + course.title}}
               </a>
             </div>

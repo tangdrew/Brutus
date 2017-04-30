@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+
 import { User } from '../shared/users/user';
 import { UsersService } from '../shared/users/users.service';
 import { AuthService } from '../shared/auth/auth.service';
@@ -50,9 +52,11 @@ export class LoginComponent {
           err => {
             if(err.status == 404) {
               console.log('sign up');
-              let user = this.register(authResult.idTokenPayload);
-              localStorage.setItem('user', JSON.stringify(user));
-              this.router.navigate(['/']);
+              let user = this.register(authResult.idTokenPayload)
+                .subscribe((newUser: User) => {
+                  localStorage.setItem('user', JSON.stringify(newUser));
+                  this.router.navigate(['/']);
+                });;
             }
             else {
               console.error(err);
@@ -68,13 +72,11 @@ export class LoginComponent {
     }
   }
 
-  public register(idTokenPayload: any) {
-    this.usersService.createUser({
+  public register(idTokenPayload: any): Observable<User> {
+    return this.usersService.createUser({
       email: idTokenPayload.email,
       auth0Id: idTokenPayload.sub,
       courses: []
-    }).subscribe((user: User) => {
-      return user;
     });
   }
 

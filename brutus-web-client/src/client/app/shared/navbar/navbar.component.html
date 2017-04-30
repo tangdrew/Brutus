@@ -18,7 +18,7 @@
                     <a *ngIf="auth.authenticated()" [routerLink]="['/dashboard']">Dashboard</a>
                 </li>
                 <li>
-                    <a *ngIf="auth.authenticated()" [routerLink]="['/review']">Submit Reviews</a>
+                    <a *ngIf="auth.authenticated()" [routerLink]="['/reviews']">Submit Reviews</a>
                 </li>
                 <li>
                   <a *ngIf="!auth.authenticated()" [routerLink]="['/login']">Login</a>

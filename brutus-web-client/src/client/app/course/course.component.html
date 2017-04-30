@@ -18,8 +18,8 @@
         <div class="col-xs-4">
           <br><br>
           <div *ngIf="auth.authenticated()">
-            <button *ngIf="!this.enrolled()" class="btn btn-success btn-md" (click)="addCourse()">Add Class</button>
-            <button *ngIf="this.enrolled()" class="btn btn-danger btn-md" (click)="removeCourse()">Remove Class</button>
+            <button *ngIf="!auth.enrolled(course)" class="btn btn-success btn-md" (click)="auth.addCourse(course)">Add Class</button>
+            <button *ngIf="auth.enrolled(course)" class="btn btn-danger btn-md" (click)="auth.removeCourse(course)">Remove Class</button>
           </div>
         </div>
       </div>

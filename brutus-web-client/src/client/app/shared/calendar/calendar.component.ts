@@ -124,11 +124,11 @@ export class CalendarComponent {
       let date = this.startDate.format('YYYY-MM-DD');
       let newDate = moment(date).add(daysAhead, 'd');
       return {
-        id: course._id,
+        id: course.id,
         title: course.title,
         start: newDate.format('YYYY-MM-DD') + 'T' + course.start_time,
         end: newDate.format('YYYY-MM-DD') + 'T' + course.end_time,
-        url: '/course/' + course._id
+        url: '/course/' + course.id
       }
     }
 }

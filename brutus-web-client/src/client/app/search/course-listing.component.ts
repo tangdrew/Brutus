@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Course } from '../shared/courses/course';
+import { AuthService } from '../shared/auth/auth.service';
+import { User } from '../shared/users/user';
 
 @Component({
     moduleId: module.id,
@@ -10,17 +12,25 @@ import { Course } from '../shared/courses/course';
 })
 
 export class CourseListingComponent {
-    @Input() course: Course;
-    @Output() courseEnter = new EventEmitter<Course>();
-    @Output() courseLeave = new EventEmitter<Course>();
+    @Input() course: Course
+    @Output() courseEnter = new EventEmitter<Course>()
+    @Output() courseLeave = new EventEmitter<Course>()
+    currentUser: User
 
-    constructor(private router: Router, private el: ElementRef) { }
+    constructor(private auth: AuthService, private router: Router, private el: ElementRef) { }
 
-    /**
-     * Go to course page
-     */
+    addCourse(e: Event) {
+      this.auth.addCourse(this.course);
+      e.stopPropagation();
+    }
+
+    removeCourse(e: Event) {
+      this.auth.removeCourse(this.course);
+      e.stopPropagation();
+    }
+
     goToCourse(course: Course) {
-        this.router.navigate(['/course', course._id]);
+        this.router.navigate(['/course', course.id]);
     }
 
     @HostListener('mouseenter') onMouseEnter() {

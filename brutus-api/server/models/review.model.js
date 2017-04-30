@@ -6,8 +6,15 @@ import Joi from 'joi';
 
 const ReviewSchema = new mongoose.Schema({
   course: {
-      type: mongoose.Schema.Types.ObjectId,
+      // type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: 'Course'
+  },
+  course_id: {
+    type: Number
+  },
+  instructor: {
+    type: String
   },
   user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -80,9 +87,16 @@ ReviewSchema.statics = {
   },
 
   getCourseScore(course, factor) {
+    //match by id
+    // return this.aggregate()
+    //   .match({course: course._id})
+    //   .group({_id: "$course", avgScore: {$avg: `$${factor}`}})
+    //   .exec();
+    //match by course_id and instructor
+    console.log('GET COURSE SCORES');
     return this.aggregate()
-      .match({course: course._id})
-      .group({_id: "$course", avgScore: {$avg: `$${factor}`}})
+      .match({course_id: course.course_id, instructor: course.instructor.name})
+      .group({_id: "$course_id", avgScore: {$avg: `$${factor}`}})
       .exec();
   }
 };
@@ -99,8 +113,10 @@ export const ReviewValidation = {
   // POST /api/reviews
   createReview: {
     body: {
-      course: Joi.string().required(),
+      course: Joi.number().required(),
       user: Joi.string().required(),
+      course_id: Joi.number(),
+      instructor: Joi.string(),
       rating: Joi.number(),
       grade: Joi.number(),
       time: Joi.number(),
@@ -110,7 +126,9 @@ export const ReviewValidation = {
   // UPDATE /api/reviews/:reviewId
   updateReview: {
     body: {
-      course: Joi.string().required(),
+      course: Joi.number().required(),
+      course_id: Joi.number(),
+      instructor: Joi.string(),
       user: Joi.string().required(),
       rating: Joi.number(),
       grade: Joi.number(),

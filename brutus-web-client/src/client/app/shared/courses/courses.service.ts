@@ -29,6 +29,7 @@ export class CoursesService {
     options.set('subject', params.subject);
     options.set('searchTerm', params.searchTerm);
     options.set('skip', params.skip);
+    options.set('limit', params.limit);
     return this.http.get(this.coursesUrl, {search: options})
                     .map(this.extractData)
                     .catch(this.handleError);

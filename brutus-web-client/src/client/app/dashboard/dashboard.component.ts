@@ -29,6 +29,8 @@ export class DashboardComponent {
       this.termsService.getTerms()
         .subscribe(terms => {
           this.term = terms[0];
+          console.log('term: ', this.term.name);
+          console.log(this.currentUser.courses);
           this.courses = this.currentUser.courses.filter(course => course.term == this.term.name);
           this.terms = terms.filter(term => {
             return this.currentUser.courses.map(course => course.term).includes(term.name);
