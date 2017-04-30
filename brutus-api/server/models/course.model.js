@@ -186,11 +186,12 @@ CourseSchema.index({
 CourseSchema.statics = {
   /**
    * Get course
-   * @param {ObjectId} id - The API id of the course
+   * @param {number} id - The API id of the course
    * @returns {Promise<Course, APIError>}
    */
   get(id) {
-    return this.findById(id)
+    // return this.findById(id)
+    return this.findOne({'id': id})
       .exec()
       .then((course) => {
         if (course) {
@@ -209,8 +210,6 @@ CourseSchema.statics = {
    * @returns {Promise<Course[]>}
    */
   list({ skip, limit, subject, term} = {}) {
-      console.log('==========LIST========');
-      console.log({ skip, limit, subject, term});
       if(subject == 'ANY') {
         return this.find()
           .where({ term: term })

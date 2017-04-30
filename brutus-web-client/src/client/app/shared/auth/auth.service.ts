@@ -37,9 +37,9 @@ export class AuthService {
 
   public enrolled(course: Course): boolean {
     let courseIds = this.getCurrentUser().courses.map(course => {
-      return course._id;
+      return course.id;
     });
-    return courseIds.includes(course._id);
+    return courseIds.includes(course.id);
   }
 
   public addCourse(course: Course) {
@@ -53,7 +53,7 @@ export class AuthService {
   }
 
   public removeCourse(course: Course) {
-    this.user.courses = this.user.courses.filter((c: Course) => c._id != course._id);
+    this.user.courses = this.user.courses.filter((c: Course) => c.id != course.id);
     this.usersService.updateUser(this.user)
       .subscribe(user => {
         console.log('updated user: ', user);

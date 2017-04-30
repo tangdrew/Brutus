@@ -101,7 +101,7 @@ export class ReviewsComponent {
   }
 
   submitReview() {
-    this.review.course = this.course._id;
+    this.review.course = this.course.id;
     this.review.course_id = this.course.course_id;
     this.review.instructor = this.course.instructor.name;
     this.review.user = this.currentUser._id;

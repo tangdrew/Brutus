@@ -23,7 +23,7 @@
           </div>
           <div class="panel-body" style="padding: 0px">
             <div *ngFor="let course of courses">
-              <a class="course-list-item list-group-item" [routerLink]="'/course/' + course._id">
+              <a class="course-list-item list-group-item" [routerLink]="'/course/' + course.id">
                 {{course.subject + ' ' + course.catalog_num + ' ' + course.title}}
               </a>
             </div>

@@ -30,7 +30,7 @@ export class CourseListingComponent {
     }
 
     goToCourse(course: Course) {
-        this.router.navigate(['/course', course._id]);
+        this.router.navigate(['/course', course.id]);
     }
 
     @HostListener('mouseenter') onMouseEnter() {

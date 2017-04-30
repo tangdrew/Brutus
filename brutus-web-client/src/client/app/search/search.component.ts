@@ -116,7 +116,7 @@ export class SearchComponent {
             factor: this.selectedFactor
         }).subscribe(courses => {
           if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
-            courses = courses.filter(course => course.score); //Removes courses without factor rating
+            courses = courses.filter(course => course.score != null); //Removes courses without factor rating
             courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
           }
           this.courses = courses;
