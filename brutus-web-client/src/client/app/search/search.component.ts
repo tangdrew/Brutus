@@ -37,7 +37,7 @@ export class SearchComponent {
 
     constructor(private coursesService: CoursesService, private termsService: TermsService, private auth: AuthService) {
         this.selectedTermIndex = 0;
-        this.factors = ['Sort By...', 'Grade', 'Rating', 'Time'];
+        this.factors = ['None', 'Grade', 'Rating', 'Time'];
         this.skip = 0;
         this.courses = [];
         this.currentUser = new User();

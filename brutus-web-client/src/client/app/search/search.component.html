@@ -14,13 +14,16 @@
     </div>
 
       <div class="row" style="margin-top: 15px; margin-bottom: 15px">
-          <div class="col-md-4 col-xs-4 select-container">
-              <select2 class="select2" style="height: 50px" [data]="termNames" (valueChanged)="changed($event, 'term')"></select2>
+          <div class="col-md-4 col-xs-4">
+              Terms:
+              <select2 class="select2" [data]="termNames" (valueChanged)="changed($event, 'term')"></select2>
           </div>
           <div class="col-md-4 col-xs-4">
+              Subjects:
               <select2 class="select2" [data]="subjectSymbols" (valueChanged)="changed($event, 'subject')"></select2>
           </div>
           <div class="col-md-4 col-xs-4">
+              Sort By:
               <select2 class="select2" [data]="factors" (valueChanged)="changed($event, 'factor')"></select2>
           </div>
       </div>

@@ -21,13 +21,14 @@ export class CoursesService {
 
   getCourses(params: any): Observable<Course[]> {
     let options = new URLSearchParams();
-    console.log("Params: ", params);
     options.set('term', params.term);
-    if(params.factor != 'Sort By...') {
+    if(params.factor != 'None') {
       options.set('factor', params.factor);
     }
     options.set('subject', params.subject);
-    options.set('searchTerm', params.searchTerm);
+    if(params.searchTerm) {
+        options.set('searchTerm', params.searchTerm.toLowerCase().replace(/ /g,''));
+    }
     options.set('skip', params.skip);
     options.set('limit', params.limit);
     return this.http.get(this.coursesUrl, {search: options})
