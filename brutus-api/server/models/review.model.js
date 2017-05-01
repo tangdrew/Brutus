@@ -80,7 +80,7 @@ ReviewSchema.statics = {
   list({ skip = 0, limit = 50, course } = {}) {
     return this.find()
       .sort({ createdAt: -1 })
-      .where({ course: course })
+      // .where({ course: course })
       .skip(skip)
       .limit(limit)
       .exec();

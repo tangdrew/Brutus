@@ -146,6 +146,27 @@ function list(req, res, next) {
       }
     })
     .catch(e => next(e));
+
+    //TODO: do something about sorting with ANY subject
+    // Review.list().then(reviews => {
+    //   console.log(reviews);
+    //   let courses = []
+    //   Promise.all(reviews.forEach(review => {
+    //     Course.get(review.course)
+    //     .then(course => {
+    //       return course;
+    //       // if(course) {
+    //       //   console.log(course);
+    //       //   courses.push(course);
+    //       // }
+    //     });
+    //   })).then(values => {
+    //     console.log('values', values);
+    //     res.json(values);
+    //   })
+    //
+    // });
+
   }
 }
 
@@ -197,8 +218,6 @@ function courseScores(courses, factor) {
               .then((courseScore) => {
                 if(courseScore.length > 0) {
                   courseScore[0].id = course.id;
-                  console.log("==========");
-                  console.log(courseScore[0]);
                   courseScores = courseScores.concat(courseScore[0]);
                 }
               });
