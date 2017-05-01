@@ -106,9 +106,9 @@ function update(req, res, next) {
  * @returns {Course[]}
  */
 function list(req, res, next) {
-  req.query.limit = req.query.limit === undefined ? 50 : Number(req.query.limit);
+  req.query.limit = req.query.limit === undefined ? 10 : Number(req.query.limit);
   req.query.skip = req.query.skip === undefined ? 0 :  Number(req.query.skip);
-  const { skip, limit, searchTerm, subject, term } = req.query;
+  let { skip, limit, searchTerm, subject, term } = req.query;
   if(searchTerm) {
     search(skip, limit, searchTerm, subject, term).then(courses => {
       if(req.query.factor) {
@@ -131,8 +131,6 @@ function list(req, res, next) {
   else {
     Course.list({ skip, limit, subject, term }).then(courses => {
       if(req.query.factor) {
-        console.log('========');
-        console.log(req.query.factor);
         courseScores(courses, req.query.factor)
           .then((courseScores) => {
             let scoredCourses = [];
@@ -161,18 +159,27 @@ function list(req, res, next) {
  * @returns {Promise<Course[]>}
  */
 function search(skip, limit, searchTerm, subject, term) {
-  return Course.list({
-    limit: 100000,
+  // return Course.list({
+  //   limit: 100000,
+  //   subject: subject,
+  //   term: term
+  // }).then(courses => {
+  //     return courses.filter(course => {
+  //       let searchField = course.subject + course.catalog_num + course.title;
+  //       searchField = searchField.toLowerCase().replace(/ /g,'');
+  //       searchTerm = searchTerm.toLowerCase().replace(/ /g,'');
+  //       return searchField.includes(searchTerm);
+  //     }).slice(skip, skip + 50);
+  //   });
+
+  return Course.search({
+    limit: 50,
     subject: subject,
-    term: term
+    term: term,
+    searchTerm: searchTerm
   }).then(courses => {
-      return courses.filter(course => {
-        let searchField = course.subject + course.catalog_num + course.title;
-        searchField = searchField.toLowerCase().replace(/ /g,'');
-        searchTerm = searchTerm.toLowerCase().replace(/ /g,'');
-        return searchField.includes(searchTerm);
-      }).slice(skip, skip + 50);
-    });
+    return courses;
+  })
 }
 
 /**

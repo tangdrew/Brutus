@@ -226,6 +226,18 @@ CourseSchema.statics = {
           .limit(limit)
           .exec();
       }
+    },
+    search({skip, limit, subject, term, searchTerm} = {}) {
+      if(subject == 'ANY') {
+        return this.aggregate([{$match: {term: term}},
+                {$addFields: {searchField: {$toLower: {$concat: ["$subject", "$catalog_num", "$title"]}}}},
+                {$match: {searchField: {$regex: searchTerm}}}])
+      }
+      else {
+        return this.aggregate([{$match: {term: term, subject: subject}},
+                {$addFields: {searchField: {$toLower: {$concat: ["$subject", "$catalog_num", "$title"]}}}},
+                {$match: {searchField: {$regex: searchTerm}}}])
+      }
     }
 };
 
