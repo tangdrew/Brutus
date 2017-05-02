@@ -94,38 +94,57 @@ export class CalendarComponent {
       courses.forEach(course => {
         //Check if meeting_days exists
         if(course.meeting_days) {
-          if(course.meeting_days.includes('Su')) {
-            events.push(this.formatEvent(course, 0));
-          }
-          if(course.meeting_days.includes('Mo')) {
-            events.push(this.formatEvent(course, 1));
-          }
-          if(course.meeting_days.includes('Tu')) {
-            events.push(this.formatEvent(course, 2));
-          }
-          if(course.meeting_days.includes('We')) {
-            events.push(this.formatEvent(course, 3));
-          }
-          if(course.meeting_days.includes('Th')) {
-            events.push(this.formatEvent(course, 4));
-          }
-          if(course.meeting_days.includes('Fr')) {
-            events.push(this.formatEvent(course, 5));
-          }
-          if(course.meeting_days.includes('Sa')) {
-            events.push(this.formatEvent(course, 6));
-          }
+          let dayNumbers = this.meetingDaysToNumbers(course.meeting_days);
+          dayNumbers.forEach(num => {
+            events.push(this.formatEvent(course, num));
+          });
+        }
+        if(course.componentIndex != null) {
+          let component: any = course.course_components[course.componentIndex];
+          component.id = course.id;
+          component.subject = course.subject;
+          component.catalog_num = course.catalog_num + ' - ' + component.component;
+          let dayNumbers = this.meetingDaysToNumbers(component.meeting_days);
+          dayNumbers.forEach(num => {
+            events.push(this.formatEvent(component, num));
+          });
         }
       });
       return events;
     }
 
-    formatEvent(course: Course, daysAhead: number) {
+    meetingDaysToNumbers(meeting_days: string): number[] {
+      let dayNumbers: number[] = [];
+      if(meeting_days.includes('Su')) {
+        dayNumbers.push(0);
+      }
+      if(meeting_days.includes('Mo')) {
+        dayNumbers.push(1);
+      }
+      if(meeting_days.includes('Tu')) {
+        dayNumbers.push(2);
+      }
+      if(meeting_days.includes('We')) {
+        dayNumbers.push(3);
+      }
+      if(meeting_days.includes('Th')) {
+        dayNumbers.push(4);
+      }
+      if(meeting_days.includes('Fr')) {
+        dayNumbers.push(5);
+      }
+      if(meeting_days.includes('Sa')) {
+        dayNumbers.push(6);
+      }
+      return dayNumbers;
+    }
+
+    formatEvent(course: any, daysAhead: number) {
       let date = this.startDate.format('YYYY-MM-DD');
       let newDate = moment(date).add(daysAhead, 'd');
       return {
         id: course.id,
-        title: course.title,
+        title: course.subject + ' ' + course.catalog_num,
         start: newDate.format('YYYY-MM-DD') + 'T' + course.start_time,
         end: newDate.format('YYYY-MM-DD') + 'T' + course.end_time,
         url: '/course/' + course.id

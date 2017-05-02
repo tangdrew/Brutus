@@ -18,8 +18,8 @@
         <div class="col-xs-4">
           <br><br>
           <div *ngIf="auth.authenticated()">
-            <button *ngIf="!auth.enrolled(course)" class="btn btn-success btn-md" (click)="auth.addCourse(course)">Add Class</button>
-            <button *ngIf="auth.enrolled(course)" class="btn btn-danger btn-md" (click)="auth.removeCourse(course)">Remove Class</button>
+            <button *ngIf="!auth.enrolled(course)" class="btn btn-success btn-md" (click)="addCourse()">Add Class</button>
+            <button *ngIf="auth.enrolled(course)" class="btn btn-danger btn-md" (click)="removeCourse()">Remove Class</button>
           </div>
         </div>
       </div>
@@ -43,8 +43,20 @@
           <div *ngIf="course.course_components">
             None
           </div>
-          <div *ngFor="let component of course.course_components">
-            {{component.meeting_days}}
+          <div *ngFor="let component of course.course_components; let i = index" [attr.data-index]="i" class="li-component">
+            <div class="row">
+              <div class="col-xs-8">
+                Section: {{component.section}} - {{component.component}}<br>
+                Time: {{component.meeting_days}} {{component.start_time}}:{{component.end_time}}<br>
+                Location: {{component.room}}<br>
+              </div>
+              <div class="col-xs-4">
+                <br>
+                <input type="radio" name="radiogroup" style="float: right"
+                  [value]="component.section"
+                  (change)="onSelectionChange(i)">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -58,7 +70,11 @@
             No comments yet
           </div>
           <div *ngFor="let review of reviews">
-            {{review.comment}}
+            <div *ngIf="review.comment" style="padding: 5px">
+              <span *ngFor="let i of arr(review.rating).fill(1)">&#9734;</span>
+              <span class="comment-date">{{review.created_at}}</span><br>
+              "{{review.comment}}"
+            </div>
           </div>
         </div>
       </div>

@@ -24,7 +24,8 @@ export class Course {
     course_id: number;
     score: number;
     course_descriptions: [Object];
-    course_component: [Object];
+    course_components: [Object];
+    componentIndex: number;
 
     constructor(){}
 }

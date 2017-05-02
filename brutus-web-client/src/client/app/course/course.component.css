@@ -2,3 +2,17 @@
   padding: 0px;
   line-height: 100%;
 }
+
+.li-component {
+  padding: 15px;
+}
+
+.li-component:hover {
+    cursor: pointer;
+    background-color: #8b76ad;
+}
+
+.comment-date {
+  font-size: 11px;
+  color: #aaa;
+}
