@@ -124,6 +124,7 @@ export class SearchComponent {
     }
 
     private scrolledBottom(): void {
+      console.log('bottom');
       this.skip = this.skip + 10;
       if(this.searchTerm.value) {
         this.search(this.searchTerm.value)
