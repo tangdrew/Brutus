@@ -7,6 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <a [routerLink]="['/']"><img class="navbar-brand brutus-logo" src="/assets/images/logo.gif"></a>
             <a class="navbar-brand brutus-brand" [routerLink]="['/']">Brutus</a>
         </div>
         <div class="navbar-collapse collapse">
@@ -20,10 +21,12 @@
                 <li>
                     <a *ngIf="auth.authenticated()" [routerLink]="['/reviews']">Submit Reviews</a>
                 </li>
-                <li>
-                  <a *ngIf="!auth.authenticated()" [routerLink]="['/login']">Login</a>
-                  <a *ngIf="auth.authenticated()" href="#" onclick="return false" (click)="auth.logout()">Log Out</a>
-                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a *ngIf="!auth.authenticated()" [routerLink]="['/login']">Login</a>
+                <a *ngIf="auth.authenticated()" href="#" onclick="return false" (click)="auth.logout()">Log Out</a>
+              </li>
             </ul>
         </div>
 
