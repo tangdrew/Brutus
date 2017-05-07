@@ -31,9 +31,9 @@
       <div *ngIf="courses.length == 0" style="text-align: center">
         <h3>No courses fit search parameters.</h3>
       </div>
-      <div *ngIf="courses.length > 0" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300"
-      (scrolled)="scrolledBottom()" style="height: 100%">
-        <course-listing  *ngFor="let course of courses" [course]="course"
+      <div *ngIf="courses.length > 0" infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="100"
+      (scrolled)="scrolledBottom()" (scrolledUp)="scrolledBottom()" style="height: 100%">
+        <course-listing  *ngFor="let course of courses" [course]="course" [factor]="selectedFactor"
         (courseEnter)="addToCalendar($event)" (courseLeave)="removeFromCalendar($event)">
       </course-listing>
      </div>

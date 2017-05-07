@@ -8,7 +8,7 @@ export class Review {
     grade: number;
     time: number;
     comment: string;
-    createdAt: string;
+    created_at: string;
 
     constructor(){}
 }

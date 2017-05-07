@@ -23,7 +23,7 @@ export class CourseComponent {
     reviews: Review[];
     currentUser: User;
     selectedComponentIndex: number;
-    arr: number[];
+    arr: any;
 
     constructor(private coursesService: CoursesService, private reviewsService: ReviewsService, private usersService: UsersService,
       private route: ActivatedRoute, private auth: AuthService) {
@@ -39,7 +39,7 @@ export class CourseComponent {
             .switchMap((params: Params) => this.coursesService.getCourse(params['id']))
             .subscribe((course: Course) => {
                 this.course = course;
-                this.components = course.course_component;
+                this.components = course.course_components;
 
                 this.reviewsService.getReviews({course: this.course.id}).subscribe(reviews => {
                   this.reviews = reviews.map(review => {

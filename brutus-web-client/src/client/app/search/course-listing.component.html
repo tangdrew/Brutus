@@ -10,7 +10,7 @@
         </div>
         <div *ngIf="course.score" class="row">
           <div class="col-xs-12">
-              <label>Score: </label><span>{{course.score}}</span>
+              <label>{{factor}}: </label><span>{{course.score | number : '1.2-2'}}</span>
           </div>
         </div>
         <div class="row">

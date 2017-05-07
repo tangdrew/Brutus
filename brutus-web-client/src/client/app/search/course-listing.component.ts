@@ -13,6 +13,7 @@ import { User } from '../shared/users/user';
 
 export class CourseListingComponent {
     @Input() course: Course
+    @Input() factor: string
     @Output() courseEnter = new EventEmitter<Course>()
     @Output() courseLeave = new EventEmitter<Course>()
     currentUser: User
