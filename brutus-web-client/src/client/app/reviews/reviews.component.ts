@@ -129,25 +129,29 @@ export class ReviewsComponent {
       });
   }
 
+  private findLine(textArray: string[], substr: string): string {
+    return textArray.find(line => line.includes(substr));
+  }
+
   private parse() {
     let textArray = this.text.split("\n");
     let titleLine = textArray[2];
     let subject = titleLine.split("_")[0];
     let catalog_num = titleLine.split("_")[1];
     let last_name = titleLine.split(" ")[titleLine.split(" ").length - 1];
-    let termLine = textArray[3];
+    let termLine = this.findLine(textArray, 'Course and Teacher Evaluations CTEC');
     let quarter = termLine.split(" ")[termLine.split(" ").length - 2]
     let year = termLine.split(" ")[termLine.split(" ").length - 1];
-    let responsesLine = textArray[5];
+    let responsesLine = this.findLine(textArray, 'Responses Received');
     let responses = parseFloat(responsesLine.split(" ")[responsesLine.split(" ").length - 1]);
-    let ratingLine = textArray[21].replace(/\s+/g,' ');
+    let ratingLine = this.findLine(textArray, 'Mean').replace(/\s+/g,' ');
     let rating = parseFloat(ratingLine.split(" ")[ratingLine.split(" ").length - 1]);
-    let time3Line = textArray[47].replace(/\s+/g,' ').split(" ");
-    let time4to7Line = textArray[48].replace(/\s+/g,' ').split(" ");
-    let time8to11Line = textArray[49].replace(/\s+/g,' ').split(" ");
-    let time12to15Line = textArray[50].replace(/\s+/g,' ').split(" ");
-    let time16to19Line = textArray[51].replace(/\s+/g,' ').split(" ");
-    let time20orMoreLine = textArray[52].replace(/\s+/g,' ').split(" ");
+    let time3Line = this.findLine(textArray, '3 or fewer').replace(/\s+/g,' ').split(" ");
+    let time4to7Line = this.findLine(textArray, '4 - 7').replace(/\s+/g,' ').split(" ");
+    let time8to11Line = this.findLine(textArray, '8 - 11').replace(/\s+/g,' ').split(" ");
+    let time12to15Line = this.findLine(textArray, '12 - 15').replace(/\s+/g,' ').split(" ");
+    let time16to19Line = this.findLine(textArray, '16 - 19').replace(/\s+/g,' ').split(" ");
+    let time20orMoreLine = this.findLine(textArray, '20 or more').replace(/\s+/g,' ').split(" ");
     let time = (3 * parseFloat(time3Line[time3Line.length - 2]) +
                5.5 * parseFloat(time4to7Line[time4to7Line.length - 2]) +
                9.5 * parseFloat(time8to11Line[time8to11Line.length - 2]) +
