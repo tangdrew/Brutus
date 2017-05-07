@@ -136,8 +136,8 @@ export class ReviewsComponent {
   private parse() {
     let textArray = this.text.split("\n");
     let titleLine = textArray[2];
-    let subject = titleLine.split("_")[0];
-    let catalog_num = titleLine.split("_")[1];
+    let subject = titleLine.slice(0, titleLine.search(/\d/) - 1);
+    let catalog_num = titleLine.slice(titleLine.search(/\d/)).split("_")[0];
     let last_name = titleLine.split(" ")[titleLine.split(" ").length - 1];
     let termLine = this.findLine(textArray, 'Course and Teacher Evaluations CTEC');
     let quarter = termLine.split(" ")[termLine.split(" ").length - 2]
