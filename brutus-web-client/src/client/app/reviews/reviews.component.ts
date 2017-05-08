@@ -26,6 +26,8 @@ export class ReviewsComponent {
   termNames: string[];
   subjects: any[];
   grades: string[];
+  ratings: number[];
+  times: number[];
   subjectSymbols: string[];
   selectedTermIndex: number;
   selectedTerm: string;
@@ -47,6 +49,8 @@ export class ReviewsComponent {
       this.skip = 0;
       this.courses = [];
       this.grades = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D', 'F'];
+      this.ratings = Array(6).fill().map((e,i)=>i+1);
+      this.times = Array(20).fill().map((e,i)=>i+1);
       this.currentUser = new User();
       this.review = new Review();
       this.number = 1;
@@ -143,6 +147,14 @@ export class ReviewsComponent {
       default:
         this.review.grade = null;
     }
+  }
+
+  private setRating(e: any): void {
+    this.review.rating = e.value;
+  }
+
+  private setTime(e: any): void {
+    this.review.time = e.value;
   }
 
   submitReview() {

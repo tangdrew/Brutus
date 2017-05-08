@@ -44,11 +44,13 @@
     <div class="row">
       <div class="col-xs-4">
         <label>Rating</label>
-        <input class="form-control" [(ngModel)]="review.rating" />
+        <!-- <input class="form-control" [(ngModel)]="review.rating" /> -->
+        <select2 class="select2" [data]="ratings" (valueChanged)="setRating($event)"></select2>
       </div>
       <div class="col-xs-4">
         <label>Time</label>
-        <input class="form-control" [(ngModel)]="review.time" />
+        <!-- <input class="form-control" [(ngModel)]="review.time" /> -->
+        <select2 class="select2" [data]="times" (valueChanged)="setTime($event)"></select2>
       </div>
       <div class="col-xs-4">
         <label>Grade</label>
@@ -71,6 +73,7 @@
       </div>
     </div>
   </div>
+
   <!-- Admin Reviews -->
   <div *ngIf="currentUser.admin">
     <h1>Admin Reviews</h1>
