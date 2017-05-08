@@ -100,6 +100,12 @@ export class SearchComponent {
             case "term":
                 this.selectedTerm = e.value;
                 this.term = this.terms.find(term => term.name == this.selectedTerm);
+                this.subjects = this.term.subjects;
+                this.subjectSymbols = this.subjects.map(function(item) {
+                    return item['symbol'];
+                });
+                this.subjectSymbols = ['ANY'].concat(this.subjectSymbols);
+                this.selectedSubject = this.subjects[0].symbol;
                 this.calendarCourses = this.currentUser.courses.filter(course => course.term == this.term.name);
                 break;
             default:
@@ -107,35 +113,50 @@ export class SearchComponent {
                 return
         }
 
-        this.searchTerm.reset();
+        // this.searchTerm.reset();
         this.skip = 0;
         let limit = this.selectedFactor &&
           this.selectedSubject &&
           (this.selectedSubject != 'ANY' || this.selectedFactor != 'None')
           ? 100 : 10;
 
-        this.coursesService.getCourses({
-            skip: this.skip,
-            term: this.selectedTerm,
-            subject: this.selectedSubject,
-            factor: this.selectedFactor,
-            limit: limit
-        }).subscribe(courses => {
-          if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
-            courses = courses.filter(course => course.score != null); //Removes courses without factor rating
-            courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
-          }
-          this.courses = courses;
-        });
+        if(this.searchTerm) {
+          this.search(this.searchTerm.value).subscribe(courses => {
+            if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
+              courses = courses.filter(course => course.score != null); //Removes courses without factor rating
+              courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
+            }
+            this.courses = courses;
+          });
+        }
+        else {
+          this.coursesService.getCourses({
+              skip: this.skip,
+              term: this.selectedTerm,
+              subject: this.selectedSubject,
+              factor: this.selectedFactor,
+              limit: limit
+          }).subscribe(courses => {
+            if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
+              courses = courses.filter(course => course.score != null); //Removes courses without factor rating
+              courses.sort((a, b) => Number(b.score) - Number(a.score)); //TODO: allow user to choose sort
+            }
+            this.courses = courses;
+          });
+        }
+
     }
 
     private scrolledBottom(): void {
       console.log('bottom');
-      this.skip = this.courses.length + 10;
+      this.skip = this.skip + 10;
       if(this.searchTerm.value) {
         this.search(this.searchTerm.value)
           .subscribe(courses => {
-            this.courses = this.courses.concat(courses);
+            //Add new unique courses
+            this.courses = this.courses.concat(courses).filter((course, pos, arr) => {
+              return arr.map(c => c.id).indexOf(course.id) === pos;
+            });
           });
       }
       else{
@@ -145,7 +166,10 @@ export class SearchComponent {
             subject: this.selectedSubject,
             factor: this.selectedFactor
         }).subscribe(courses => {
-          this.courses = this.courses.concat(courses);
+          //Add new unique courses
+          this.courses = this.courses.concat(courses).filter((course, pos, arr) => {
+            return arr.map(c => c.id).indexOf(course.id) === pos;
+          });
         });
       }
     }

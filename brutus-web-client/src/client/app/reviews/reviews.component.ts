@@ -86,6 +86,11 @@ export class ReviewsComponent {
           case "term":
               this.selectedTerm = e.value;
               this.term = this.terms.find(term => term.name == this.selectedTerm);
+              this.subjects = this.term.subjects;
+              this.subjectSymbols = this.subjects.map(function(item) {
+                  return item['symbol'];
+              });
+              this.selectedSubject = this.subjects[0].symbol;
               break;
           case "course":
               let n = e.value.lastIndexOf(':');
