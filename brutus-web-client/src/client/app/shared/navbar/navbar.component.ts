@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
-/**
- * This class represents the navigation bar component.
- */
+declare var $: any;
+
 @Component({
   moduleId: module.id,
   selector: 'navbar',
@@ -13,4 +12,12 @@ import { AuthService } from '../auth/auth.service';
 
 export class NavbarComponent {
   constructor(private auth: AuthService) {}
+
+  ngOnInit() {
+    $(document).on('click','.navbar-collapse.in',(e: any) => {
+      if($(e.target).is('a')) {
+        $('.collapse').collapse('hide');
+      }
+    })
+  }
 }
