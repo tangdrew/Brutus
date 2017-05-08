@@ -194,7 +194,7 @@ function search(skip, limit, searchTerm, subject, term) {
   //   });
 
   return Course.search({
-    limit: 50,
+    limit: 100,
     subject: subject,
     term: term,
     searchTerm: searchTerm

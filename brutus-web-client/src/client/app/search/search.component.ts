@@ -38,6 +38,7 @@ export class SearchComponent {
     constructor(private coursesService: CoursesService, private termsService: TermsService, private auth: AuthService) {
         this.selectedTermIndex = 0;
         this.factors = ['None', 'Grade', 'Rating', 'Time'];
+        this.selectedFactor = 'None';
         this.skip = 0;
         this.courses = [];
         this.currentUser = new User();
@@ -108,12 +109,17 @@ export class SearchComponent {
 
         this.searchTerm.reset();
         this.skip = 0;
+        let limit = this.selectedFactor &&
+          this.selectedSubject &&
+          (this.selectedSubject != 'ANY' || this.selectedFactor != 'None')
+          ? 100 : 10;
 
         this.coursesService.getCourses({
             skip: this.skip,
             term: this.selectedTerm,
             subject: this.selectedSubject,
-            factor: this.selectedFactor
+            factor: this.selectedFactor,
+            limit: limit
         }).subscribe(courses => {
           if(['Grade', 'Rating', 'Time'].includes(this.selectedFactor)) {
             courses = courses.filter(course => course.score != null); //Removes courses without factor rating
@@ -125,7 +131,7 @@ export class SearchComponent {
 
     private scrolledBottom(): void {
       console.log('bottom');
-      this.skip = this.skip + 10;
+      this.skip = this.courses.length + 10;
       if(this.searchTerm.value) {
         this.search(this.searchTerm.value)
           .subscribe(courses => {

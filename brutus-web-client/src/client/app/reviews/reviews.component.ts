@@ -25,6 +25,7 @@ export class ReviewsComponent {
   terms: Term[];
   termNames: string[];
   subjects: any[];
+  grades: string[];
   subjectSymbols: string[];
   selectedTermIndex: number;
   selectedTerm: string;
@@ -35,6 +36,7 @@ export class ReviewsComponent {
   course: Course
   courseNames: string[]
   number: number
+  reviewedCourses: Course[]
   text: string
   ctecReview: Review
   ctecReviewString: string
@@ -44,9 +46,11 @@ export class ReviewsComponent {
       this.selectedTermIndex = 0;
       this.skip = 0;
       this.courses = [];
+      this.grades = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D', 'F'];
       this.currentUser = new User();
       this.review = new Review();
-      this.number = 0;
+      this.number = 1;
+      this.reviewedCourses = [];
   }
 
   ngOnInit() {
@@ -104,6 +108,43 @@ export class ReviewsComponent {
       });
   }
 
+  private setGrade(e: any): void {
+    switch(e.value) {
+      case 'A':
+        this.review.grade = 4.0;
+        break;
+      case 'A-':
+        this.review.grade = 3.7;
+        break;
+      case 'B+':
+        this.review.grade = 3.3;
+        break;
+      case 'B':
+        this.review.grade = 3.0;
+        break;
+      case 'B-':
+        this.review.grade = 2.7;
+        break;
+      case 'C+':
+        this.review.grade = 2.3;
+        break;
+      case 'C':
+        this.review.grade = 2.0;
+        break;
+      case 'C-':
+        this.review.grade = 1.7;
+        break;
+      case 'D':
+        this.review.grade = 1.0;
+        break;
+      case 'F':
+        this.review.grade = 0;
+        break;
+      default:
+        this.review.grade = null;
+    }
+  }
+
   submitReview() {
     this.review.course = this.course.id;
     this.review.course_id = this.course.course_id;
@@ -111,7 +152,7 @@ export class ReviewsComponent {
     this.review.user = this.currentUser._id;
     for(let i = 0; i < this.number; i++) {
       this.reviewsService.createReview(this.review).subscribe(res => {
-        console.log(res);
+        this.reviewedCourses.push(this.course);
       });
     }
     this.review.rating = null;

@@ -6,6 +6,7 @@ export class User {
     auth0Id: string;
     createdAt: string;
     courses: Course[];
+    admin: boolean;
 
     constructor(){}
 }
